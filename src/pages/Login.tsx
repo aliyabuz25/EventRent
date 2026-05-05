@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { LogIn, Mail, Lock, AlertCircle, User as UserIcon, ArrowRight } from 'lucide-react';
+import { LogIn, AlertCircle, ArrowRight } from 'lucide-react';
 import { auth } from '../firebase';
 import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import { useSiteContent } from '../content.context';
+import { t } from '../content';
 
 export default function Login() {
+  const { locale } = useSiteContent();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -13,6 +16,22 @@ export default function Login() {
   const location = useLocation();
 
   const from = (location.state as any)?.from?.pathname || '/profile';
+
+  const labels = {
+    welcomeTitle:     { az: 'Xoş gəlmisiniz',       en: 'Welcome',             ru: 'Добро пожаловать',    tr: 'Hoş geldiniz' },
+    welcomeSubtitle:  { az: 'Sifarişlərinizi izləmək üçün daxil olun.', en: 'Sign in to track your orders.', ru: 'Войдите для отслеживания заказов.', tr: 'Siparişlerinizi takip etmek için giriş yapın.' },
+    noPasswordNote:  { az: 'Şifrə tələb olunmur!', en: 'No password required!', ru: 'Пароль не требуется!',  tr: 'Şifre gerekmiyor!' },
+    loginBtn:         { az: 'Daxil ol',             en: 'Sign In',              ru: 'Войти',               tr: 'Giriş yap' },
+    loggingIn:        { az: 'Giriş edilir...',      en: 'Signing in...',        ru: 'Вход...',             tr: 'Giriş yapılıyor...' },
+    orDivider:        { az: 'və ya',                 en: 'or',                  ru: 'или',                 tr: 'veya' },
+    googleBtn:        { az: '{t(locale, labels.googleBtn)}',    en: 'Continue with Google', ru: 'Войти через Google',  tr: 'Google ile giriş yap' },
+    noAccountText:    { az: 'Hesabınız yoxdur?',    en: "Don't have an account?", ru: 'Нет аккаунта?',       tr: 'Hesabınız yok mu?' },
+    registerBtn:      { az: 'Qeydiyyatdan keçin',    en: 'Sign up',             ru: 'Зарегистрироваться',   tr: 'Kayıt olun' },
+    invalidCreds:     { az: 'İstifadəçi adı və ya şifrə yanlışdır.', en: 'Invalid username or password.', ru: 'Неверное имя пользователя или пароль.', tr: 'Kullanıcı adı veya şifre yanlış.' },
+    loginError:       { az: 'Giriş zamanı xəta baş verdi. Yenidən cəhd edin.', en: 'Login failed. Please try again.', ru: 'Ошибка входа. Попробуйте снова.', tr: 'Giriş başarısız. Tekrar deneyin.' },
+    popupClosed:      { az: 'Giriş pəncərəsi bağlandı.', en: 'Login popup was closed.', ru: 'Окно входа закрыто.', tr: 'Giriş penceresi kapatıldı.' },
+    googleError:      { az: 'Google ilə giriş zamanı xəta baş verdi.', en: 'Google login failed.', ru: 'Ошибка входа через Google.', tr: 'Google ile giriş başarısız.' },
+  };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,9 +66,9 @@ export default function Login() {
     } catch (err: any) {
       console.error('Login error:', err);
       if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
-        setError('İstifadəçi adı və ya şifrə yanlışdır.');
+        setError(t(locale, labels.invalidCreds));
       } else {
-        setError('Giriş zamanı xəta baş verdi. Yenidən cəhd edin.');
+        setError(t(locale, labels.loginError));
       }
     } finally {
       setIsLoading(false);
@@ -64,7 +83,7 @@ export default function Login() {
     // We don't even try Firebase here to avoid any potential environment/config issues
     try {
       localStorage.setItem('demo_mode', 'true');
-      localStorage.setItem('demo_user_name', 'Tural Rəhimov');
+      localStorage.setItem('demo_user_name', t(locale, { az: 'Tural Rəhimov', en: 'Tural Rahimov', ru: 'Турал Рагимов', tr: 'Tural Rəhimov' }));
       
       // Small delay for visual feedback
       setTimeout(() => {
@@ -73,7 +92,7 @@ export default function Login() {
       }, 500);
     } catch (err: any) {
       console.error('Login error:', err);
-      setError('Giriş zamanı xəta baş verdi.');
+      setError(t(locale, labels.loginError));
       setIsLoading(false);
     }
   };
@@ -90,9 +109,9 @@ export default function Login() {
       console.error('Google login error:', err);
       if (err.code === 'auth/cancelled-popup-request' || err.code === 'auth/popup-closed-by-user') {
         // Just ignore or show a subtle message
-        setError('Giriş pəncərəsi bağlandı.');
+        setError(t(locale, labels.popupClosed));
       } else {
-        setError('Google ilə giriş zamanı xəta baş verdi.');
+        setError(t(locale, labels.googleError));
       }
     } finally {
       setIsLoading(false);
@@ -106,8 +125,8 @@ export default function Login() {
           <div className="w-16 h-16 bg-red-50 rounded-2xl flex items-center justify-center mx-auto text-red-500">
             <LogIn className="w-8 h-8" />
           </div>
-          <h1 className="text-2xl font-bold tracking-tight">Xoş gəlmisiniz</h1>
-          <p className="text-gray-500 text-sm">Sifarişlərinizi izləmək üçün daxil olun. <br/> <span className="text-red-500 font-bold">Şifrə tələb olunmur!</span></p>
+          <h1 className="text-2xl font-bold tracking-tight">{t(locale, labels.welcomeTitle)}</h1>
+          <p className="text-gray-500 text-sm">{t(locale, labels.welcomeSubtitle)}<br/><span className="text-red-500 font-bold">{t(locale, labels.noPasswordNote)}</span></p>
         </div>
 
         {error && (
@@ -126,11 +145,11 @@ export default function Login() {
             {isLoading ? (
               <>
                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                Giriş edilir...
+                {t(locale, labels.loggingIn)}
               </>
             ) : (
               <>
-                Daxil ol <ArrowRight className="w-6 h-6" />
+                {t(locale, labels.loginBtn)} <ArrowRight className="w-6 h-6" />
               </>
             )}
           </button>
@@ -140,7 +159,7 @@ export default function Login() {
               <div className="w-full border-t border-gray-100"></div>
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-white px-4 text-gray-400 font-bold tracking-widest">və ya</span>
+              <span className="bg-white px-4 text-gray-400 font-bold tracking-widest">{t(locale, labels.orDivider)}</span>
             </div>
           </div>
 
@@ -149,7 +168,7 @@ export default function Login() {
             className="w-full flex items-center justify-center gap-3 bg-white border border-gray-100 py-5 rounded-3xl font-bold hover:bg-gray-50 transition-all active:scale-95 shadow-sm"
           >
             <img src="https://www.google.com/favicon.ico" className="w-5 h-5" alt="Google" />
-            Google ilə daxil ol
+            {t(locale, labels.googleBtn)}
           </button>
         </div>
 
@@ -167,11 +186,11 @@ export default function Login() {
           className="w-full flex items-center justify-center gap-3 bg-white border border-gray-100 py-4 rounded-2xl font-bold hover:bg-gray-50 transition-all active:scale-95"
         >
           <img src="https://www.google.com/favicon.ico" className="w-5 h-5" alt="Google" />
-          Google ilə daxil ol
+          {t(locale, labels.googleBtn)}
         </button>
 
         <p className="text-center text-sm text-gray-500">
-          Hesabınız yoxdur? <button className="text-red-600 font-bold hover:underline">Qeydiyyatdan keçin</button>
+          {t(locale, labels.noAccountText)} <button type="button" className="text-red-600 font-bold hover:underline">{t(locale, labels.registerBtn)}</button>
         </p>
       </div>
     </div>
