@@ -2,6 +2,8 @@ import React from 'react';
 import { User as UserIcon, Camera, LayoutDashboard, Package, Settings, HelpCircle, LogOut, Shield } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { User } from 'firebase/auth';
+import { useSiteContent } from '../../content.context';
+import { t } from '../../content';
 
 interface ProfileSidebarProps {
   user: User | null;
@@ -18,11 +20,26 @@ export default function ProfileSidebar({
   ordersCount,
   onLogout
 }: ProfileSidebarProps) {
+  const { locale } = useSiteContent();
+
+  const labels = {
+    menuOverview:   { az: 'İcmal',              en: 'Overview',         ru: 'Обзор',           tr: 'Genel Bakış' },
+    menuOrders:     { az: 'Sifarişlərim',        en: 'My Orders',         ru: 'Мои заказы',       tr: 'Siparişlerim' },
+    menuSettings:   { az: 'Ayarlar',             en: 'Settings',          ru: 'Настройки',       tr: 'Ayarlar' },
+    menuSupport:    { az: 'Dəstək',              en: 'Support',          ru: 'Поддержка',       tr: 'Destek' },
+    userPlaceholder:{ az: 'İstifadəçi',          en: 'User',             ru: 'Пользователь',    tr: 'Kullanıcı' },
+    logout:         { az: 'Çıxış',               en: 'Logout',           ru: 'Выйти',            tr: 'Çıkış yap' },
+    accountStatus:  { az: 'Hesab Statusu',        en: 'Account Status',    ru: 'Статус аккаунта',  tr: 'Hesap Durumu' },
+    premiumCustomer:{ az: 'Premium Müştəri',     en: 'Premium Customer', ru: 'Премиум клиент',   tr: 'Premium Müşteri' },
+    viewAll:        { az: 'Hamısına bax',        en: 'View All',         ru: 'Смотреть все',    tr: 'Tümünü gör' },
+    premiumBanner:  { az: 'Siz bizim sadiq müştərimizsiniz. Bütün xidmətlərdə 5% endirim əldə edirsiniz.', en: 'You are our valued customer. You get a 5% discount on all services.', ru: 'Вы наш ценный клиент. Вы получаете скидку 5% на все услуги.', tr: 'Değerli müşterimizsiniz. Tüm hizmetlerde %5 indirim kazanıyorsunuz.' },
+  };
+
   const menuItems = [
-    { id: 'overview', label: 'İcmal', icon: LayoutDashboard },
-    { id: 'orders', label: 'Sifarişlərim', icon: Package, count: ordersCount },
-    { id: 'settings', label: 'Ayarlar', icon: Settings },
-    { id: 'support', label: 'Dəstək', icon: HelpCircle },
+    { id: 'overview', label: t(locale, labels.menuOverview), icon: LayoutDashboard },
+    { id: 'orders',   label: t(locale, labels.menuOrders),   icon: Package, count: ordersCount },
+    { id: 'settings', label: t(locale, labels.menuSettings), icon: Settings },
+    { id: 'support',  label: t(locale, labels.menuSupport),  icon: HelpCircle },
   ];
 
   return (
@@ -37,12 +54,12 @@ export default function ProfileSidebar({
                 <UserIcon className="w-10 h-10" />
               )}
             </div>
-            <button className="absolute -bottom-2 -right-2 w-10 h-10 bg-black text-white rounded-2xl flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
+            <button type="button" className="absolute -bottom-2 -right-2 w-10 h-10 bg-black text-white rounded-2xl flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
               <Camera className="w-5 h-5" />
             </button>
           </div>
           <div>
-            <h3 className="text-xl font-bold text-gray-900">{user?.displayName || 'İstifadəçi'}</h3>
+            <h3 className="text-xl font-bold text-gray-900">{user?.displayName || t(locale, labels.userPlaceholder)}</h3>
             <p className="text-sm text-gray-400 font-medium">{user?.email}</p>
           </div>
         </div>
@@ -50,6 +67,7 @@ export default function ProfileSidebar({
         <nav className="space-y-1">
           {menuItems.map((item) => (
             <button
+              type="button"
               key={item.id}
               onClick={() => setActiveTab(item.id)}
               className={cn(
@@ -74,10 +92,11 @@ export default function ProfileSidebar({
             </button>
           ))}
           <button
+            type="button"
             onClick={onLogout}
             className="w-full flex items-center gap-4 px-6 py-4 rounded-2xl text-sm font-bold text-red-500 hover:bg-red-50 transition-all mt-8"
           >
-            <LogOut className="w-5 h-5" /> Çıxış
+            <LogOut className="w-5 h-5" /> {t(locale, labels.logout)}
           </button>
         </nav>
       </div>
@@ -89,12 +108,12 @@ export default function ProfileSidebar({
             <Shield className="w-6 h-6" />
           </div>
           <div>
-            <p className="text-xs font-bold uppercase tracking-widest opacity-60">Hesab Statusu</p>
-            <p className="text-lg font-bold">Premium Müştəri</p>
+            <p className="text-xs font-bold uppercase tracking-widest opacity-60">{t(locale, labels.accountStatus)}</p>
+            <p className="text-lg font-bold">{t(locale, labels.premiumCustomer)}</p>
           </div>
         </div>
         <p className="text-sm opacity-80 leading-relaxed">
-          Siz bizim sadiq müştərimizsiniz. Bütün xidmətlərdə 5% endirim əldə edirsiniz.
+          {t(locale, labels.premiumBanner)}
         </p>
       </div>
     </aside>

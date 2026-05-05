@@ -10,6 +10,8 @@ import ProfileOverview from '../sections/profile/ProfileOverview';
 import ProfileOrders from '../sections/profile/ProfileOrders';
 import ProfileSettings from '../sections/profile/ProfileSettings';
 import ProfileSupport from '../sections/profile/ProfileSupport';
+import { useSiteContent } from '../content.context';
+import { t } from '../content';
 
 type Tab = 'overview' | 'orders' | 'settings' | 'support';
 
@@ -20,7 +22,12 @@ export default function Profile() {
   const [activeTab, setActiveTab] = useState<Tab>('overview');
   const [displayName, setDisplayName] = useState('');
   const [isSaving, setIsSaving] = useState(false);
+  const { locale } = useSiteContent();
   const navigate = useNavigate();
+
+  const labels = {
+    demoUserName: { az: 'Tural Rəhimov', en: 'Tural Rahimov', ru: 'Турал Рагимов', tr: 'Tural Rəhimov' },
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (u) => {
@@ -30,7 +37,7 @@ export default function Profile() {
       } else {
         const isDemo = localStorage.getItem('demo_mode') === 'true';
         if (isDemo) {
-          setDisplayName(localStorage.getItem('demo_user_name') || 'Tural Rəhimov');
+          setDisplayName(localStorage.getItem('demo_user_name') || t(locale, labels.demoUserName));
           setIsLoading(false);
         } else {
           navigate('/login');
