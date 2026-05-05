@@ -1,0 +1,157 @@
+import React, { useMemo, useRef } from 'react';
+import { useGsap, gsap } from '../motion/useGsap';
+import { Building2, Music, Heart } from 'lucide-react';
+import { useSiteContent } from '../content.context';
+import { t } from '../content';
+
+const eventTypeIcons: Record<string, React.ComponentType<{ className?: string }>> = {
+  corporate: Building2,
+  concerts: Music,
+  weddings: Heart,
+};
+
+const fallbackEventTypes = [
+  {
+    id: 'corporate',
+    title: 'Corporate Events',
+    subtitle: 'Conferences & Summits',
+    description: 'Technical production for high-stakes corporate gatherings where reliability is paramount.',
+    icon: Building2,
+    image: 'https://images.unsplash.com/photo-1505373633560-2283204b0c0c?auto=format&fit=crop&q=80&w=1000',
+  },
+  {
+    id: 'concerts',
+    title: 'Live Concerts',
+    subtitle: 'Arena & Festival Scale',
+    description: 'Immersive sound and lighting systems designed for the ultimate audience experience.',
+    icon: Music,
+    image: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&q=80&w=1000',
+  },
+  {
+    id: 'weddings',
+    title: 'Premium Weddings',
+    subtitle: 'Cinematic Celebrations',
+    description: 'Bespoke lighting and visual setups that transform your special day into a masterpiece.',
+    icon: Heart,
+    image: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=1000',
+  },
+];
+
+export default function EventTypes() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { content, locale } = useSiteContent();
+
+  const eventTypes = useMemo(() => {
+    const contentItems = content.home.eventTypes.items || [];
+    if (!contentItems.length) {
+      return fallbackEventTypes;
+    }
+
+    return contentItems.map((item) => ({
+      id: item.id,
+      title: t(locale, item.title),
+      subtitle: t(locale, item.subtitle),
+      description: t(locale, item.description),
+      image: item.image,
+      icon: eventTypeIcons[item.id] || Building2,
+    }));
+  }, [content.home.eventTypes.items, locale]);
+
+  useGsap(() => {
+    const sections = gsap.utils.toArray('.event-type-section');
+    
+    sections.forEach((section: any, i) => {
+      const content = section.querySelector('.event-content');
+      const image = section.querySelector('.event-image');
+      
+      gsap.fromTo(content,
+        { y: 88, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          scrollTrigger: {
+            trigger: section,
+            start: 'top 82%',
+            end: 'top 24%',
+            scrub: 0.85,
+          }
+        }
+      );
+
+      gsap.fromTo(image,
+        { scale: 1.14, opacity: 0.08 },
+        {
+          scale: 1,
+          opacity: 0.48,
+          scrollTrigger: {
+            trigger: section,
+            start: 'top 82%',
+            end: 'top 24%',
+            scrub: 0.85,
+          }
+        }
+      );
+    });
+  }, { dependencies: [eventTypes.length], scope: containerRef });
+
+  return (
+    <section ref={containerRef} className="bg-black py-36 md:py-40">
+      <div className="max-w-7xl mx-auto px-6 mb-24 md:mb-28">
+        <div className="flex flex-col md:flex-row justify-between items-end gap-8">
+          <div className="space-y-5">
+            <span className="text-[10px] font-black uppercase tracking-[0.26em] text-premium-orange">{t(locale, content.home.eventTypes.badge)}</span>
+            <h2 className="text-6xl md:text-8xl font-black tracking-ultra-tight uppercase leading-[0.94]">
+              {t(locale, content.home.eventTypes.title)} <br /> <span className="text-premium-orange">{t(locale, content.home.eventTypes.titleAccent)}</span>
+            </h2>
+          </div>
+          <p className="text-lg md:text-xl text-gray-400 max-w-sm font-medium leading-[1.75]">
+            {t(locale, content.home.eventTypes.description)}
+          </p>
+        </div>
+      </div>
+
+      <div className="space-y-0">
+        {eventTypes.map((type, i) => (
+          <div 
+            key={type.id} 
+            className="event-type-section relative h-[80vh] flex items-center overflow-hidden border-t border-white/5"
+          >
+            <div className="event-image absolute inset-0 z-0">
+              <img 
+                src={type.image} 
+                className="w-full h-full object-cover"
+                referrerPolicy="no-referrer"
+                alt={type.title}
+              />
+              <div className="absolute inset-0 bg-linear-to-r from-black via-black/85 to-black/20" />
+            </div>
+
+            <div className="event-content relative z-10 max-w-7xl mx-auto px-6 w-full grid grid-cols-1 lg:grid-cols-2">
+              <div className="space-y-6 md:space-y-7">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-2xl bg-white/7 backdrop-blur-sm flex items-center justify-center border border-white/12 shadow-[0_16px_40px_rgba(0,0,0,0.2)]">
+                    <type.icon className="w-6 h-6 text-premium-orange" />
+                  </div>
+                  <span className="text-sm font-bold uppercase tracking-[0.16em] text-gray-300/85">{type.subtitle}</span>
+                </div>
+                
+                <h3 className="text-5xl md:text-7xl font-black tracking-ultra-tight uppercase leading-[0.94]">{type.title}</h3>
+                <p className="text-lg text-gray-300/90 max-w-md font-medium leading-[1.75]">
+                  {type.description}
+                </p>
+                
+                <button className="min-h-12 px-8 py-3.5 border border-white/20 rounded-full text-[11px] font-black uppercase tracking-[0.24em] hover:bg-white hover:text-black transition-all duration-300">
+                  {t(locale, content.home.eventTypes.cta)}
+                </button>
+              </div>
+            </div>
+
+            <div className="absolute right-20 top-1/2 -translate-y-1/2 hidden lg:block">
+              <span className="text-[12rem] font-black text-white/5 leading-none select-none">0{i + 1}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}

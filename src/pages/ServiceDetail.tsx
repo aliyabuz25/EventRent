@@ -1,0 +1,300 @@
+import React, { useState } from 'react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'motion/react';
+import { ArrowLeft, CheckCircle2, ShoppingCart, Plus, Minus, X, Info } from 'lucide-react';
+import { cn } from '../lib/utils';
+
+const serviceData: Record<string, any> = {
+  'printing': {
+    title: 'Çap xidmətləri',
+    description: 'Yüksək keyfiyyətli çap həlləri ilə brendinizi ön plana çıxarın.',
+    image: 'https://images.unsplash.com/photo-1562654501-a0ccc0fc3fb1?q=80&w=1920&auto=format&fit=crop',
+    subItems: [
+      { 
+        id: 'notebook', 
+        name: 'Bloknot', 
+        desc: 'Xüsusi dizaynlı korporativ bloknotlar.',
+        questions: ['Ölçü (A4, A5)', 'Vərəq sayı (50, 100)', 'Üz qabığı (Sərt, Yumşaq)', 'Rəng']
+      },
+      { 
+        id: 'vinyl', 
+        name: 'Vinil', 
+        desc: 'Geniş formatlı vinil çapı və montajı.',
+        questions: ['Ölçü (m²)', 'Material növü', 'Laminasiya', 'Montaj xidməti']
+      },
+      { 
+        id: 'rollup', 
+        name: 'Roll-Up', 
+        desc: 'Səyyar reklam stendləri.',
+        questions: ['Ölçü (85x200, 100x200)', 'Material keyfiyyəti', 'Mexanizm növü']
+      },
+      { 
+        id: 'pen', 
+        name: 'Qələm', 
+        desc: 'Brendləşdirilmiş qələmlər və suvenirlər.',
+        questions: ['Model', 'Rəng', 'Çap növü (Lazer, UV)']
+      },
+    ]
+  },
+  'decor': {
+    title: 'Dekor xidmətləri',
+    description: 'Tədbirləriniz üçün estetik və innovativ dekorasiya həlləri.',
+    image: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=1920&auto=format&fit=crop',
+    subItems: [
+      { 
+        id: 'tents', 
+        name: 'Çadırlar', 
+        desc: 'Hər ölçüdə və dizaynda çadırların qurulması.',
+        questions: ['Ölçü (m²)', 'Qurulma yeri', 'Döşəmə (Xalça, Taxta)', 'İşıqlandırma']
+      },
+      { 
+        id: 'tables-chairs', 
+        name: 'Masa Və Oturacaqlar', 
+        desc: 'Müasir və klassik mebel icarəsi.',
+        questions: ['Növ (Masa, Oturacaq)', 'Model', 'Rəng', 'Örtük növü']
+      },
+      { 
+        id: 'tableware', 
+        name: 'Qab-Qacaq', 
+        desc: 'Premium qab-qacaq dəstləri.',
+        questions: ['Dəst növü', 'Nəfər sayı', 'Model']
+      },
+    ]
+  },
+  'other': {
+    title: 'Digər xidmətlər',
+    description: 'Tədbirinizin mükəmməlliyi üçün əlavə peşəkar xidmətlər.',
+    image: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=1920&auto=format&fit=crop',
+    subItems: [
+      { id: 'dj', name: 'DJ Xidməti', desc: 'Peşəkar musiqi tərtibatı.', questions: ['Tədbir növü', 'Müddət (saat)', 'Avadanlıq tələbi'] },
+      { id: 'singer', name: 'Müğənni Xidməti', desc: 'Canlı musiqi performansı.', questions: ['Janr', 'Müddət', 'Səs sistemi tələbi'] },
+      { id: 'host', name: 'Aparıcı Xidməti', desc: 'Təcrübəli tədbir aparıcıları.', questions: ['Tədbir dili', 'Tədbir növü'] },
+      { id: 'organization', name: 'Tədbirlərin Təşkili Xidməti', desc: 'A-dan Z-yə təşkilatçılıq.', questions: ['Tədbir növü', 'Qonaq sayı', 'Büdcə aralığı'] },
+      { id: 'designer', name: 'Dizayner Xidməti', desc: 'Vizual konseptlərin yaradılması.', questions: ['Dizayn növü', 'Müddət'] },
+    ]
+  }
+};
+
+export default function ServiceDetail() {
+  const { category, id } = useParams();
+  const navigate = useNavigate();
+  const [isOrdering, setIsOrdering] = useState(false);
+  const [quantity, setQuantity] = useState(1);
+  const [answers, setAnswers] = useState<Record<string, string>>({});
+  const [showSuccess, setShowSuccess] = useState(false);
+  
+  const currentCategory = serviceData[category || ''];
+  const currentItem = id ? currentCategory?.subItems.find((item: any) => item.id === id) : null;
+
+  if (!currentCategory) return <div className="p-20 text-center">Xidmət tapılmadı.</div>;
+
+  const handleAddToCart = () => {
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    const newItem = {
+      productId: currentItem.id,
+      quantity,
+      technicalAnswers: answers,
+      name: currentItem.name, // For display in cart
+      image: `https://picsum.photos/seed/${currentItem.id}/800/800`,
+      category: currentCategory.title
+    };
+    
+    cart.push(newItem);
+    localStorage.setItem('cart', JSON.stringify(cart));
+    window.dispatchEvent(new Event('storage'));
+    
+    setShowSuccess(true);
+    setTimeout(() => {
+      setShowSuccess(false);
+      setIsOrdering(false);
+      navigate('/cart');
+    }, 2000);
+  };
+
+  return (
+    <div className="space-y-20 pb-20">
+      {/* Hero Section */}
+      <section className="relative h-[500px] -mt-8 -mx-4 sm:-mx-6 lg:-mx-8 overflow-hidden flex items-center justify-center text-center">
+        <div className="absolute inset-0 bg-black">
+          <img 
+            src={currentCategory.image} 
+            className="w-full h-full object-cover opacity-40"
+            alt={currentCategory.title}
+            referrerPolicy="no-referrer"
+          />
+        </div>
+        <div className="relative z-10 max-w-4xl mx-auto px-4 space-y-6">
+          <Link to="/services" className="inline-flex items-center gap-2 text-white/60 hover:text-white transition-colors text-xs font-bold uppercase tracking-widest">
+            <ArrowLeft className="w-4 h-4" /> Xidmətlərə qayıt
+          </Link>
+          <motion.h1 
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            className="text-5xl md:text-7xl font-bold text-white tracking-tighter"
+          >
+            {currentItem ? currentItem.name : currentCategory.title}
+          </motion.h1>
+          <motion.p 
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.1 }}
+            className="text-xl text-white/60 font-light max-w-2xl mx-auto"
+          >
+            {currentItem ? currentItem.desc : currentCategory.description}
+          </motion.p>
+        </div>
+      </section>
+
+      {/* Content Section */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {!id ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {currentCategory.subItems.map((item: any, i: number) => (
+              <motion.div
+                key={item.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.1 }}
+                className="group p-8 bg-gray-50 rounded-[40px] hover:bg-black hover:text-white transition-all duration-500"
+              >
+                <div className="aspect-square rounded-3xl overflow-hidden mb-8 border-4 border-white shadow-xl">
+                  <img 
+                    src={`https://picsum.photos/seed/${item.id}/800/800`} 
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                    alt={item.name}
+                    referrerPolicy="no-referrer"
+                  />
+                </div>
+                <h3 className="text-2xl font-bold tracking-tight mb-4">{item.name}</h3>
+                <p className="text-gray-500 group-hover:text-gray-400 font-light mb-8">{item.desc}</p>
+                <Link 
+                  to={`/services/${category}/${item.id}`}
+                  className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest group-hover:text-white"
+                >
+                  Ətraflı <CheckCircle2 className="w-4 h-4" />
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+            <div className="aspect-square rounded-[60px] overflow-hidden border-8 border-gray-50 shadow-2xl sticky top-24">
+              <img 
+                src={`https://picsum.photos/seed/${currentItem.id}/1000/1000`} 
+                className="w-full h-full object-cover"
+                alt={currentItem.name}
+                referrerPolicy="no-referrer"
+              />
+            </div>
+            <div className="space-y-12">
+              <div className="space-y-8">
+                <div className="inline-block px-6 py-2 bg-black text-white rounded-full text-[10px] font-bold uppercase tracking-widest">
+                  {currentCategory.title}
+                </div>
+                <h2 className="text-4xl md:text-6xl font-bold tracking-tighter">{currentItem.name}</h2>
+                <p className="text-xl text-gray-500 font-light leading-relaxed">
+                  {currentItem.desc} üçün biz ən müasir texnologiyalar və peşəkar komandamızla xidmətinizdəyik. 
+                  Hər bir layihəyə fərdi yanaşaraq, sizin tələblərinizə uyğun ən optimal həlli təklif edirik.
+                </p>
+                <div className="space-y-4">
+                  {['Yüksək keyfiyyət', 'Peşəkar yanaşma', 'Sürətli icra', 'Sərfəli qiymət'].map(feature => (
+                    <div key={feature} className="flex items-center gap-3 text-gray-900 font-bold">
+                      <CheckCircle2 className="w-5 h-5 text-red-500" />
+                      {feature}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {!isOrdering ? (
+                <button 
+                  onClick={() => setIsOrdering(true)}
+                  className="inline-flex items-center gap-3 bg-black text-white px-12 py-6 rounded-full font-bold text-xl hover:bg-gray-800 transition-all shadow-2xl shadow-black/20 active:scale-95"
+                >
+                  Sifariş et <ShoppingCart className="w-6 h-6" />
+                </button>
+              ) : (
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="bg-gray-50 rounded-[40px] p-10 space-y-8 border border-gray-100"
+                >
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-2xl font-bold tracking-tight">Sifariş detalları</h3>
+                    <button onClick={() => setIsOrdering(false)} className="p-2 hover:bg-gray-200 rounded-full transition-colors">
+                      <X className="w-6 h-6" />
+                    </button>
+                  </div>
+
+                  <div className="space-y-6">
+                    {/* Quantity Selector */}
+                    <div className="space-y-3">
+                      <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Say</label>
+                      <div className="flex items-center gap-4 bg-white p-2 rounded-2xl border border-gray-100 w-fit">
+                        <button 
+                          onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                          className="w-10 h-10 flex items-center justify-center hover:bg-gray-50 rounded-xl transition-colors"
+                        >
+                          <Minus className="w-4 h-4" />
+                        </button>
+                        <span className="text-xl font-bold w-12 text-center">{quantity}</span>
+                        <button 
+                          onClick={() => setQuantity(quantity + 1)}
+                          className="w-10 h-10 flex items-center justify-center hover:bg-gray-50 rounded-xl transition-colors"
+                        >
+                          <Plus className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Dynamic Questions */}
+                    {currentItem.questions?.map((q: string) => (
+                      <div key={q} className="space-y-3">
+                        <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">{q}</label>
+                        <input 
+                          type="text" 
+                          placeholder={`${q} daxil edin...`}
+                          className="w-full px-6 py-4 bg-white border border-gray-100 rounded-2xl text-sm font-bold focus:outline-none focus:ring-4 focus:ring-red-500/5 focus:border-red-500 transition-all"
+                          value={answers[q] || ''}
+                          onChange={(e) => setAnswers({ ...answers, [q]: e.target.value })}
+                        />
+                      </div>
+                    ))}
+
+                    <div className="pt-4">
+                      <button 
+                        onClick={handleAddToCart}
+                        className="w-full bg-red-600 text-white py-6 rounded-3xl font-bold text-lg hover:bg-red-700 transition-all shadow-xl shadow-red-600/20 flex items-center justify-center gap-3"
+                      >
+                        Səbətə əlavə et <ShoppingCart className="w-6 h-6" />
+                      </button>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+
+              <AnimatePresence>
+                {showSuccess && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    className="fixed bottom-10 right-10 z-50 bg-black text-white px-8 py-6 rounded-[32px] shadow-2xl flex items-center gap-4 border border-white/10"
+                  >
+                    <div className="w-12 h-12 bg-green-500 rounded-2xl flex items-center justify-center">
+                      <CheckCircle2 className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <p className="font-bold">Səbətə əlavə olundu!</p>
+                      <p className="text-xs text-white/60">Yönləndirilirsiniz...</p>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </div>
+        )}
+      </section>
+    </div>
+  );
+}
