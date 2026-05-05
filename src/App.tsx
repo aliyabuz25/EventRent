@@ -17,6 +17,7 @@ import Cart from './pages/Cart';
 import Admin from './pages/Admin';
 import Login from './pages/Login';
 import Profile from './pages/Profile';
+import Premium from './pages/Premium';
 import ServiceDetail from './pages/ServiceDetail';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth, ensureUserDoc } from './firebase';
@@ -53,6 +54,7 @@ function AnimatedRoutes() {
         <Route path="/admin" element={<Admin />} />
         <Route path="/login" element={<Login />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/premium" element={<Premium />} />
       </Routes>
     </AnimatePresence>
   );
