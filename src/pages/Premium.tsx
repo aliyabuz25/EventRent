@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { signInWithPhoneNumber, ConfirmationResult, RecaptchaVerifier } from 'firebase/auth';
+import { auth } from '../firebase';
 import { ShieldCheck, Phone, Lock, CheckCircle2, AlertCircle, ArrowRight } from 'lucide-react';
-import { cn } from '../lib/utils';
 
 export default function Premium() {
   const [step, setStep] = useState<'phone' | 'otp' | 'content'>('phone');
@@ -9,6 +10,26 @@ export default function Premium() {
   const [error, setError] = useState<string | null>(null);
   const [timer, setTimer] = useState(60);
   const [attempts, setAttempts] = useState(0);
+  const [confirmationResult, setConfirmationResult] = useState<ConfirmationResult | null>(null);
+  const recaptchaRef = useRef<HTMLDivElement>(null);
+  const recaptchaVerifier = useRef<any>(null);
+
+  useEffect(() => {
+    if (recaptchaRef.current && !recaptchaVerifier.current) {
+      const verifier = new RecaptchaVerifier(auth, recaptchaRef.current, {
+        size: 'invisible',
+        callback: () => {},
+        'expired-callback': () => {}
+      });
+      recaptchaVerifier.current = verifier;
+    }
+    return () => {
+      if (recaptchaVerifier.current) {
+        recaptchaVerifier.current.clear();
+        recaptchaVerifier.current = null;
+      }
+    };
+  }, []);
 
   useEffect(() => {
     let interval: any;
@@ -18,30 +39,47 @@ export default function Premium() {
     return () => clearInterval(interval);
   }, [step, timer]);
 
-  const handleSendOTP = (e: React.FormEvent) => {
+  const handleSendOTP = async (e: React.FormEvent) => {
     e.preventDefault();
     if (phone.length < 10) {
       setError('Düzgün telefon nömrəsi daxil edin');
       return;
     }
-    setStep('otp');
-    setTimer(60);
-    setError(null);
+    if (!recaptchaVerifier.current) {
+      setError('Recaptcha hazır deyil. Bir az gözləyin.');
+      return;
+    }
+    try {
+      const fullPhone = phone.startsWith('+') ? phone : `+${phone}`;
+      const result = await signInWithPhoneNumber(auth, fullPhone, recaptchaVerifier.current);
+      setConfirmationResult(result);
+      setStep('otp');
+      setTimer(60);
+      setError(null);
+      setAttempts(0);
+    } catch (err: any) {
+      setError(`SMS göndərilə bilmədi: ${err.message}`);
+    }
   };
 
-  const handleVerifyOTP = (e: React.FormEvent) => {
+  const handleVerifyOTP = async (e: React.FormEvent) => {
     e.preventDefault();
     if (attempts >= 3) {
       setError('Çox sayda yanlış cəhd. Bloklandınız.');
       return;
     }
-
-    if (otp === '1234') { // Mock OTP
+    if (!confirmationResult) {
+      setError('OTP sessiyası baş tutmadı. Yenidən kod alın.');
+      return;
+    }
+    try {
+      await confirmationResult.confirm(otp);
       setStep('content');
       setError(null);
-    } else {
+    } catch (err: any) {
       setAttempts(a => a + 1);
-      setError(`Yanlış kod. Qalan cəhd: ${3 - (attempts + 1)}`);
+      const remaining = 3 - (attempts + 1);
+      setError(remaining > 0 ? `Yanlış kod. Qalan cəhd: ${remaining}` : 'Yanlış kod. Yenidən kod alın.');
     }
   };
 
@@ -116,7 +154,7 @@ export default function Premium() {
         ) : (
           <form onSubmit={handleVerifyOTP} className="space-y-6">
             <div className="space-y-2 text-center">
-              <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Təsdiq Kodu (Mock: 1234)</label>
+              <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Təsdiq Kodu</label>
               <div className="flex justify-center gap-2">
                 <input
                   required

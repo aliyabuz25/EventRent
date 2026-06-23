@@ -1,78 +1,92 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion, useSpring, useMotionValue } from 'motion/react';
+
+const INTERACTIVE = [
+  'a[href]', 'button', 'summary', 'select', 'label',
+  '[role="button"]', '[role="link"]', '[role="menuitem"]',
+  '[tabindex]:not([tabindex="-1"])', '.interactive', '[data-cursor="button"]',
+].join(', ');
+
+const INPUT = [
+  'textarea',
+  'input:not([type="button"]):not([type="submit"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]):not([type="color"])',
+  '[contenteditable=""]', '[contenteditable="true"]', '[role="textbox"]',
+].join(', ');
+
+const TEXT = [
+  'p', 'span', 'li', 'blockquote', 'figcaption', 'small',
+  'strong', 'em', 'code', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+  '[data-cursor="text"]',
+].join(', ');
+
+type CursorType = 'default' | 'interactive' | 'input' | 'text';
 
 export default function Cursor() {
   const mouse = { x: useMotionValue(0), y: useMotionValue(0) };
-  
   const springConfig = { damping: 25, stiffness: 250, mass: 0.5 };
   const cursorX = useSpring(mouse.x, springConfig);
   const cursorY = useSpring(mouse.y, springConfig);
 
-  const [hoverType, setHoverType] = useState<'default' | 'button' | 'text'>('default');
-  const [isClicking, setIsClicking] = useState(false);
+  const [type, setType] = useState<CursorType>('default');
 
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      mouse.x.set(e.clientX - 6);
-      mouse.y.set(e.clientY - 6);
+    const onMove = (e: MouseEvent) => {
+      mouse.x.set(e.clientX);
+      mouse.y.set(e.clientY);
     };
 
-    const handleMouseOver = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
-      const isSelectable = target.closest('button, a, .interactive');
-      const isText = target.closest('h1, h2, h3, p, span') && !isSelectable;
-
-      if (isSelectable) {
-        setHoverType('button');
-      } else if (isText) {
-        setHoverType('text');
-      } else {
-        setHoverType('default');
-      }
+    const onOver = (e: MouseEvent) => {
+      const t = e.target as HTMLElement;
+      if (t.closest(INTERACTIVE)) setType('interactive');
+      else if (t.closest(INPUT))   setType('input');
+      else if (t.closest(TEXT))    setType('text');
+      else                          setType('default');
     };
 
-    const handleMouseDown = () => setIsClicking(true);
-    const handleMouseUp = () => setIsClicking(false);
-
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mouseover', handleMouseOver);
-    window.addEventListener('mousedown', handleMouseDown);
-    window.addEventListener('mouseup', handleMouseUp);
-
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mouseover', onOver);
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseover', handleMouseOver);
-      window.removeEventListener('mousedown', handleMouseDown);
-      window.removeEventListener('mouseup', handleMouseUp);
+      window.removeEventListener('mousemove', onMove);
+      window.removeEventListener('mouseover', onOver);
     };
-  }, []);
+  }, [mouse.x, mouse.y]);
+
+  const isInteractive = type === 'interactive';
+  const isInput       = type === 'input';
+  const isText        = type === 'text';
 
   return (
     <>
+      {/* Dot */}
       <motion.div
-        className="fixed top-0 left-0 w-3 h-3 bg-premium-orange rounded-full pointer-events-none z-[10000]"
-        style={{
-          x: cursorX,
-          y: cursorY,
-        }}
+        className="fixed top-0 left-0 rounded-full pointer-events-none z-[10000] bg-premium-orange"
+        style={{ x: cursorX, y: cursorY, translateX: '-50%', translateY: '-50%', width: 12, height: 12 }}
         animate={{
-          scale: hoverType !== 'default' ? 2 : (isClicking ? 0.8 : 1),
+          scaleX:  isInteractive ? 0.35 : isText ? 0.15 : 1,
+          scaleY:  isInteractive ? 0.35 : isText ? 1.6  : 1,
+          opacity: isInteractive ? 0    : 1,
+          borderRadius: isText ? 2 : 9999,
         }}
+        transition={{ type: 'spring', damping: 28, stiffness: 280 }}
       />
+
+      {/* Ring — becomes a tall narrow ellipse on text */}
       <motion.div
-        className="fixed top-0 left-0 w-10 h-10 border border-premium-orange/30 rounded-full pointer-events-none z-[9999]"
-        style={{
-          x: mouse.x,
-          y: mouse.y,
-          translateX: '-14px',
-          translateY: '-14px',
-        }}
+        className="fixed top-0 left-0 border border-premium-orange/30 pointer-events-none z-[9999]"
+        style={{ x: mouse.x, y: mouse.y, translateX: '-50%', translateY: '-50%' }}
         animate={{
-          scale: hoverType === 'button' ? 2.5 : (hoverType === 'text' ? 1.8 : 1),
-          opacity: isClicking ? 0 : 1,
-          borderColor: hoverType === 'button' ? 'rgba(242, 125, 38, 0.6)' : 'rgba(242, 125, 38, 0.3)'
+          width:       isInteractive || isText ? 18 : 40,
+          height:      isInteractive ? 18 : isText ? 28 : 40,
+          borderRadius: 9999,
+          opacity:     isInput || isInteractive ? 0 : isText ? 0.35 : 1,
+          borderColor: isInteractive
+            ? 'rgba(227, 6, 19, 0)'
+            : isText
+            ? 'rgba(242, 125, 38, 0.45)'
+            : 'rgba(242, 125, 38, 0.3)',
+          scale: isInteractive ? 0.55 : 1,
         }}
-        transition={{ type: 'spring', damping: 20, stiffness: 100 }}
+        transition={{ type: 'spring', damping: 24, stiffness: 170 }}
       />
     </>
   );

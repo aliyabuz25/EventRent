@@ -9,10 +9,10 @@ const IMAGES = [
   { url: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=800&auto=format&fit=crop', category: 'Teambuilding' },
   { url: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=800&auto=format&fit=crop', category: 'İşıq' },
   { url: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=800&auto=format&fit=crop', category: 'Texnika' },
-  { url: 'https://images.unsplash.com/photo-1505373633569-e083a4634fd0?q=80&w=800&auto=format&fit=crop', category: 'Təqdimat' },
+  { url: 'https://images.unsplash.com/photo-1560472355-536de3962603?q=80&w=800&auto=format&fit=crop', category: 'Təqdimat' },
   { url: 'https://images.unsplash.com/photo-1511578314322-379afb476865?q=80&w=800&auto=format&fit=crop', category: 'Konfrans' },
   { url: 'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?q=80&w=800&auto=format&fit=crop', category: 'Şou' },
-  { url: 'https://images.unsplash.com/photo-1514525253361-bee8718a74a2?q=80&w=800&auto=format&fit=crop', category: 'Konsert' },
+  { url: 'https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?q=80&w=800&auto=format&fit=crop', category: 'Konsert' },
   { url: 'https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=800&auto=format&fit=crop', category: 'Premium' },
   { url: 'https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?q=80&w=800&auto=format&fit=crop', category: 'Tədbir' },
 ];

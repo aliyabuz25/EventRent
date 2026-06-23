@@ -14,7 +14,6 @@ export default function Hero() {
   useGsap(() => {
     const tl = gsap.timeline({ defaults: { ease: 'power3.out', duration: 1.2 } });
 
-    // Initial Reveal
     tl.to('.hero-title-reveal', {
       clipPath: 'inset(0% 0 0 0)',
       duration: 1.5,
@@ -28,7 +27,6 @@ export default function Hero() {
       '0'
     );
 
-    // Parallax on Scroll
     gsap.to(bgRef.current, {
       scrollTrigger: {
         trigger: containerRef.current,
@@ -43,7 +41,6 @@ export default function Hero() {
       force3D: true,
     });
 
-    // Sub-elements Reveal
     tl.from('.hero-sub', {
       y: 36,
       opacity: 0,
@@ -54,9 +51,9 @@ export default function Hero() {
   return (
     <section
       ref={containerRef}
-      className="relative h-svh w-full flex items-center justify-center overflow-hidden bg-brand-bg select-none md:h-dvh"
+      className="relative h-svh w-full flex items-center justify-center overflow-hidden bg-brand-bg md:h-dvh"
     >
-      {/* Background Layer with Parallax */}
+      {/* Background Layer */}
       <div
         ref={bgRef}
         className="absolute -inset-[6%] z-0 will-change-transform"
@@ -72,11 +69,10 @@ export default function Hero() {
         >
           <source src="https://storage.googleapis.com/coverr-main/mp4/Mt_Baker.mp4" type="video/mp4" />
         </video>
-        
-        {/* Animated Audience Layers */}
+
         <div className="absolute inset-0 overflow-hidden">
           {[1, 2, 3].map((i) => (
-            <div 
+            <div
               key={i}
               className="audience-layer absolute inset-x-0 bottom-0 h-[60%] pointer-events-none"
               style={{
@@ -100,8 +96,8 @@ export default function Hero() {
       </div>
 
       {/* Content Layer */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 pt-24 pb-16 md:pt-28 md:pb-20 min-h-full flex flex-col">
-        <div className="text-center w-full">
+      <div className="absolute inset-0 z-10 flex items-center justify-center">
+        <div className="w-full max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-center">
           <h1
             ref={titleRef}
             className="text-[14vw] md:text-[min(18vw,11rem)] xl:text-[min(16vw,10rem)] font-light leading-[0.82] tracking-ultra-tight uppercase flex flex-col items-center"
@@ -109,7 +105,7 @@ export default function Hero() {
             <div className="hero-title-reveal reveal-mask py-2">
               <span className="block drop-shadow-2xl">{t(locale, content.home.hero.titleLine1)}</span>
             </div>
-            <div className="hero-title-reveal reveal-mask pt-3 pb-2 md:pt-4 md:pb-3">
+            <div className="hero-title-reveal reveal-mask pt-3 pb-2 md:pt-4 md:pb-3" style={{ paddingRight: '0.25em', marginRight: '-0.25em' }}>
               <span className="block text-stroke-solid italic font-black leading-[1.02]">{t(locale, content.home.hero.titleLine2)}</span>
             </div>
             <div className="hero-title-reveal reveal-mask py-2">
@@ -117,8 +113,10 @@ export default function Hero() {
             </div>
           </h1>
         </div>
+      </div>
 
-        <motion.div className="hero-sub mt-auto w-full space-y-6 md:space-y-8">
+      {/* Bottom Bar — absolute so it doesn't push title off center */}
+      <motion.div className="hero-sub absolute bottom-16 md:bottom-20 left-0 right-0 z-20 w-full space-y-6 md:space-y-8">
           <div className="flex w-full flex-col items-end gap-4 md:hidden sm:flex-row sm:justify-end mb-8">
             <button className="min-h-12 px-7 md:px-8 py-3 md:py-3.5 bg-premium-orange text-white rounded-full font-black text-[10px] uppercase tracking-[0.2em] border border-premium-orange/70 transition-all duration-300 hover:bg-premium-orange/90 hover:border-premium-orange/60 active:scale-95 shadow-[0_20px_50px_rgba(227,6,19,0.32)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-premium-orange focus-visible:ring-offset-2 focus-visible:ring-offset-brand-bg">
               <span className="flex items-center justify-center gap-2.5 md:gap-3">
@@ -174,7 +172,6 @@ export default function Hero() {
             </div>
           </div>
         </motion.div>
-      </div>
 
       {/* Scroll Indicator */}
       <motion.div
@@ -186,15 +183,8 @@ export default function Hero() {
         <p className="text-[9px] font-black uppercase tracking-[0.35em] text-white/35">Scroll</p>
         <div className="w-5 h-8 rounded-full border-2 border-white/20 bg-black/20 flex justify-center p-1">
           <motion.div
-            animate={{
-              y: [0, 9, 0],
-              opacity: [1, 0.35, 1]
-            }}
-            transition={{
-              repeat: Infinity,
-              duration: 1.7,
-              ease: 'easeInOut'
-            }}
+            animate={{ y: [0, 9, 0], opacity: [1, 0.35, 1] }}
+            transition={{ repeat: Infinity, duration: 1.7, ease: 'easeInOut' }}
             className="w-1 h-1.5 bg-premium-orange rounded-full"
           />
         </div>
@@ -212,7 +202,6 @@ export default function Hero() {
           Est. 2016 — Premium Production
         </p>
       </div>
-
     </section>
   );
 }

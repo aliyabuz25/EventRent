@@ -10,6 +10,7 @@ interface ProfileSettingsProps {
   setDisplayName: (name: string) => void;
   isSaving: boolean;
   onSubmit: (e: React.FormEvent) => void;
+  saveMsg?: 'ok' | 'err' | null;
 }
 
 export default function ProfileSettings({
@@ -17,27 +18,36 @@ export default function ProfileSettings({
   displayName,
   setDisplayName,
   isSaving,
-  onSubmit
+  onSubmit,
+  saveMsg = null,
 }: ProfileSettingsProps) {
   const { locale } = useSiteContent();
 
   const labels = {
-    accountSettings: { az: 'Hesab Ayarları',      en: 'Account Settings',     ru: 'Настройки аккаунта',       tr: 'Hesap Ayarları' },
-    fullName:        { az: 'Ad Soyad',             en: 'Full Name',             ru: 'Имя Фамилия',               tr: 'Ad Soyad' },
-    namePlaceholder: { az: 'Adınızı daxil edin',   en: 'Enter your name',       ru: 'Введите ваше имя',         tr: 'Adınızı girin' },
-    email:           { az: 'Email',                en: 'Email',                 ru: 'Эл. почта',                tr: 'E-posta' },
-    saving:          { az: 'Yadda saxlanılır...', en: 'Saving...',             ru: 'Сохранение...',            tr: 'Kaydediliyor...' },
-    save:            { az: 'Yadda saxla',          en: 'Save',                 ru: 'Сохранить',                tr: 'Kaydet' },
-    security:        { az: 'Təhlükəsizlik',        en: 'Security',             ru: 'Безопасность',              tr: 'Güvenlik' },
-    changePassword:  { az: 'Şifrəni dəyiş',        en: 'Change Password',     ru: 'Изменить пароль',          tr: 'Şifreyi değiştir' },
-    securityHint:    { az: 'Hesabınızın təhlükəsizliyini təmin edin', en: 'Secure your account', ru: 'Обеспечьте безопасность аккаунта', tr: 'Hesabınızın güvenliğini sağlayın' },
-    update:          { az: 'Yenilə',                en: 'Update',               ru: 'Обновить',                  tr: 'Güncelle' },
+    accountSettings: { az: 'Hesab Ayarlari', en: 'Account Settings', ru: 'Nastroyki akkaunta', tr: 'Hesap Ayarlari' },
+    fullName:        { az: 'Ad Soyad', en: 'Full Name', ru: 'Imya Familiya', tr: 'Ad Soyad' },
+    namePlaceholder: { az: 'Adinizi daxil edin', en: 'Enter your name', ru: 'Vvedite vashe imya', tr: 'Adinizi girin' },
+    email:           { az: 'Email', en: 'Email', ru: 'El. pochta', tr: 'E-posta' },
+    saving:          { az: 'Yadda saxlanilir...', en: 'Saving...', ru: 'Sokhranenie...', tr: 'Kaydediliyor...' },
+    savedOk:         { az: 'Yadda saxlandi ✓', en: 'Saved ✓', ru: 'Sokhraneno ✓', tr: 'Kaydedildi ✓' },
+    savedErr:        { az: 'Xeta bas verdi', en: 'Error saving', ru: 'Oshibka sokhraneniya', tr: 'Kaydetme hatasi' },
+    save:            { az: 'Yadda saxla', en: 'Save', ru: 'Sokhranit', tr: 'Kaydet' },
+    security:        { az: 'Tehlukesizlik', en: 'Security', ru: 'Bezopasnost', tr: 'Guvenlik' },
+    changePassword:  { az: 'Sifreni deyis', en: 'Change Password', ru: 'Izmenit parol', tr: 'Sifreyi degistir' },
+    securityHint:    { az: 'Hesabinizin tehlukesizliyini temin edin', en: 'Secure your account', ru: 'Obespechte bezopasnost akkaunta', tr: 'Hesabinizin guvenliyini saglayin' },
+    update:          { az: 'Yenile', en: 'Update', ru: 'Obnovit', tr: 'Guncelle' },
   };
+
+  const saveMsgLabel = saveMsg === 'ok'
+    ? t(locale, labels.savedOk)
+    : saveMsg === 'err'
+    ? t(locale, labels.savedErr)
+    : null;
 
   return (
     <div className="bg-white border border-gray-100 rounded-[40px] p-10 shadow-2xl shadow-black/5 space-y-10">
       <h2 className="text-3xl font-bold tracking-tighter">{t(locale, labels.accountSettings)}</h2>
-      
+
       <form onSubmit={onSubmit} className="space-y-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="space-y-2">
@@ -52,17 +62,24 @@ export default function ProfileSettings({
           </div>
           <div className="space-y-2">
             <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">{t(locale, labels.email)}</label>
-            <input 
-              type="email" 
-              value={user?.email || ''} 
+            <input
+              type="email"
+              value={user?.email || ''}
               disabled
+              placeholder={t(locale, labels.email)}
               className="w-full px-6 py-4 bg-gray-100 border border-transparent rounded-2xl text-sm font-bold text-gray-400 cursor-not-allowed"
             />
           </div>
         </div>
 
+        {saveMsgLabel && (
+          <p className={`text-sm font-bold ${saveMsg === 'ok' ? 'text-green-600' : 'text-red-500'}`}>
+            {saveMsgLabel}
+          </p>
+        )}
+
         <div className="flex justify-end">
-          <button 
+          <button
             type="submit"
             disabled={isSaving}
             className="flex items-center gap-2 bg-black text-white px-10 py-4 rounded-2xl font-bold hover:bg-premium-orange transition-all shadow-xl shadow-black/10 disabled:opacity-50"

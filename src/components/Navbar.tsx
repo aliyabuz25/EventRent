@@ -23,6 +23,18 @@ const navLinks = [
     name: { az: 'Kataloq', en: 'Catalog', ru: 'Каталог', tr: 'Katalog' },
   },
   {
+    path: '/teambuilding',
+    name: { az: 'Teambuilding', en: 'Teambuilding', ru: 'Тибилдинг', tr: 'Takım Oluşturma' },
+  },
+  {
+    path: '/catering',
+    name: { az: 'Katering', en: 'Catering', ru: 'Кейтеринг', tr: 'Catering' },
+  },
+  {
+    path: '/tv',
+    name: { az: 'TV&LED', en: 'TV&LLED', ru: 'ТВ&LED', tr: 'TV&LED' },
+  },
+  {
     path: '/portfolio',
     name: { az: 'Portfolio', en: 'Portfolio', ru: 'Портфолио', tr: 'Portföy' },
   },
@@ -304,6 +316,7 @@ export default function Navbar() {
             <button
               type="button"
               onClick={() => setIsMobileMenuOpen((prev) => !prev)}
+              data-testid="mobile-menu-btn"
               aria-label={isMobileMenuOpen ? t(locale, closeMenuLabel) : t(locale, menuLabel)}
               aria-expanded={isMobileMenuOpen ? 'true' : 'false'}
               aria-controls="mobile-navigation"

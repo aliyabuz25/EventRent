@@ -7,6 +7,8 @@ interface TeambuildingAuthModalProps {
   setStep: (step: any) => void;
   formData: any;
   setFormData: (data: any) => void;
+  phone: string;
+  setPhone: (phone: string) => void;
   otp: string;
   setOtp: (otp: string) => void;
   handleRegister: (e: React.FormEvent) => void;
@@ -18,6 +20,8 @@ export default function TeambuildingAuthModal({
   setStep,
   formData,
   setFormData,
+  phone,
+  setPhone,
   otp,
   setOtp,
   handleRegister,
@@ -72,8 +76,8 @@ export default function TeambuildingAuthModal({
                     type="tel"
                     placeholder="Telefon"
                     className="w-full px-6 py-4 bg-white/5 rounded-2xl border-2 border-transparent focus:border-premium-orange focus:bg-white/10 transition-all text-sm font-bold text-white"
-                    value={formData.phone}
-                    onChange={e => setFormData({...formData, phone: e.target.value})}
+                    value={phone}
+                    onChange={e => setPhone(e.target.value)}
                   />
                   <input
                     required
@@ -97,7 +101,7 @@ export default function TeambuildingAuthModal({
                     <Lock className="w-8 h-8" />
                   </div>
                   <h2 className="text-2xl font-black tracking-tight uppercase text-white">OTP Təsdiq</h2>
-                  <p className="text-gray-500 text-[10px] font-black uppercase tracking-widest text-white/40">Test kodu: 123456</p>
+                  <p className="text-gray-500 text-[10px] font-black uppercase tracking-widest text-white/40">Telefon nömrənizə SMS kodu göndəriləcək</p>
                 </div>
                 <form onSubmit={handleVerifyOtp} className="space-y-6">
                   <input

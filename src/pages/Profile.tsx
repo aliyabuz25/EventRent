@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { auth, db } from '../firebase';
 import { onAuthStateChanged, signOut, User, updateProfile } from 'firebase/auth';
-import { collection, query, orderBy, onSnapshot, where } from 'firebase/firestore';
+import { doc, updateDoc, collection, query, orderBy, onSnapshot, where } from 'firebase/firestore';
 import { Lead } from '../types';
 import { motion, AnimatePresence } from 'motion/react';
 import ProfileSidebar from '../sections/profile/ProfileSidebar';
@@ -22,6 +22,7 @@ export default function Profile() {
   const [activeTab, setActiveTab] = useState<Tab>('overview');
   const [displayName, setDisplayName] = useState('');
   const [isSaving, setIsSaving] = useState(false);
+  const [saveMsg, setSaveMsg] = useState<'ok' | 'err' | null>(null);
   const { locale } = useSiteContent();
   const navigate = useNavigate();
 
@@ -90,12 +91,24 @@ export default function Profile() {
 
   const handleUpdateProfile = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user) return;
+    const isDemo = localStorage.getItem('demo_mode') === 'true';
     setIsSaving(true);
+    setSaveMsg(null);
     try {
-      await updateProfile(user, { displayName });
+      if (isDemo) {
+        localStorage.setItem('demo_user_name', displayName);
+      } else if (user) {
+        await updateProfile(user, { displayName });
+        await updateDoc(doc(db, 'users', user.uid), {
+          displayName,
+          updatedAt: new Date(),
+        });
+      }
+      setSaveMsg('ok');
+      setTimeout(() => setSaveMsg(null), 3000);
     } catch (err) {
       console.error('Update profile error:', err);
+      setSaveMsg('err');
     } finally {
       setIsSaving(false);
     }
@@ -136,12 +149,13 @@ export default function Profile() {
                 <ProfileOrders orders={orders} />
               )}
               {activeTab === 'settings' && (
-                <ProfileSettings 
-                  user={user} 
-                  displayName={displayName} 
-                  setDisplayName={setDisplayName} 
-                  isSaving={isSaving} 
-                  onSubmit={handleUpdateProfile} 
+                <ProfileSettings
+                  user={user}
+                  displayName={displayName}
+                  setDisplayName={setDisplayName}
+                  isSaving={isSaving}
+                  onSubmit={handleUpdateProfile}
+                  saveMsg={saveMsg}
                 />
               )}
               {activeTab === 'support' && (

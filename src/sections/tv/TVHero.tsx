@@ -6,7 +6,7 @@ export default function TVHero() {
     <section className="relative h-[600px] -mt-8 -mx-4 sm:-mx-6 lg:-mx-8 overflow-hidden flex items-center justify-center text-center">
       <div className="absolute inset-0 bg-black">
         <img 
-          src="https://images.unsplash.com/photo-1485846234645-a62644ef7462?q=80&w=1920&auto=format&fit=crop" 
+          src="https://images.unsplash.com/photo-1478737270239-2f02b77fc618?q=80&w=1920&auto=format&fit=crop" 
           className="w-full h-full object-cover opacity-30"
           alt="TV Hero"
           referrerPolicy="no-referrer"

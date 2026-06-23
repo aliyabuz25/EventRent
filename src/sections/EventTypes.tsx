@@ -17,7 +17,7 @@ const fallbackEventTypes = [
     subtitle: 'Conferences & Summits',
     description: 'Technical production for high-stakes corporate gatherings where reliability is paramount.',
     icon: Building2,
-    image: 'https://images.unsplash.com/photo-1505373633560-2283204b0c0c?auto=format&fit=crop&q=80&w=1000',
+    image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80&w=1000',
   },
   {
     id: 'concerts',

@@ -148,12 +148,15 @@ export default defineConfig(({ mode }) => {
     },
     server: {
       host: '0.0.0.0',
-      port: 6333,
+      port: 4320,
+      strictPort: true,
+      allowedHosts: ['eventrent2.octotech.az'],
       hmr: process.env.DISABLE_HMR !== 'true',
     },
     preview: {
       host: '0.0.0.0',
-      port: 6333,
+      port: 4321,
+      strictPort: true,
     },
   };
 });

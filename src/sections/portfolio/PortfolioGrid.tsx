@@ -24,7 +24,7 @@ const PROJECTS = [
     client: 'Samsung Azerbaijan',
     date: 'Mart 2024',
     location: 'JW Marriott Absheron',
-    image: 'https://images.unsplash.com/photo-1505373633569-e083a4634fd0?q=80&w=800&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1560472355-536de3962603?q=80&w=800&auto=format&fit=crop',
     category: 'Təqdimat',
   },
   {

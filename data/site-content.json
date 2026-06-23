@@ -2,16 +2,16 @@
   "home": {
     "hero": {
       "titleLine1": {
-        "az": "Səhnələri",
-        "en": "Elevating",
-        "ru": "Поднимаем",
-        "tr": "Sahneleri"
+        "az": "Səhnə",
+        "en": "The Stage",
+        "ru": "Сцена",
+        "tr": "Sahne"
       },
       "titleLine2": {
-        "az": "Yüksəldirik",
-        "en": "Event",
-        "ru": "События",
-        "tr": "Yükseltiyoruz"
+        "az": "SİZİNDİR",
+        "en": "IS YOURS",
+        "ru": "ВАША",
+        "tr": "SİZİNDİR"
       },
       "titleLine3": {
         "az": "Eventrent.az",
@@ -188,7 +188,7 @@
             "ru": "Технический продакшн для ответственных корпоративных мероприятий.",
             "tr": "Güvenilirliğin kritik olduğu kurumsal etkinlikler için teknik prodüksiyon."
           },
-          "image": "https://images.unsplash.com/photo-1505373633560-2283204b0c0c?auto=format&fit=crop&q=80&w=1000"
+          "image": "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80&w=1000"
         },
         {
           "id": "concerts",

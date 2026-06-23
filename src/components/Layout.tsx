@@ -15,7 +15,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <div className="min-h-screen bg-brand-bg font-sans selection:bg-premium-orange selection:text-white overflow-x-hidden">
+    <div className="min-h-screen bg-brand-bg font-sans selection:bg-premium-orange selection:text-white" style={{ overflowX: 'clip' }}>
       <AnimatePresence>
         {isLoading && (
           <motion.div 

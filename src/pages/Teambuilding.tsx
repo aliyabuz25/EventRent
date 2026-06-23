@@ -1,11 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { signInWithPhoneNumber, ConfirmationResult, RecaptchaVerifier } from 'firebase/auth';
+import { auth } from '../firebase';
 import { cn } from '../lib/utils';
 import { GAMES, CONCEPTS } from '../data/teambuilding';
 import TeambuildingHero from '../sections/teambuilding/TeambuildingHero';
 import TeambuildingGrid from '../sections/teambuilding/TeambuildingGrid';
 import TeambuildingDetailView from '../sections/teambuilding/TeambuildingDetailView';
 import TeambuildingAuthModal from '../sections/teambuilding/TeambuildingAuthModal';
+
+// Firebase Phone Auth recaptcha globals
+declare global {
+  interface Window {
+    recaptchaVerifier?: any;
+    RecaptchaVerifier?: any;
+  }
+}
 
 export default function Teambuilding() {
   const [searchParams] = useSearchParams();
@@ -15,10 +25,17 @@ export default function Teambuilding() {
   const [selectedGame, setSelectedGame] = useState<any | null>(null);
   const [selectedConcept, setSelectedConcept] = useState<any | null>(null);
   const [step, setStep] = useState<'list' | 'register' | 'otp' | 'details' | 'concept-select'>('list');
-  
+
   const [formData, setFormData] = useState({ name: '', phone: '', company: '' });
   const [otp, setOtp] = useState('');
   const [verifiedGames, setVerifiedGames] = useState<Set<string>>(new Set());
+  const [otpError, setOtpError] = useState<string | null>(null);
+  const [otpAttempts, setOtpAttempts] = useState(0);
+  const [otpTimer, setOtpTimer] = useState(0);
+  const [confirmationResult, setConfirmationResult] = useState<ConfirmationResult | null>(null);
+  const recaptchaRef = useRef<HTMLDivElement>(null);
+  const recaptchaVerifier = useRef<any>(null);
+  const [phone, setPhone] = useState('');
   
   const [orderExtraData, setOrderExtraData] = useState({
     location: '',
@@ -30,7 +47,33 @@ export default function Teambuilding() {
     if (typeFilter) {
       setActiveTab('games');
     }
+    if (recaptchaRef.current && !recaptchaVerifier.current) {
+      if ((window as any).recaptchaVerifier) {
+        (window as any).recaptchaVerifier.clear();
+      }
+      const verifier = new RecaptchaVerifier(auth, recaptchaRef.current, {
+        size: 'invisible',
+        callback: () => {},
+        'expired-callback': () => {}
+      });
+      recaptchaVerifier.current = verifier;
+      (window as any).recaptchaVerifier = verifier;
+    }
+    return () => {
+      if ((window as any).recaptchaVerifier) {
+        (window as any).recaptchaVerifier.clear();
+        (window as any).recaptchaVerifier = undefined;
+      }
+    };
   }, [typeFilter]);
+
+  useEffect(() => {
+    let interval: ReturnType<typeof setInterval>;
+    if (otpTimer > 0) {
+      interval = setInterval(() => setOtpTimer(t => t - 1), 1000);
+    }
+    return () => clearInterval(interval);
+  }, [otpTimer]);
 
   const filteredGames = typeFilter 
     ? GAMES.filter(g => g.category.toLowerCase() === typeFilter.toLowerCase())
@@ -45,21 +88,47 @@ export default function Teambuilding() {
     }
   };
 
-  const handleRegister = (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    alert('OTP Kodunuz: 123456'); 
-    setStep('otp');
+    if (!recaptchaVerifier.current) {
+      alert('Recaptcha hazır deyil. Bir az gözləyin.');
+      return;
+    }
+    try {
+      const fullPhone = phone.startsWith('+') ? phone : `+${phone}`;
+      const result = await signInWithPhoneNumber(auth, fullPhone, recaptchaVerifier.current);
+      setConfirmationResult(result);
+      setStep('otp');
+      setOtpTimer(60);
+      setOtpError(null);
+      setOtpAttempts(0);
+    } catch (err: any) {
+      alert(`SMS göndərilə bilmadi: ${err.message}`);
+    }
   };
 
-  const handleVerifyOtp = (e: React.FormEvent) => {
+  const handleVerifyOtp = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (otp === '123456') {
+    if (!confirmationResult) {
+      setOtpError('OTP sessiyası baş tutmadı. Yenidən kod alın.');
+      return;
+    }
+    if (otpAttempts >= 3) {
+      setOtpError('Çox sayda yanlış cəhd. Yenidən kod alın.');
+      return;
+    }
+    try {
+      await confirmationResult.confirm(otp);
       const newVerified = new Set(verifiedGames);
       newVerified.add(selectedGame.id);
       setVerifiedGames(newVerified);
       setStep('details');
-    } else {
-      alert('Yanlış OTP kod! (Şərti kod: 123456)');
+      setOtpError(null);
+      setOtp('');
+    } catch (err: any) {
+      setOtpAttempts(a => a + 1);
+      const remaining = 3 - (otpAttempts + 1);
+      setOtpError(remaining > 0 ? `Yanlış kod. Qalan cəhd: ${remaining}` : 'Yanlış kod. Yenidən kod alın.');
     }
   };
 
@@ -152,6 +221,8 @@ export default function Teambuilding() {
         setStep={setStep}
         formData={formData}
         setFormData={setFormData}
+        phone={phone}
+        setPhone={setPhone}
         otp={otp}
         setOtp={setOtp}
         handleRegister={handleRegister}

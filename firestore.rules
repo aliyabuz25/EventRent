@@ -118,5 +118,16 @@ service cloud.firestore {
       allow read: if true; // Public access for client links
       allow write: if isAdmin();
     }
+
+    match /contact-submissions/{submissionId} {
+      // Public write — anyone can submit contact form
+      allow create: if incoming().name is string && incoming().name.size() <= 128 &&
+                    incoming().email is string && incoming().email.size() <= 256 &&
+                    incoming().phone is string && incoming().phone.size() <= 32 &&
+                    incoming().message is string && incoming().message.size() <= 2000 &&
+                    incoming().keys().hasAll(['name', 'email', 'phone', 'message']);
+      // Only admins can read/manage submissions
+      allow read, update, delete: if isAdmin();
+    }
   }
 }

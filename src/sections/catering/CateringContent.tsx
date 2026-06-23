@@ -42,7 +42,7 @@ export default function CateringContent() {
         <div className="space-y-6">
           <div className="aspect-square rounded-[60px] overflow-hidden shadow-2xl border-8 border-gray-50">
             <img 
-              src="https://images.unsplash.com/photo-1558636508-e0ee97247067?q=80&w=600&auto=format&fit=crop" 
+              src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=600&auto=format&fit=crop" 
               className="w-full h-full object-cover"
               alt="Catering 1"
               referrerPolicy="no-referrer"

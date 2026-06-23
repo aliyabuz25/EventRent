@@ -2,6 +2,14 @@
 
 > Bu dosya, Claude Code / Claude CLI ile Eventrent.az için sıfırdan yeni bir site sistemi üretmek üzere hazırlanmış kapsamlı bir proje brieﬁ, kurulum planı, çalışma talimatı ve kalite kontrol dökümanıdır. Claude Code, proje kökünde yer alan `CLAUDE.md` dosyasını her oturum başında okuyarak proje bağlamını ve kuralları uygular.
 
+## ⚠️ BÜTÜN AJANLAR ÜÇÜN ZƏRURİ QAYDALAR (MANDATORY RULES FOR ALL AGENTS) ⚠️
+
+1. **PORT İDARƏETMƏSİ (PORT MANAGEMENT):**
+   - Bu layihə **KƏSİNLİKLƏ 5050 portunda** çalışmalıdır (`vite --port=5050`).
+   - Hər hansı bir test, mock server, backend və ya başqa bir tətbiq üçün port ayırmazdan **ƏVVƏL** `/home/aliv/Desktop/Projeler/GLOBAL_PORT_REGISTRY.md` faylını oxuyun.
+   - `/home/aliv/Desktop/Projeler/GLOBAL_PORT_REGISTRY.md` kompüterinizdəki **bütün ajanlar və layihələr üçün ortaq** IP/Port siyahısıdır. Hansı portların "busy/used", hansıların isə "available" olduğunu göstərir.
+   - Yeni bir port istifadə etdiyinizdə (busy/used), dərhal gedib həmin qlobal faylda (`GLOBAL_PORT_REGISTRY.md`) portun statusunu "IN_USE" olaraq yeniləyin ki, digər layihələrdəki ajanlar xəbərdar olsun.
+
 ---
 
 ## Proje hedefi

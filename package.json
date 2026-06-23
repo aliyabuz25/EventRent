@@ -1,18 +1,18 @@
 {
-  "name": "react-example",
+  "name": "eventrent-az-rebuild",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --strictPort --port=6333 --host=0.0.0.0",
+    "dev": "vite --strictPort --port=5050 --host=0.0.0.0",
     "build": "vite build",
-    "preview": "vite preview --strictPort --port=6334 --host=0.0.0.0",
+    "preview": "vite preview --strictPort --port=5051 --host=0.0.0.0",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit",
-    "dev:fixed": "bash -lc 'p=6333; if lsof -nP -iTCP:$p -sTCP:LISTEN >/dev/null 2>&1; then echo \"Port $p occupied:\"; lsof -nP -iTCP:$p -sTCP:LISTEN; read -r -p \"Stop process(es) and continue on $p? [y/N]: \" a; if [ \"$a\" = \"y\" ] || [ \"$a\" = \"Y\" ]; then lsof -tiTCP:$p -sTCP:LISTEN | xargs -r kill -15; sleep 1; lsof -tiTCP:$p -sTCP:LISTEN | xargs -r kill -9; else echo \"Aborted: port $p busy\"; exit 1; fi; fi; npm run dev'",
-    "preview:fixed": "bash -lc 'p=6334; if lsof -nP -iTCP:$p -sTCP:LISTEN >/dev/null 2>&1; then echo \"Port $p occupied:\"; lsof -nP -iTCP:$p -sTCP:LISTEN; read -r -p \"Stop process(es) and continue on $p? [y/N]: \" a; if [ \"$a\" = \"y\" ] || [ \"$a\" = \"Y\" ]; then lsof -tiTCP:$p -sTCP:LISTEN | xargs -r kill -15; sleep 1; lsof -tiTCP:$p -sTCP:LISTEN | xargs -r kill -9; else echo \"Aborted: port $p busy\"; exit 1; fi; fi; npm run preview'",
-    "predev": "bash -lc 'p=6333; if lsof -nP -iTCP:$p -sTCP:LISTEN >/dev/null 2>&1; then echo \"Port $p occupied:\"; lsof -nP -iTCP:$p -sTCP:LISTEN; read -r -p \"Stop process(es) and continue on $p? [y/N]: \" a; if [ \"$a\" = \"y\" ] || [ \"$a\" = \"Y\" ]; then lsof -tiTCP:$p -sTCP:LISTEN | xargs -r kill -15; sleep 1; lsof -tiTCP:$p -sTCP:LISTEN | xargs -r kill -9; else echo \"Aborted: port $p busy\"; exit 1; fi; fi'",
-    "prepreview": "bash -lc 'p=6334; if lsof -nP -iTCP:$p -sTCP:LISTEN >/dev/null 2>&1; then echo \"Port $p occupied:\"; lsof -nP -iTCP:$p -sTCP:LISTEN; read -r -p \"Stop process(es) and continue on $p? [y/N]: \" a; if [ \"$a\" = \"y\" ] || [ \"$a\" = \"Y\" ]; then lsof -tiTCP:$p -sTCP:LISTEN | xargs -r kill -15; sleep 1; lsof -tiTCP:$p -sTCP:LISTEN | xargs -r kill -9; else echo \"Aborted: port $p busy\"; exit 1; fi; fi'"
+    "dev:fixed": "bash -lc 'p=5050; if lsof -nP -iTCP:$p -sTCP:LISTEN >/dev/null 2>&1; then echo \"Port $p occupied:\"; lsof -nP -iTCP:$p -sTCP:LISTEN; read -r -p \"Stop process(es) and continue on $p? [y/N]: \" a; if [ \"$a\" = \"y\" ] || [ \"$a\" = \"Y\" ]; then lsof -tiTCP:$p -sTCP:LISTEN | xargs -r kill -15; sleep 1; lsof -tiTCP:$p -sTCP:LISTEN | xargs -r kill -9; else echo \"Aborted: port $p busy\"; exit 1; fi; fi; npm run dev'",
+    "preview:fixed": "bash -lc 'p=5051; if lsof -nP -iTCP:$p -sTCP:LISTEN >/dev/null 2>&1; then echo \"Port $p occupied:\"; lsof -nP -iTCP:$p -sTCP:LISTEN; read -r -p \"Stop process(es) and continue on $p? [y/N]: \" a; if [ \"$a\" = \"y\" ] || [ \"$a\" = \"Y\" ]; then lsof -tiTCP:$p -sTCP:LISTEN | xargs -r kill -15; sleep 1; lsof -tiTCP:$p -sTCP:LISTEN | xargs -r kill -9; else echo \"Aborted: port $p busy\"; exit 1; fi; fi; npm run preview'",
+    "predev": "bash -lc 'p=5050; if lsof -nP -iTCP:$p -sTCP:LISTEN >/dev/null 2>&1; then echo \"Port $p occupied:\"; lsof -nP -iTCP:$p -sTCP:LISTEN; read -r -p \"Stop process(es) and continue on $p? [y/N]: \" a; if [ \"$a\" = \"y\" ] || [ \"$a\" = \"Y\" ]; then lsof -tiTCP:$p -sTCP:LISTEN | xargs -r kill -15; sleep 1; lsof -tiTCP:$p -sTCP:LISTEN | xargs -r kill -9; else echo \"Aborted: port $p busy\"; exit 1; fi; fi'",
+    "prepreview": "bash -lc 'p=5051; if lsof -nP -iTCP:$p -sTCP:LISTEN >/dev/null 2>&1; then echo \"Port $p occupied:\"; lsof -nP -iTCP:$p -sTCP:LISTEN; read -r -p \"Stop process(es) and continue on $p? [y/N]: \" a; if [ \"$a\" = \"y\" ] || [ \"$a\" = \"Y\" ]; then lsof -tiTCP:$p -sTCP:LISTEN | xargs -r kill -15; sleep 1; lsof -tiTCP:$p -sTCP:LISTEN | xargs -r kill -9; else echo \"Aborted: port $p busy\"; exit 1; fi; fi'"
   },
   "dependencies": {
     "@google/genai": "^1.29.0",

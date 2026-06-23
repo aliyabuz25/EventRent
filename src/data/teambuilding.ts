@@ -4,7 +4,7 @@ export const GAMES = [
     id: 'game-1',
     name: 'Film Atölyesi',
     category: 'Indoor',
-    image: 'https://images.unsplash.com/photo-1485846234645-a62644ef7467?q=80&w=800&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1440404653325-ab127d49abc1?q=80&w=800&auto=format&fit=crop',
     description: 'Komandanızla birlikdə öz filminizi çəkin.',
     details: 'Bu fəaliyyətdə komandalar ssenari yazır, rol bölgüsü edir və qısa film çəkirlər. Yaradıcılıq və əməkdaşlığın zirvəsi.'
   },
@@ -61,7 +61,7 @@ export const GAMES = [
     id: 'game-8',
     name: 'Hazine Avı',
     category: 'Outdoor',
-    image: 'https://images.unsplash.com/photo-1533481406255-75b2ca8efc39?q=80&w=800&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1551918120-9739cb430c6d?q=80&w=800&auto=format&fit=crop',
     description: 'Xəritə ilə gizli xəzinəni tapın.',
     details: 'Şəhər və ya meşə ərazisində keçirilən bu oyunda komandalar ipuclarını izləyərək hədəfə çatırlar.'
   },
@@ -85,7 +85,7 @@ export const GAMES = [
     id: 'game-11',
     name: 'Olympic Games',
     category: 'Outdoor',
-    image: 'https://images.unsplash.com/photo-1461896756984-3ef185f2518e?q=80&w=800&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=800&auto=format&fit=crop',
     description: 'Korporativ olimpiada həyəcanı.',
     details: 'Müxtəlif idman növləri üzrə komandalar arası yarışlar və mükafatlandırma mərasimi.'
   },
@@ -93,7 +93,7 @@ export const GAMES = [
     id: 'game-12',
     name: 'Rafting Team',
     category: 'Outdoor',
-    image: 'https://images.unsplash.com/photo-1530866495547-084969725137?q=80&w=800&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1533107862482-0e6974b06ec4?q=80&w=800&auto=format&fit=crop',
     description: 'Çayda komanda koordinasiyası.',
     details: 'Sürətli çayda bir qayıqda olan komandanın birgə hərəkət etmə bacarığını yoxlayan adrenalin dolu oyun.'
   }
