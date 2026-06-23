@@ -89,7 +89,7 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 60);
+    const handleScroll = () => setIsScrolled(window.scrollY > 30);
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -162,7 +162,7 @@ export default function Navbar() {
           <Link
             to="/"
             aria-label={t(locale, logoLabel)}
-            className="flex shrink-0 items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-premium-orange focus-visible:ring-offset-2 focus-visible:ring-offset-black rounded-md"
+            className="flex shrink-0 items-center gap-0 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-premium-orange focus-visible:ring-offset-2 focus-visible:ring-offset-black rounded-md"
           >
             <span className="text-[28px] font-black lowercase leading-none tracking-[-0.04em] text-white">event</span>
             <span className="text-[28px] font-black lowercase leading-none tracking-[-0.04em] text-premium-orange">rent</span>
@@ -170,7 +170,7 @@ export default function Navbar() {
 
           {/* Desktop Nav Links */}
           <div className="hidden min-w-0 flex-1 items-center justify-center lg:flex">
-            <div className="flex items-center gap-7 xl:gap-8">
+            <div className="flex items-center gap-5 xl:gap-7">
               {navLinks.map((link) => {
                 const isActive =
                   link.path === '/'
@@ -182,8 +182,8 @@ export default function Navbar() {
                     key={link.path}
                     to={link.path}
                     className={cn(
-                      'group relative rounded-md py-2 text-[11px] font-bold uppercase tracking-[0.16em] transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-premium-orange focus-visible:ring-offset-2 focus-visible:ring-offset-black',
-                      isActive ? 'text-white' : 'text-gray-400 hover:text-white'
+                      'group relative rounded-md py-2 text-[10px] font-bold uppercase tracking-[0.14em] transition-colors duration-300 whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-premium-orange focus-visible:ring-offset-2 focus-visible:ring-offset-black',
+                      isActive ? 'text-white' : 'text-white/40 hover:text-white'
                     )}
                   >
                     {t(locale, link.name)}

@@ -91,14 +91,16 @@ export default function HomeServices3D() {
       <div className="sticky top-0 h-screen flex" style={{ background: '#080808' }}>
 
         {/* LEFT — text panel */}
-        <div className="relative z-10 w-full md:w-[46%] flex flex-col justify-center px-8 md:px-12 shrink-0">
+        <div className="relative z-10 w-full md:w-[46%] flex flex-col justify-center px-8 md:px-12 shrink-0"
+          style={{ background: 'linear-gradient(to right, #080808 0%, #080808 85%, transparent 100%)' }}>
 
           {/* Eyebrow */}
           <div className="flex items-center gap-2 mb-6">
             <div className="w-5 h-px bg-premium-orange" />
-            <span className="text-[9px] tracking-[0.3em] uppercase font-inter text-white/35">
+            <span className="text-[9px] tracking-[0.35em] uppercase font-inter text-white/30">
               Xidmətlər
             </span>
+            <div className="h-px flex-1 bg-white/[0.06]" />
           </div>
 
           {/* Cards */}
@@ -159,17 +161,17 @@ export default function HomeServices3D() {
           </div>
 
           {/* Step dots */}
-          <div className="flex items-center gap-2 mt-8">
+          <div className="flex items-center gap-2.5 mt-8">
             {SERVICES.map((_, i) => (
-              <div key={i} className="rounded-full transition-all duration-400"
+              <div key={i} className="rounded-full transition-all duration-500"
                 style={{
-                  width: i === activeIdx ? '20px' : '5px',
+                  width: i === activeIdx ? '24px' : '5px',
                   height: '3px',
-                  background: i === activeIdx ? '#e30613' : 'rgba(255,255,255,0.2)',
+                  background: i === activeIdx ? '#e30613' : 'rgba(255,255,255,0.15)',
                 }}
               />
             ))}
-            <span className="ml-2 text-[9px] font-inter text-white/20">
+            <span className="ml-2 text-[9px] font-inter text-white/25 tracking-wider">
               {String(activeIdx + 1).padStart(2, '0')} / {String(SERVICES.length).padStart(2, '0')}
             </span>
           </div>

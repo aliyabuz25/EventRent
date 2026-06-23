@@ -23,15 +23,15 @@ function LogoItem({ name, sub, img, url }: { name: string; sub: string; img: str
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className="flex flex-col items-center justify-center select-none transition-all duration-300"
+      className="group flex flex-col items-center justify-center select-none transition-all duration-400 rounded-xl"
       style={{
-        width: 160,
-        height: 88,
-        border: hovered ? '1px solid rgba(227,6,19,0.45)' : '1px solid rgba(255,255,255,0.07)',
-        background: hovered ? 'rgba(255,255,255,0.92)' : 'rgba(255,255,255,0.02)',
-        borderRadius: 6,
-        opacity: hovered ? 1 : 0.45,
-        boxShadow: hovered ? '0 0 18px rgba(227,6,19,0.12)' : 'none',
+        width: 176,
+        height: 100,
+        border: hovered ? '1px solid rgba(227,6,19,0.4)' : '1px solid rgba(255,255,255,0.07)',
+        background: hovered ? 'rgba(255,255,255,0.95)' : 'rgba(255,255,255,0.02)',
+        opacity: hovered ? 1 : 0.42,
+        boxShadow: hovered ? '0 8px 32px rgba(227,6,19,0.15), 0 0 0 1px rgba(227,6,19,0.1)' : 'none',
+        transform: hovered ? 'translateY(-4px)' : 'translateY(0)',
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
@@ -43,26 +43,26 @@ function LogoItem({ name, sub, img, url }: { name: string; sub: string; img: str
           onError={() => setImgFailed(true)}
           className="w-auto object-contain transition-all duration-400"
           style={{
-            maxWidth: 130,
-            height: 56,
+            maxWidth: 140,
+            height: 60,
             filter: hovered
-              ? 'grayscale(0) brightness(1.15) contrast(1.05) drop-shadow(0 0 8px rgba(227,6,19,0.3))'
-              : 'grayscale(1) brightness(1.35) contrast(0.65)',
-            transform: hovered ? 'scale(1.06)' : 'scale(1)',
+              ? 'grayscale(0) brightness(1) contrast(1.1) drop-shadow(0 2px 8px rgba(227,6,19,0.2))'
+              : 'grayscale(1) brightness(1.3) contrast(0.6)',
+            transform: hovered ? 'scale(1.08)' : 'scale(1)',
           }}
         />
       ) : (
-        <div className="flex flex-col items-center gap-[5px]">
+        <div className="flex flex-col items-center gap-1.5">
           <span
-            className="text-[22px] font-black tracking-[-0.03em] uppercase leading-none transition-colors duration-300"
-            style={{ color: hovered ? '#e30613' : 'rgba(255,255,255,0.85)' }}
+            className="font-black tracking-tight uppercase leading-none transition-colors duration-300"
+            style={{ fontSize: 'clamp(18px, 2vw, 24px)', color: hovered ? '#e30613' : 'rgba(255,255,255,0.88)' }}
           >
             {name}
           </span>
           {sub && (
             <span
-              className="text-[8px] font-bold tracking-[0.28em] uppercase leading-none transition-colors duration-300"
-              style={{ color: hovered ? 'rgba(227,6,19,0.55)' : 'rgba(255,255,255,0.3)' }}
+              className="text-[8px] font-bold tracking-[0.32em] uppercase leading-none transition-colors duration-300"
+              style={{ color: hovered ? 'rgba(227,6,19,0.6)' : 'rgba(255,255,255,0.28)' }}
             >
               {sub}
             </span>
@@ -200,7 +200,10 @@ export default function HomeClients() {
 
         {/* Logo strip — img with text fallback */}
         <div className="mt-20 pt-10 border-t border-white/[0.05]">
-          <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-7">
+          <p className="text-[9px] font-black tracking-[0.4em] uppercase text-white/20 mb-8 text-center">
+            Güvənilən Brendlər
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-5 md:gap-6">
             {LOGOS.map((l) => (
               <LogoItem key={l.name} name={l.name} sub={l.sub} img={l.img} url={l.url} />
             ))}
