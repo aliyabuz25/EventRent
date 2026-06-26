@@ -44,3 +44,16 @@ export function ta(locale: string | undefined, value: { az: string[]; en: string
 export function getServiceCategories(content: SiteContent) {
   return content.services?.categories ?? [];
 }
+
+export function getServiceCategoryBySlug(content: SiteContent, slug: string) {
+  return getServiceCategories(content).find(c => c.id === slug) ?? null;
+}
+
+export function getServiceSubItemBySlug(
+  content: SiteContent,
+  categorySlug: string,
+  itemSlug: string
+) {
+  const category = getServiceCategoryBySlug(content, categorySlug);
+  return category?.subItems?.find(item => item.id === itemSlug) ?? null;
+}
