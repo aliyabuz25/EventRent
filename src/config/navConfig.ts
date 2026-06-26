@@ -15,7 +15,7 @@ export const navLinks: NavLink[] = [
   { path: '/tv', name: { az: 'TV&LED', en: 'TV&LED', ru: 'ТВ&LED', tr: 'TV&LED' }, hiddenByDefault: true },
   { path: '/portfolio', name: { az: 'Portfolio', en: 'Portfolio', ru: 'Портфолио', tr: 'Portföy' } },
   { path: '/about', name: { az: 'Haqqımızda', en: 'About', ru: 'О нас', tr: 'Hakkımızda' } },
-  { path: '/contact', name: { az: 'Əlaqə', en: 'Contact', ru: 'Kontakt', tr: 'İletişim' } },
+  { path: '/contact', name: { az: 'Əlaqə', en: 'Contact', ru: 'Контакт', tr: 'İletişim' } },
 ];
 
 export const langLabels: Record<Locale, string> = {
