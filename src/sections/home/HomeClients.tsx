@@ -1,7 +1,5 @@
 import React, { useRef } from 'react';
 import { useGsap, gsap } from '../../motion/useGsap';
-import { useSiteContent } from '../../content.context';
-import { t } from '../../content';
 
 const LOGOS = [
   { name: 'ABB', sub: 'Bank', img: '/logos/abb.png', url: 'https://abb-bank.az' },
@@ -77,44 +75,8 @@ function LogoItem({ name, sub, img, url }: { name: string; sub: string; img: str
 
 export default function HomeClients() {
   const outerRef = useRef<HTMLDivElement>(null);
-  const { content, locale } = useSiteContent();
-  const metrics = content?.home?.metrics?.items || [];
-
-  const parseValue = (v: string) => {
-    const match = v.match(/^([\d.,]+)(.*)$/);
-    if (!match) return { raw: '0', suffix: v };
-    return { raw: match[1], suffix: match[2] };
-  };
 
   useGsap(() => {
-    // Metrics Animation
-    gsap.utils.toArray<HTMLElement>('.cl-metric-item').forEach((item, i) => {
-      const valueEl = item.querySelector<HTMLElement>('.cl-metric-val');
-      if (valueEl) {
-        const raw = valueEl.dataset.raw ?? '0';
-        const suffix = valueEl.dataset.suffix ?? '';
-        const numericVal = parseFloat(raw.replace(/,/g, ''));
-        const obj = { val: 0 };
-        gsap.to(obj, {
-          val: numericVal,
-          duration: 2.5,
-          ease: 'power3.out',
-          delay: i * 0.15,
-          scrollTrigger: { trigger: outerRef.current, start: 'top 85%', once: true },
-          onUpdate() {
-            const display = Math.round(obj.val).toLocaleString('en-US');
-            if (valueEl) valueEl.innerHTML = display + suffix;
-          },
-        });
-      }
-    });
-
-    gsap.fromTo('.cl-metric-item',
-      { y: 40, opacity: 0 },
-      { y: 0, opacity: 1, duration: 1, stagger: 0.1, ease: 'power3.out',
-        scrollTrigger: { trigger: outerRef.current, start: 'top 85%', once: true }
-      }
-    );
     // Row 1 — slides from left all the way through
     gsap.fromTo('.cl-row-1',
       { x: '-22%' },
@@ -156,12 +118,12 @@ export default function HomeClients() {
       }
     );
 
-      // Eyebrow + rule
-      gsap.from('.cl-eyebrow', {
-        y: 20, opacity: 0, duration: 0.9, ease: 'power3.out',
-        scrollTrigger: { trigger: outerRef.current, start: 'top 80%', toggleActions: 'play none none none' },
-      });
-    }, { scope: outerRef, dependencies: [metrics] });
+    // Eyebrow + rule
+    gsap.from('.cl-eyebrow', {
+      y: 20, opacity: 0, duration: 0.9, ease: 'power3.out',
+      scrollTrigger: { trigger: outerRef.current, start: 'top 80%', toggleActions: 'play none none none' },
+    });
+  }, { scope: outerRef });
 
   return (
     <section ref={outerRef} className="relative bg-[#060606] overflow-hidden py-28 md:py-40">
@@ -176,36 +138,6 @@ export default function HomeClients() {
         style={{ background: 'radial-gradient(ellipse at top left, rgba(255,120,0,0.05) 0%, transparent 60%)' }} />
 
       <div className="max-w-[1600px] mx-auto px-6 md:px-12">
-
-        {/* --- Metrics Section Integrated --- */}
-        <div className="mb-28 md:mb-40">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-16">
-            {metrics.map((stat, i) => {
-              const val = stat?.value || '0';
-              const { raw, suffix } = parseValue(val);
-              return (
-                <div key={i} className="cl-metric-item flex flex-col items-center text-center group">
-                  <span
-                    className="cl-metric-val font-black tracking-tighter italic transition-all duration-500 group-hover:scale-105"
-                    style={{
-                      fontSize: 'clamp(3rem, 6vw, 6rem)',
-                      WebkitTextStroke: '1.5px rgba(255,255,255,0.3)',
-                      color: 'transparent',
-                      lineHeight: 1,
-                    }}
-                    data-raw={raw}
-                    data-suffix={suffix}
-                    dangerouslySetInnerHTML={{ __html: `0${suffix}` }}
-                  />
-                  <span className="mt-4 text-[10px] md:text-xs font-black uppercase tracking-[0.3em] text-premium-orange/80">
-                    {t(locale, stat.label)}
-                  </span>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-        {/* -------------------------------- */}
 
         {/* Eyebrow */}
         <div className="cl-eyebrow flex items-center gap-4 mb-16 md:mb-20">

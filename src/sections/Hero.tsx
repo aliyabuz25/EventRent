@@ -1,11 +1,11 @@
 import { useRef } from 'react';
-import { useGsap, gsap } from '../../motion/useGsap';
+import { useGsap, gsap } from '../motion/useGsap';
 import { ArrowRight, Play } from 'lucide-react';
 import { motion } from 'motion/react';
-import { useSiteContent } from '../../content.context';
-import { t } from '../../content';
+import { useSiteContent } from '../content.context';
+import { t } from '../content';
 
-export default function HomeHero() {
+export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const bgRef = useRef<HTMLDivElement>(null);
@@ -115,63 +115,63 @@ export default function HomeHero() {
         </div>
       </div>
 
-      {/* Bottom Bar */}
+      {/* Bottom Bar — absolute so it doesn't push title off center */}
       <motion.div className="hero-sub absolute bottom-16 md:bottom-20 left-0 right-0 z-20 w-full space-y-6 md:space-y-8">
-        <div className="flex w-full flex-col items-end gap-4 md:hidden sm:flex-row sm:justify-end mb-8">
-          <button className="min-h-12 px-7 md:px-8 py-3 md:py-3.5 bg-premium-orange text-white rounded-full font-black text-[10px] uppercase tracking-[0.2em] border border-premium-orange/70 transition-all duration-300 hover:bg-premium-orange/90 hover:border-premium-orange/60 active:scale-95 shadow-[0_20px_50px_rgba(227,6,19,0.32)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-premium-orange focus-visible:ring-offset-2 focus-visible:ring-offset-brand-bg">
-            <span className="flex items-center justify-center gap-2.5 md:gap-3">
-              {t(locale, content.home.hero.primaryCta)} <ArrowRight className="w-4 h-4" />
-            </span>
-          </button>
+          <div className="flex w-full flex-col items-end gap-4 md:hidden sm:flex-row sm:justify-end mb-8">
+            <button className="min-h-12 px-7 md:px-8 py-3 md:py-3.5 bg-premium-orange text-white rounded-full font-black text-[10px] uppercase tracking-[0.2em] border border-premium-orange/70 transition-all duration-300 hover:bg-premium-orange/90 hover:border-premium-orange/60 active:scale-95 shadow-[0_20px_50px_rgba(227,6,19,0.32)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-premium-orange focus-visible:ring-offset-2 focus-visible:ring-offset-brand-bg">
+              <span className="flex items-center justify-center gap-2.5 md:gap-3">
+                {t(locale, content.home.hero.primaryCta)} <ArrowRight className="w-4 h-4" />
+              </span>
+            </button>
 
-          <button className="flex min-h-12 items-center justify-center gap-2.5 md:gap-3 px-7 md:px-8 py-3 md:py-3.5 glass-dark rounded-full text-white font-black text-[10px] uppercase tracking-[0.2em] border border-white/20 hover:border-premium-orange/60 hover:bg-black/60 transition-all duration-300 active:scale-95 shadow-[0_12px_36px_rgba(0,0,0,0.22)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.32)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-premium-orange focus-visible:ring-offset-2 focus-visible:ring-offset-brand-bg">
-            <Play className="w-4 h-4 fill-current" />
-            {t(locale, content.home.hero.secondaryCta)}
-          </button>
-        </div>
+            <button className="flex min-h-12 items-center justify-center gap-2.5 md:gap-3 px-7 md:px-8 py-3 md:py-3.5 glass-dark rounded-full text-white font-black text-[10px] uppercase tracking-[0.2em] border border-white/20 hover:border-premium-orange/60 hover:bg-black/60 transition-all duration-300 active:scale-95 shadow-[0_12px_36px_rgba(0,0,0,0.22)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.32)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-premium-orange focus-visible:ring-offset-2 focus-visible:ring-offset-brand-bg">
+              <Play className="w-4 h-4 fill-current" />
+              {t(locale, content.home.hero.secondaryCta)}
+            </button>
+          </div>
 
-        <div className="hidden md:block relative left-1/2 w-screen -translate-x-1/2 px-3 md:px-6 lg:px-8 xl:px-10 2xl:px-12 mt-3 lg:mt-4">
-          <div className="flex w-full flex-col items-start gap-4 lg:gap-5 pr-16 lg:pr-24 xl:pr-32">
-            <div className="flex flex-col items-start gap-4 max-w-sm">
-              <div className="h-px w-20 bg-premium-orange/40" />
-              <p className="text-[11px] text-white/60 font-bold uppercase tracking-[0.7em] text-left leading-[1.8]">
-                {t(locale, content.home.hero.subtitle)}
-              </p>
-            </div>
-
-            <div className="flex w-full justify-between items-end gap-8 lg:gap-10">
-              <div className="flex items-start gap-12 lg:gap-16">
-                {[
-                  { label: 'Excellence', value: 'Technical' },
-                  { label: 'Market', value: 'High-End' },
-                  { label: 'Focus', value: 'Cinematic' },
-                ].map((stat, i) => (
-                  <div
-                    key={i}
-                    className={`space-y-1 text-left${i === 0 ? '' : ' border-l border-white/10 pl-6'}`}
-                  >
-                    <p className="text-left text-[9px] font-black uppercase tracking-widest text-premium-orange">{stat.label}</p>
-                    <p className="text-left text-lg font-black text-white uppercase tracking-tighter">{stat.value}</p>
-                  </div>
-                ))}
+          <div className="hidden md:block relative left-1/2 w-screen -translate-x-1/2 px-3 md:px-6 lg:px-8 xl:px-10 2xl:px-12 mt-3 lg:mt-4">
+            <div className="flex w-full flex-col items-start gap-4 lg:gap-5 pr-16 lg:pr-24 xl:pr-32">
+              <div className="flex flex-col items-start gap-4 max-w-sm">
+                <div className="h-px w-20 bg-premium-orange/40" />
+                <p className="text-[11px] text-white/60 font-bold uppercase tracking-[0.7em] text-left leading-[1.8]">
+                  {t(locale, content.home.hero.subtitle)}
+                </p>
               </div>
 
-              <div className="flex flex-col lg:flex-row items-end gap-4 lg:gap-5">
-                <button className="min-h-12 px-7 md:px-8 py-3 md:py-3.5 bg-premium-orange text-white rounded-full font-black text-[10px] uppercase tracking-[0.2em] border border-premium-orange/70 transition-all duration-300 hover:bg-premium-orange/90 hover:border-premium-orange/60 active:scale-95 shadow-[0_20px_50px_rgba(227,6,19,0.32)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-premium-orange focus-visible:ring-offset-2 focus-visible:ring-offset-brand-bg">
-                  <span className="flex items-center gap-2.5 md:gap-3">
-                    {t(locale, content.home.hero.primaryCta)} <ArrowRight className="w-4 h-4" />
-                  </span>
-                </button>
+              <div className="flex w-full justify-between items-end gap-8 lg:gap-10">
+                <div className="flex items-start gap-12 lg:gap-16">
+                  {[
+                    { label: 'Excellence', value: 'Technical' },
+                    { label: 'Market', value: 'High-End' },
+                    { label: 'Focus', value: 'Cinematic' },
+                  ].map((stat, i) => (
+                    <div
+                      key={i}
+                      className={`space-y-1 text-left${i === 0 ? '' : ' border-l border-white/10 pl-6'}`}
+                    >
+                      <p className="text-left text-[9px] font-black uppercase tracking-widest text-premium-orange">{stat.label}</p>
+                      <p className="text-left text-lg font-black text-white uppercase tracking-tighter">{stat.value}</p>
+                    </div>
+                  ))}
+                </div>
 
-                <button className="flex min-h-12 items-center gap-2.5 md:gap-3 px-7 md:px-8 py-3 md:py-3.5 glass-dark rounded-full text-white font-black text-[10px] uppercase tracking-[0.2em] border border-white/20 hover:border-premium-orange/60 hover:bg-black/60 transition-all duration-300 active:scale-95 shadow-[0_12px_36px_rgba(0,0,0,0.22)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.32)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-premium-orange focus-visible:ring-offset-2 focus-visible:ring-offset-brand-bg">
-                  <Play className="w-4 h-4 fill-current" />
-                  {t(locale, content.home.hero.secondaryCta)}
-                </button>
+                <div className="flex flex-col lg:flex-row items-end gap-4 lg:gap-5">
+                  <button className="min-h-12 px-7 md:px-8 py-3 md:py-3.5 bg-premium-orange text-white rounded-full font-black text-[10px] uppercase tracking-[0.2em] border border-premium-orange/70 transition-all duration-300 hover:bg-premium-orange/90 hover:border-premium-orange/60 active:scale-95 shadow-[0_20px_50px_rgba(227,6,19,0.32)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-premium-orange focus-visible:ring-offset-2 focus-visible:ring-offset-brand-bg">
+                    <span className="flex items-center gap-2.5 md:gap-3">
+                      {t(locale, content.home.hero.primaryCta)} <ArrowRight className="w-4 h-4" />
+                    </span>
+                  </button>
+
+                  <button className="flex min-h-12 items-center gap-2.5 md:gap-3 px-7 md:px-8 py-3 md:py-3.5 glass-dark rounded-full text-white font-black text-[10px] uppercase tracking-[0.2em] border border-white/20 hover:border-premium-orange/60 hover:bg-black/60 transition-all duration-300 active:scale-95 shadow-[0_12px_36px_rgba(0,0,0,0.22)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.32)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-premium-orange focus-visible:ring-offset-2 focus-visible:ring-offset-brand-bg">
+                    <Play className="w-4 h-4 fill-current" />
+                    {t(locale, content.home.hero.secondaryCta)}
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </motion.div>
+        </motion.div>
 
       {/* Scroll Indicator */}
       <motion.div

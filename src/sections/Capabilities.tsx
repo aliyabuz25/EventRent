@@ -1,9 +1,9 @@
 import React, { useMemo, useRef } from 'react';
-import { useGsap, gsap, ScrollTrigger } from '../../motion/useGsap';
+import { useGsap, gsap, ScrollTrigger } from '../motion/useGsap';
 import { Monitor, Volume2, Lightbulb, Layers } from 'lucide-react';
-import { cn } from '../../lib/utils';
-import { useSiteContent } from '../../content.context';
-import { t } from '../../content';
+import { cn } from '../lib/utils';
+import { useSiteContent } from '../content.context';
+import { t } from '../content';
 
 const capabilityIcons: Record<string, React.ComponentType<{ className?: string }>> = {
   led: Monitor,
@@ -39,7 +39,7 @@ const fallbackCapabilities = [
   },
 ];
 
-export default function HomeCapabilities() {
+export default function Capabilities() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLDivElement>(null);
   const { content, locale } = useSiteContent();
@@ -96,8 +96,8 @@ export default function HomeCapabilities() {
           >
             {/* Background Image with Parallax */}
             <div className="absolute inset-0 z-0 overflow-hidden">
-              <img
-                src={cap.image}
+              <img 
+                src={cap.image} 
                 className="w-full h-full object-cover opacity-30 grayscale hover:grayscale-0 transition-all duration-1000"
                 referrerPolicy="no-referrer"
                 alt={cap.title}
@@ -113,13 +113,13 @@ export default function HomeCapabilities() {
                   </div>
                   <span className="text-[10px] font-black uppercase tracking-[0.26em] text-premium-red/90">{t(locale, content.home.capabilities.badge)} 0{i + 1}</span>
                 </div>
-
+                
                 <h2 className="text-6xl md:text-8xl font-black tracking-ultra-tight uppercase leading-[0.94]">
                   {cap.title.split(' ').map((word, idx) => (
                     <span key={idx} className={cn("block", idx === 1 && "text-premium-red")}>{word}</span>
                   ))}
                 </h2>
-
+                
                 <p className="text-lg md:text-xl text-gray-300/90 max-w-md font-medium leading-[1.75]">
                   {cap.description}
                 </p>
@@ -133,8 +133,8 @@ export default function HomeCapabilities() {
               <div className="hidden lg:block relative aspect-square">
                 <div className="absolute inset-0 border border-white/10 rounded-[2.75rem] rotate-6" />
                 <div className="absolute inset-0 border border-premium-red/20 rounded-[2.75rem] -rotate-3" />
-                <img
-                  src={cap.image}
+                <img 
+                  src={cap.image} 
                   className="w-full h-full object-cover rounded-[2.75rem] shadow-[0_28px_80px_rgba(0,0,0,0.32)] relative z-10"
                   referrerPolicy="no-referrer"
                   alt={cap.title}
@@ -146,7 +146,7 @@ export default function HomeCapabilities() {
             <div className="absolute bottom-12 left-20 flex items-center gap-4">
               <span className="text-xs font-bold text-white">0{i + 1}</span>
               <div className="w-40 h-px bg-white/10 relative">
-                <div
+                <div 
                   className="absolute inset-0 bg-premium-red origin-left"
                   style={{ transform: `scaleX(${(i + 1) / capabilities.length})` }}
                 />

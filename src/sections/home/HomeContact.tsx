@@ -16,7 +16,7 @@ function FloatingOrb({ style }: { style: React.CSSProperties }) {
   );
 }
 
-export default function ContactCTA() {
+export default function HomeContact() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState<number | null>(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });

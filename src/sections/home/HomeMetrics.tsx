@@ -6,127 +6,134 @@ import { t } from '../../content';
 export default function Metrics() {
   const containerRef = useRef<HTMLDivElement>(null);
   const { content, locale } = useSiteContent();
-  const metrics = content?.home?.metrics?.items || [];
 
   useGsap(() => {
-    // Section header
+    // Section fade-in
     gsap.from('.metrics-eyebrow', {
-      y: 20, opacity: 0, duration: 1, ease: 'power3.out',
-      scrollTrigger: { trigger: containerRef.current, start: 'top 85%', once: true },
+      y: 20, opacity: 0, duration: 0.9, ease: 'power3.out',
+      scrollTrigger: { trigger: containerRef.current, start: 'top 82%', once: true },
     });
 
-    gsap.utils.toArray<HTMLElement>('.metric-item-raw').forEach((item, i) => {
-      // Line grow
-      const line = item.querySelector('.metric-line');
-      if (line) {
-        gsap.fromTo(line, { scaleY: 0 }, {
-          scaleY: 1, duration: 1.5, ease: 'expo.out', delay: i * 0.1,
-          scrollTrigger: { trigger: containerRef.current, start: 'top 80%', once: true },
-        });
-      }
-
-      // Number mask reveal
-      const numWrapper = item.querySelector('.num-wrapper');
-      if (numWrapper) {
-        gsap.fromTo(numWrapper, 
-          { y: '100%', opacity: 0 },
-          { y: '0%', opacity: 1, duration: 1.2, ease: 'power4.out', delay: i * 0.15 + 0.2,
-            scrollTrigger: { trigger: containerRef.current, start: 'top 80%', once: true },
-          }
-        );
-      }
-
-      // Label fade
-      const label = item.querySelector('.metric-label-raw');
-      if (label) {
-        gsap.fromTo(label, { opacity: 0, x: -10 }, {
-          opacity: 1, x: 0, duration: 1, ease: 'power2.out', delay: i * 0.15 + 0.5,
-          scrollTrigger: { trigger: containerRef.current, start: 'top 80%', once: true },
-        });
-      }
+    gsap.utils.toArray<HTMLElement>('.metric-item').forEach((item, i) => {
+      // Card entrance
+      gsap.from(item, {
+        y: 50, opacity: 0, duration: 1.0, ease: 'power3.out',
+        delay: i * 0.1,
+        scrollTrigger: { trigger: containerRef.current, start: 'top 80%', once: true },
+      });
 
       // Number counter animation
-      const valueEl = item.querySelector<HTMLElement>('.metric-value-raw');
+      const valueEl = item.querySelector<HTMLElement>('.metric-value');
       if (valueEl) {
         const raw = valueEl.dataset.raw ?? '0';
         const suffix = valueEl.dataset.suffix ?? '';
-        const numericVal = parseFloat(raw.replace(/,/g, ''));
+        const numericVal = parseFloat(raw);
         const obj = { val: 0 };
         gsap.to(obj, {
           val: numericVal,
-          duration: 2.5,
+          duration: 2.2,
           ease: 'power2.out',
-          delay: i * 0.15 + 0.4,
-          scrollTrigger: { trigger: containerRef.current, start: 'top 80%', once: true },
+          delay: i * 0.12 + 0.3,
+          scrollTrigger: { trigger: containerRef.current, start: 'top 78%', once: true },
           onUpdate() {
-            const display = Math.round(obj.val).toLocaleString('en-US');
-            if (valueEl) valueEl.innerHTML = display + suffix;
+            const display = Number.isInteger(numericVal)
+              ? Math.round(obj.val).toString()
+              : obj.val.toFixed(1);
+            if (valueEl) valueEl.textContent = display + suffix;
           },
         });
       }
-    });
-  }, { scope: containerRef, dependencies: [metrics] });
 
-  // Parse stat values
+      // Label slide
+      const labelEl = item.querySelector<HTMLElement>('.metric-label');
+      if (labelEl) {
+        gsap.from(labelEl, {
+          x: -20, opacity: 0, duration: 0.8, ease: 'power2.out',
+          delay: 0.25 + i * 0.12,
+          scrollTrigger: { trigger: containerRef.current, start: 'top 80%', once: true },
+        });
+      }
+
+      // Accent bar
+      const bar = item.querySelector<HTMLElement>('.metric-bar');
+      if (bar) {
+        gsap.fromTo(bar, { scaleX: 0 }, {
+          scaleX: 1, duration: 1.4, ease: 'expo.out',
+          delay: i * 0.1 + 0.4,
+          scrollTrigger: { trigger: containerRef.current, start: 'top 78%', once: true },
+        });
+      }
+    });
+  }, { scope: containerRef });
+
+  // Parse stat values (e.g. "10+" -> raw=10, suffix="+")
   const parseValue = (v: string) => {
-    const match = v.match(/^([\d.,]+)(.*)$/);
+    const match = v.match(/^([\d.]+)(.*)$/);
     if (!match) return { raw: '0', suffix: v };
     return { raw: match[1], suffix: match[2] };
   };
 
   return (
-    <section ref={containerRef} className="relative bg-[#050505] py-24 md:py-36 overflow-hidden">
-      {/* Horizontal grid lines for background */}
-      <div className="absolute inset-0 pointer-events-none opacity-[0.03]">
-        <div className="w-full h-px bg-white absolute top-1/4" />
-        <div className="w-full h-px bg-white absolute top-2/4" />
-        <div className="w-full h-px bg-white absolute top-3/4" />
-      </div>
+    <section ref={containerRef} className="relative bg-[#050505] py-28 md:py-36 overflow-hidden">
+      {/* top + bottom separators */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-white/[0.06]" />
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-white/[0.06]" />
 
-      <div className="relative max-w-7xl mx-auto px-6 md:px-12">
+      {/* Ambient glow */}
+      <div className="absolute inset-0 pointer-events-none"
+        style={{ background: 'radial-gradient(ellipse 60% 50% at 50% 100%, rgba(227,6,19,0.06) 0%, transparent 70%)' }} />
+
+      <div className="max-w-7xl mx-auto px-6 md:px-12">
         {/* Eyebrow */}
-        <div className="metrics-eyebrow flex items-center gap-6 mb-20 md:mb-28">
-          <span className="text-[10px] font-black tracking-[0.4em] uppercase text-white/40">
-            [ Rəqəmlərlə BİZ ]
+        <div className="metrics-eyebrow flex items-center gap-4 mb-16 md:mb-20">
+          <div className="h-px w-10 bg-premium-orange/60" />
+          <span className="text-[9px] font-black tracking-[0.5em] uppercase text-premium-orange">
+            Rəqəmlərlə
           </span>
           <div className="h-px flex-1 bg-white/[0.06]" />
         </div>
 
-        {/* Minimalist Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-x-0 gap-y-16">
-          {metrics.map((stat, i) => {
+        {/* Stats grid */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-0">
+          {content.home.metrics.items.map((stat, i) => {
             const { raw, suffix } = parseValue(stat.value);
-            // Qırmızı vurğu üçün
-            const isAccent = i === 1 || i === 2; // 1200+ və 5000+
-            
             return (
               <div
-                key={i}
-                className="metric-item-raw relative pl-6 md:pl-10"
+                key={`${stat.value}-${i}`}
+                className="metric-item group relative px-6 md:px-10 py-8 md:py-10"
+                style={{
+                  borderRight: i < content.home.metrics.items.length - 1 ? '1px solid rgba(255,255,255,0.06)' : 'none',
+                  borderBottom: i < 2 ? '1px solid rgba(255,255,255,0.06)' : 'none',
+                }}
               >
-                {/* Vertical Divider Line */}
-                <div 
-                  className="metric-line absolute left-0 top-0 bottom-0 w-[2px] origin-top"
-                  style={{ background: isAccent ? '#e30613' : 'rgba(255,255,255,0.1)' }}
-                />
-
-                <div className="overflow-hidden mb-4">
-                  <div className="num-wrapper inline-block">
-                    <span
-                      className={`metric-value-raw font-black tracking-tighter leading-none ${isAccent ? 'text-white' : 'text-white/60'}`}
-                      style={{ fontSize: 'clamp(4rem, 6vw, 6.5rem)' }}
-                      data-raw={raw}
-                      data-suffix={suffix}
-                      dangerouslySetInnerHTML={{ __html: `0${suffix}` }}
-                    />
-                  </div>
+                {/* Number */}
+                <div className="mb-5">
+                  <span
+                    className="metric-value block font-black leading-none tracking-tight"
+                    style={{ fontSize: 'clamp(3.5rem, 6vw, 6rem)' }}
+                    data-raw={raw}
+                    data-suffix={suffix}
+                  >
+                    0{suffix}
+                  </span>
                 </div>
 
-                <div className="metric-label-raw">
-                  <p className="text-[11px] md:text-xs font-bold uppercase tracking-[0.3em] text-white/40 leading-relaxed max-w-[150px]">
+                {/* Accent bar */}
+                <div
+                  className="metric-bar h-[2px] w-12 mb-4 origin-left"
+                  style={{ background: 'linear-gradient(90deg, #e30613, transparent)' }}
+                />
+
+                {/* Label */}
+                <div className="metric-label">
+                  <p className="text-[10px] font-black uppercase tracking-[0.28em] text-white/35 leading-relaxed">
                     {t(locale, stat.label)}
                   </p>
                 </div>
+
+                {/* Hover glow */}
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                  style={{ background: 'radial-gradient(circle at 30% 50%, rgba(227,6,19,0.05) 0%, transparent 70%)' }} />
               </div>
             );
           })}

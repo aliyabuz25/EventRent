@@ -4,6 +4,7 @@ import { MOCK_PRODUCTS } from '../mockData';
 import { db } from '../firebase';
 import { collection, onSnapshot } from 'firebase/firestore';
 import { Product } from '../types';
+import CatalogHero from '../sections/catalog/CatalogHero';
 import CatalogMain from '../sections/catalog/CatalogMain';
 
 export default function Catalog() {
@@ -47,18 +48,8 @@ export default function Catalog() {
   };
 
   return (
-    <div className="pb-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16">
-        <div className="flex items-center gap-2 mb-5">
-          <div className="w-5 h-px bg-premium-orange" />
-          <span className="text-[9px] tracking-[0.35em] uppercase font-inter text-white/30">Kataloq</span>
-        </div>
-        <h1 className="text-4xl md:text-6xl font-black tracking-tighter text-white leading-none">
-          Avadanlıq<br />
-          <span className="text-white/20 italic">Kataloqu.</span>
-        </h1>
-      </div>
-
+    <div className="space-y-20 pb-20">
+      <CatalogHero />
       <CatalogMain 
         search={search}
         setSearch={setSearch}

@@ -49,7 +49,7 @@ const SERVICES = [
   },
 ];
 
-export default function ServicesShowcase() {
+export default function HomeServices3D() {
   const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const tickingRef = useRef(false);
