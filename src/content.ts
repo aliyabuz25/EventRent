@@ -40,3 +40,7 @@ export function ta(locale: string | undefined, value: { az: string[]; en: string
   if (normalized === 'tr') return value.tr;
   return value.az;
 }
+
+export function getServiceCategories(content: SiteContent) {
+  return content.services?.categories ?? [];
+}
