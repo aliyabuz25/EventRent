@@ -1,5 +1,6 @@
 import { SiteContent } from './types';
 
+// Compile-time fallback. Canonical live content is written to data/site-content.json via the admin UI.
 export const DEFAULT_SITE_CONTENT: SiteContent = {
   home: {
     hero: {
