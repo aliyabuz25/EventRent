@@ -1,68 +1,45 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'motion/react';
 import { ShoppingCart, Menu, X, ShieldCheck, User as UserIcon, LogIn, ArrowRight, Globe, ChevronDown } from 'lucide-react';
-import { onAuthStateChanged, User } from 'firebase/auth';
-import { auth } from '../firebase';
 import { cn } from '../lib/utils';
 import { useSiteContent } from '../content.context';
 import { t } from '../content';
 import { Locale } from '../types';
+import { navLinks, langLabels } from '../config/navConfig';
+import { useCartCount } from '../hooks/useCartCount';
+import { useNavbarAuth } from '../hooks/useNavbarAuth';
 
-const navLinks = [
-  {
-    path: '/',
-    name: { az: 'Ana səhifə', en: 'Home', ru: 'Главная', tr: 'Ana Sayfa' },
-  },
-  {
-    path: '/services',
-    name: { az: 'Xidmətlər', en: 'Services', ru: 'Услуги', tr: 'Hizmetler' },
-  },
-  {
-    path: '/catalog',
-    name: { az: 'Kataloq', en: 'Catalog', ru: 'Каталог', tr: 'Katalog' },
-  },
-  {
-    path: '/teambuilding',
-    name: { az: 'Teambuilding', en: 'Teambuilding', ru: 'Тибилдинг', tr: 'Takım Oluşturma' },
-  },
-  {
-    path: '/catering',
-    name: { az: 'Katering', en: 'Catering', ru: 'Кейтеринг', tr: 'Catering' },
-  },
-  {
-    path: '/tv',
-    name: { az: 'TV&LED', en: 'TV&LLED', ru: 'ТВ&LED', tr: 'TV&LED' },
-  },
-  {
-    path: '/portfolio',
-    name: { az: 'Portfolio', en: 'Portfolio', ru: 'Портфолио', tr: 'Portföy' },
-  },
-  {
-    path: '/about',
-    name: { az: 'Haqqımızda', en: 'About', ru: 'О нас', tr: 'Hakkımızda' },
-  },
-  {
-    path: '/contact',
-    name: { az: 'Əlaqə', en: 'Contact', ru: 'Контакт', tr: 'İletişim' },
-  },
-];
+const NAV_VISIBILITY_KEY = 'nav_page_visibility';
 
-const langLabels: Record<Locale, string> = {
-  az: 'Azərbaycan',
-  en: 'English',
-  ru: 'Русский',
-  tr: 'Türkçe',
-};
+function getNavVisibility(): Record<string, boolean> {
+  try {
+    return JSON.parse(localStorage.getItem(NAV_VISIBILITY_KEY) || '{}');
+  } catch {
+    return {};
+  }
+}
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
-  const [cartCount, setCartCount] = useState(0);
-  const [user, setUser] = useState<User | null>(null);
+  const cartCount = useCartCount();
+  const user = useNavbarAuth();
   const { content, locale, setLocale } = useSiteContent();
   const location = useLocation();
+  const [navVisibility, setNavVisibility] = useState<Record<string, boolean>>(getNavVisibility);
+
+  useEffect(() => {
+    const handleVisibilityChange = () => setNavVisibility(getNavVisibility());
+    window.addEventListener('nav-visibility-changed', handleVisibilityChange);
+    return () => window.removeEventListener('nav-visibility-changed', handleVisibilityChange);
+  }, []);
+
+  const visibleNavLinks = navLinks.filter(link => {
+    if (!link.hiddenByDefault) return true;
+    return navVisibility[link.path] === true;
+  });
 
   const logoLabel = { az: 'Ana səhifəyə keç', en: 'Go to homepage', ru: 'Перейти на главную', tr: 'Ana sayfaya git' };
   const cartLabel = { az: 'Səbətə keç', en: 'Open cart', ru: 'Открыть корзину', tr: 'Sepeti aç' };
@@ -75,43 +52,11 @@ export default function Navbar() {
   const inquiriesLabel = { az: 'Sorğular', en: 'Inquiries', ru: 'Запросы', tr: 'Talepler' };
   const cartItemsLabel = { az: 'Səbətdə məhsul sayı', en: 'Items in cart', ru: 'Количество товаров в корзине', tr: 'Sepetteki ürün sayısı' };
 
-  const updateCartCount = useCallback(() => {
-    if (typeof window === 'undefined') return;
-    try {
-      const cart = JSON.parse(window.localStorage.getItem('cart') || '[]');
-      const total = Array.isArray(cart)
-        ? cart.reduce((acc: number, item: { quantity?: number }) => acc + (Number(item?.quantity) || 0), 0)
-        : 0;
-      setCartCount(total);
-    } catch {
-      setCartCount(0);
-    }
-  }, []);
-
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 30);
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  useEffect(() => {
-    const unsub = onAuthStateChanged(auth, (nextUser) => setUser(nextUser));
-    return () => unsub();
-  }, []);
-
-  useEffect(() => {
-    updateCartCount();
-    const handleStorage = (event: StorageEvent) => {
-      if (!event.key || event.key === 'cart') updateCartCount();
-    };
-    const handleCartUpdate = () => updateCartCount();
-    window.addEventListener('storage', handleStorage);
-    window.addEventListener('cart-updated', handleCartUpdate as EventListener);
-    return () => {
-      window.removeEventListener('storage', handleStorage);
-      window.removeEventListener('cart-updated', handleCartUpdate as EventListener);
-    };
-  }, [updateCartCount]);
 
   useEffect(() => {
     if (isMobileMenuOpen) setIsMobileMenuOpen(false);
@@ -171,7 +116,7 @@ export default function Navbar() {
           {/* Desktop Nav Links */}
           <div className="hidden min-w-0 flex-1 items-center justify-center lg:flex">
             <div className="flex items-center gap-5 xl:gap-7">
-              {navLinks.map((link) => {
+              {visibleNavLinks.map((link) => {
                 const isActive =
                   link.path === '/'
                     ? location.pathname === '/'
@@ -390,7 +335,7 @@ export default function Navbar() {
 
             {/* Nav Links */}
             <div className="flex flex-col gap-1">
-              {navLinks.map((link, i) => (
+              {visibleNavLinks.map((link, i) => (
                 <motion.div
                   key={link.path}
                   initial={{ opacity: 0, x: 24 }}
