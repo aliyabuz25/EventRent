@@ -1,23 +1,65 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { ArrowRight, Package } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { useSiteContent } from '../content.context';
-import { t } from '../content';
+import { useSiteContent } from '../../content.context';
+import { t } from '../../content';
+import { useGsap, gsap } from '../../motion/useGsap';
 
-export default function CatalogGateway() {
+export default function ServicesCatalogGateway() {
   const { content, locale } = useSiteContent();
+  const containerRef = useRef<HTMLElement>(null);
+
+  useGsap(() => {
+    gsap.from('.cgw-card', {
+      y: 80,
+      opacity: 0,
+      scale: 0.97,
+      duration: 1.2,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: containerRef.current,
+        start: 'top 85%',
+        toggleActions: 'play none none none',
+      },
+    });
+
+    gsap.from('.cgw-text', {
+      x: -40,
+      opacity: 0,
+      duration: 1.1,
+      ease: 'power3.out',
+      delay: 0.2,
+      scrollTrigger: {
+        trigger: containerRef.current,
+        start: 'top 82%',
+        toggleActions: 'play none none none',
+      },
+    });
+
+    gsap.from('.cgw-image', {
+      x: 40,
+      opacity: 0,
+      duration: 1.1,
+      ease: 'power3.out',
+      delay: 0.3,
+      scrollTrigger: {
+        trigger: containerRef.current,
+        start: 'top 82%',
+        toggleActions: 'play none none none',
+      },
+    });
+  }, { scope: containerRef });
 
   return (
-    <section className="bg-black py-32 md:py-36">
+    <section ref={containerRef} className="bg-black py-32 md:py-36">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="relative rounded-[3.5rem] overflow-hidden bg-premium-red p-10 md:p-16 lg:p-20 group shadow-[0_32px_90px_rgba(0,0,0,0.28)]">
-          {/* Background Pattern */}
+        <div className="cgw-card relative rounded-[3.5rem] overflow-hidden bg-premium-red p-10 md:p-16 lg:p-20 group shadow-[0_32px_90px_rgba(0,0,0,0.28)]">
           <div className="absolute inset-0 opacity-10 pointer-events-none">
             <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-white via-transparent to-transparent" />
           </div>
 
           <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-14 md:gap-16 lg:gap-20 items-center">
-            <div className="space-y-7 md:space-y-8">
+            <div className="cgw-text space-y-7 md:space-y-8">
               <div className="inline-flex items-center gap-3 px-4 py-2 bg-white/20 rounded-full text-white text-[11px] font-black uppercase tracking-[0.24em] backdrop-blur-sm">
                 <Package className="w-4 h-4" />
                 {t(locale, content.home.catalogGateway.badge)}
@@ -39,7 +81,7 @@ export default function CatalogGateway() {
               </Link>
             </div>
 
-            <div className="relative aspect-video lg:aspect-square">
+            <div className="cgw-image relative aspect-video lg:aspect-square">
               <div className="absolute inset-0 bg-black/24 rounded-[2.75rem] blur-[88px] group-hover:scale-105 transition-transform duration-1000" />
               <img
                 src={content.home.catalogGateway.image}
@@ -47,8 +89,7 @@ export default function CatalogGateway() {
                 referrerPolicy="no-referrer"
                 alt={t(locale, content.home.catalogGateway.titleAccent)}
               />
-              
-              {/* Floating Labels */}
+
               {content.home.catalogGateway.stats[0] && (
                 <div className="absolute -top-5 -right-5 z-20 bg-black/92 backdrop-blur-md text-white p-5 rounded-[1.75rem] shadow-[0_20px_60px_rgba(0,0,0,0.28)] hidden md:block border border-white/8">
                   <p className="text-2xl font-black">{content.home.catalogGateway.stats[0].value}</p>

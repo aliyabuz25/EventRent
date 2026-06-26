@@ -1,58 +1,61 @@
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import { Star, CheckCircle2, Users } from 'lucide-react';
 import { useGsap, gsap } from '../../motion/useGsap';
 
 const VALUES = [
-  { icon: Star, title: 'Mukemmellik', desc: 'Her bir isde en yukssek neticeye can atiriq.' },
-  { icon: CheckCircle2, title: 'Etibarliliq', desc: 'Verdiyimiz vende ve keyfiyyete tam zemanet veririk.' },
-  { icon: Users, title: 'Musteri Memnuniyyeti', desc: 'Sizin sevinciniz bizim en boyuk ugurumuzdur.' },
+  { icon: Star,         title: 'Mükəmməllik',         desc: 'Hər bir işdə ən yüksək nəticəyə can atırıq. Standart bizim üçün başlanğıc nöqtəsidir, hədəf deyil.' },
+  { icon: CheckCircle2, title: 'Etibarlılıq',          desc: 'Verdiyimiz vəd və keyfiyyətə tam zəmanət veririk. Müştərimiz narahat olmamalıdır.' },
+  { icon: Users,        title: 'Müştəri Məmnuniyyəti', desc: 'Sizin sevincinizdən böyük uğur tanımırıq. Hər tədbiri sizinlə birlikdə yaradırıq.' },
 ];
 
 export default function AboutValues() {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useGsap(() => {
-    // Cards staggered reveal — runs immediately on mount
-    gsap.from('.value-card', {
-      y: 60,
-      opacity: 0,
-      duration: 1.1,
-      stagger: 0.15,
-      ease: 'power3.out',
-      toggleActions: 'play none none none',
+    gsap.from('.val-eyebrow', {
+      y: 16, opacity: 0, duration: 0.8, ease: 'power3.out',
+      scrollTrigger: { trigger: containerRef.current, start: 'top 80%', toggleActions: 'play none none none' },
     });
-
-    // Subtle float animation on icons — runs immediately on mount
-    const icons = gsap.utils.toArray('.value-icon');
-    icons.forEach((icon: any) => {
-      gsap.to(icon, {
-        y: -8,
-        duration: 1.5,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut',
-        toggleActions: 'play none none none',
-      });
+    gsap.from('.val-card', {
+      y: 30, opacity: 0, duration: 0.8, ease: 'power3.out', stagger: 0.1,
+      scrollTrigger: { trigger: '.val-grid', start: 'top 78%', toggleActions: 'play none none none' },
     });
   }, { scope: containerRef });
 
   return (
-    <section ref={containerRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-        {VALUES.map((value, i) => (
-          <div
-            key={i}
-            className="value-card space-y-8 p-12 bg-gray-50 rounded-5xl hover:bg-black hover:text-white transition-all duration-700 group"
-          >
-            <div className="value-icon w-16 h-16 bg-white rounded-2xl flex items-center justify-center text-black shadow-sm group-hover:bg-white/10 group-hover:text-white transition-colors">
-              <value.icon className="w-8 h-8" />
+    <section ref={containerRef} className="relative bg-[#060606]">
+      <div className="max-w-7xl mx-auto px-6 md:px-12 py-20 md:py-28">
+
+        <div className="val-eyebrow flex items-center gap-3 mb-6">
+          <div className="w-5 h-px bg-premium-orange" />
+          <span className="text-[9px] tracking-[0.35em] uppercase font-inter text-white/30">Dəyərlərimiz</span>
+        </div>
+
+        <h2 className="val-eyebrow text-4xl md:text-6xl font-black tracking-tighter text-white leading-none mb-14">
+          Prinsiplərimiz<br />
+          <span className="text-white/20 italic">Əsasımız.</span>
+        </h2>
+
+        <div className="val-grid grid grid-cols-1 md:grid-cols-3 gap-px bg-white/[0.07]">
+          {VALUES.map((v, i) => (
+            <div
+              key={i}
+              className="val-card group bg-[#060606] hover:bg-white/[0.03] transition-all duration-500 p-10 md:p-12 space-y-6 overflow-hidden relative"
+            >
+              <div className="absolute bottom-0 left-0 h-[1px] w-0 group-hover:w-full bg-premium-orange transition-all duration-500 ease-out" />
+              <div className="w-12 h-12 rounded-xl bg-white/[0.05] group-hover:bg-premium-orange/10 flex items-center justify-center transition-colors duration-400">
+                <v.icon className="w-5 h-5 text-white/40 group-hover:text-premium-orange transition-colors duration-400" />
+              </div>
+              <h3 className="text-xl md:text-2xl font-black tracking-tight text-white leading-snug group-hover:translate-x-1 transition-transform duration-400">
+                {v.title}
+              </h3>
+              <p className="text-[15px] text-[#a0a0a0] group-hover:text-[#c0c0c0] leading-[1.8] font-normal transition-colors duration-400">
+                {v.desc}
+              </p>
             </div>
-            <div className="space-y-4">
-              <h3 className="text-3xl font-bold tracking-tight">{value.title}</h3>
-              <p className="text-gray-500 group-hover:text-gray-400 font-light leading-relaxed">{value.desc}</p>
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
+
       </div>
     </section>
   );

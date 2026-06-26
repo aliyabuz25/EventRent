@@ -1,8 +1,8 @@
 import React, { useMemo, useRef } from 'react';
-import { useGsap, gsap } from '../motion/useGsap';
+import { useGsap, gsap } from '../../motion/useGsap';
 import { MessageSquare, ClipboardList, Settings, Rocket } from 'lucide-react';
-import { useSiteContent } from '../content.context';
-import { t } from '../content';
+import { useSiteContent } from '../../content.context';
+import { t } from '../../content';
 
 const stepIcons = [MessageSquare, ClipboardList, Settings, Rocket];
 
@@ -33,7 +33,7 @@ const fallbackSteps = [
   },
 ];
 
-export default function Process() {
+export default function ServicesProcess() {
   const containerRef = useRef<HTMLDivElement>(null);
   const { content, locale } = useSiteContent();
 
@@ -53,12 +53,8 @@ export default function Process() {
 
   useGsap(() => {
     const cards = gsap.utils.toArray('.process-card');
-    
-    // Instead of snapping the whole screen, let's use a "Stacking" approach
-    // with better margins so it doesn't feel like a slideshow, but a process building up.
-    
+
     cards.forEach((card: any, i: number) => {
-      // Don't animate the last card out
       if (i < cards.length - 1) {
         gsap.to(card, {
           scale: 0.66,
@@ -69,14 +65,13 @@ export default function Process() {
           filter: 'blur(16px)',
           scrollTrigger: {
             trigger: card,
-            start: 'top 12%',
+            start: 'top 28%',
             end: 'bottom top',
             scrub: 0.9,
           }
         });
       }
 
-      // Initial reveal for each card as it enters
       gsap.from(card, {
         y: 72,
         opacity: 0,
@@ -89,7 +84,6 @@ export default function Process() {
       });
     });
 
-    // Reveal header
     gsap.from('.process-header', {
       scrollTrigger: {
         trigger: containerRef.current,
@@ -103,13 +97,11 @@ export default function Process() {
   }, { scope: containerRef });
 
   return (
-    <section ref={containerRef} className="bg-brand-bg relative py-36 md:py-40 overflow-hidden border-t border-white/5">
-      {/* Fixed Sidebar Decor (Visual Anchor) */}
+    <section ref={containerRef} className="bg-brand-bg relative py-20 md:py-24 overflow-hidden border-t border-white/5">
       <div className="absolute left-10 top-0 bottom-0 w-px bg-white/5 hidden xl:block" />
-      
+
       <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
-        {/* Section Header */}
-        <div className="process-header mb-24 md:mb-28 flex flex-col md:flex-row justify-between items-end gap-10 md:gap-12">
+        <div className="process-header mb-14 md:mb-16 flex flex-col md:flex-row justify-between items-end gap-10 md:gap-12">
           <div className="space-y-5">
             <span className="text-premium-orange text-[10px] font-black uppercase tracking-[0.26em]">{t(locale, content.home.process.badge)}</span>
             <h2 className="text-6xl md:text-9xl font-black uppercase tracking-ultra-tight leading-[0.94]">
@@ -124,26 +116,23 @@ export default function Process() {
           </div>
         </div>
 
-        {/* Process Steps (Vertical Flow) */}
-        <div className="space-y-10 md:space-y-28 pb-28 md:pb-32">
+        <div className="space-y-10 md:space-y-28 pb-8 md:pb-10">
           {steps.map((step, i) => (
-            <div 
-              key={i} 
+            <div
+              key={i}
               className="process-card sticky top-24 w-full flex flex-col md:flex-row bg-brand-card rounded-[2.75rem] overflow-hidden border border-white/8 shadow-[0_28px_80px_rgba(0,0,0,0.32)] group transition-colors duration-300 hover:border-premium-orange/20"
             >
-              {/* Index Column */}
               <div className="w-full md:w-24 bg-white/5 flex flex-col items-center justify-between py-12 order-3 md:order-1 border-t md:border-t-0 md:border-r border-white/5">
                 <span className="text-sm font-black text-white/20 select-none">{t(locale, content.home.process.phase)}</span>
                 <span className="text-4xl font-black text-premium-orange select-none">0{i + 1}</span>
                 <div className="w-1 h-32 bg-white/5 rounded-full overflow-hidden hidden md:block">
-                  <div 
-                    className="w-full bg-premium-orange" 
-                    style={{ height: `${(i + 1) * 25}%` }} 
+                  <div
+                    className="w-full bg-premium-orange"
+                    style={{ height: `${(i + 1) * 25}%` }}
                   />
                 </div>
               </div>
 
-              {/* Main Content Area */}
               <div className="flex-1 p-8 md:p-14 lg:p-18 order-2 md:order-2 flex flex-col justify-center gap-8 md:gap-10">
                 <div className="space-y-6">
                   <div className="w-20 h-20 rounded-3xl bg-premium-orange/10 border border-premium-orange/20 shadow-[0_18px_40px_rgba(227,6,19,0.12)] backdrop-blur-sm flex items-center justify-center">
@@ -153,7 +142,7 @@ export default function Process() {
                     {step.title}
                   </h3>
                 </div>
-                
+
                 <p className="text-xl md:text-2xl text-gray-300/90 font-medium leading-[1.7] max-w-2xl">
                   {step.description}
                 </p>
@@ -165,10 +154,9 @@ export default function Process() {
                 </div>
               </div>
 
-              {/* Visual Component */}
               <div className="w-full md:w-[40%] h-[40vh] md:h-auto overflow-hidden order-1 md:order-3 relative">
-                <img 
-                  src={step.bg} 
+                <img
+                  src={step.bg}
                   className="w-full h-full object-cover grayscale brightness-75 transition-transform duration-1000 group-hover:scale-105 group-hover:grayscale-0 group-hover:brightness-100"
                   alt={step.title}
                   referrerPolicy="no-referrer"
@@ -180,7 +168,6 @@ export default function Process() {
         </div>
       </div>
 
-      {/* Background Ambience */}
       <div className="absolute right-0 top-1/4 w-96 h-96 bg-premium-orange/5 blur-[120px] rounded-full pointer-events-none" />
       <div className="absolute left-0 bottom-1/4 w-[600px] h-[600px] bg-white/5 blur-[150px] rounded-full pointer-events-none" />
     </section>

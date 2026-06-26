@@ -1,6 +1,9 @@
-import React from 'react';
-import { motion } from 'motion/react';
+import React, { useRef, useEffect } from 'react';
 import { Tv } from 'lucide-react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const CHANNELS = [
   { title: 'Canlı Yayım', desc: 'Tədbirlərinizin internet üzərinden canlı yayımı.' },
@@ -10,24 +13,42 @@ const CHANNELS = [
 ];
 
 export default function TVChannels() {
+  const containerRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.fromTo('.tvc-card',
+        { y: 50, opacity: 0 },
+        {
+          y: 0, opacity: 1,
+          duration: 0.55, ease: 'power3.out', stagger: 0.1,
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: 'top 78%',
+            toggleActions: 'play none none none',
+          },
+        }
+      );
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+    <section ref={containerRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
       {CHANNELS.map((channel, i) => (
-        <motion.div
+        <div
           key={i}
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ delay: i * 0.1 }}
-          className="group p-12 bg-gray-50 rounded-5xl hover:bg-black hover:text-white transition-all duration-700 text-center space-y-8"
+          className="tvc-card opacity-0 group p-12 bg-white/5 border border-white/8 rounded-5xl hover:bg-white/10 hover:border-white/15 transition-all duration-500 text-center space-y-8"
         >
-          <div className="w-20 h-20 bg-white rounded-3xl flex items-center justify-center mx-auto text-black shadow-sm group-hover:bg-white/10 group-hover:text-white transition-colors">
+          <div className="w-20 h-20 bg-white/10 rounded-3xl flex items-center justify-center mx-auto text-premium-orange transition-colors group-hover:bg-white/15">
             <Tv className="w-10 h-10" />
           </div>
           <div className="space-y-4">
-            <h3 className="text-2xl font-bold tracking-tight">{channel.title}</h3>
-            <p className="text-gray-500 group-hover:text-gray-400 text-sm leading-relaxed font-light">{channel.desc}</p>
+            <h3 className="text-2xl font-bold tracking-tight text-white">{channel.title}</h3>
+            <p className="text-white/40 text-sm leading-relaxed font-light">{channel.desc}</p>
           </div>
-        </motion.div>
+        </div>
       ))}
     </section>
   );

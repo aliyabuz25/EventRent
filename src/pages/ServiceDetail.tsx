@@ -1,108 +1,42 @@
 import React, { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import { ArrowLeft, CheckCircle2, ShoppingCart, Plus, Minus, X, Info } from 'lucide-react';
-import { cn } from '../lib/utils';
-
-const serviceData: Record<string, any> = {
-  'printing': {
-    title: 'Çap xidmətləri',
-    description: 'Yüksək keyfiyyətli çap həlləri ilə brendinizi ön plana çıxarın.',
-    image: 'https://images.unsplash.com/photo-1562654501-a0ccc0fc3fb1?q=80&w=1920&auto=format&fit=crop',
-    subItems: [
-      { 
-        id: 'notebook', 
-        name: 'Bloknot', 
-        desc: 'Xüsusi dizaynlı korporativ bloknotlar.',
-        questions: ['Ölçü (A4, A5)', 'Vərəq sayı (50, 100)', 'Üz qabığı (Sərt, Yumşaq)', 'Rəng']
-      },
-      { 
-        id: 'vinyl', 
-        name: 'Vinil', 
-        desc: 'Geniş formatlı vinil çapı və montajı.',
-        questions: ['Ölçü (m²)', 'Material növü', 'Laminasiya', 'Montaj xidməti']
-      },
-      { 
-        id: 'rollup', 
-        name: 'Roll-Up', 
-        desc: 'Səyyar reklam stendləri.',
-        questions: ['Ölçü (85x200, 100x200)', 'Material keyfiyyəti', 'Mexanizm növü']
-      },
-      { 
-        id: 'pen', 
-        name: 'Qələm', 
-        desc: 'Brendləşdirilmiş qələmlər və suvenirlər.',
-        questions: ['Model', 'Rəng', 'Çap növü (Lazer, UV)']
-      },
-    ]
-  },
-  'decor': {
-    title: 'Dekor xidmətləri',
-    description: 'Tədbirləriniz üçün estetik və innovativ dekorasiya həlləri.',
-    image: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=1920&auto=format&fit=crop',
-    subItems: [
-      { 
-        id: 'tents', 
-        name: 'Çadırlar', 
-        desc: 'Hər ölçüdə və dizaynda çadırların qurulması.',
-        questions: ['Ölçü (m²)', 'Qurulma yeri', 'Döşəmə (Xalça, Taxta)', 'İşıqlandırma']
-      },
-      { 
-        id: 'tables-chairs', 
-        name: 'Masa Və Oturacaqlar', 
-        desc: 'Müasir və klassik mebel icarəsi.',
-        questions: ['Növ (Masa, Oturacaq)', 'Model', 'Rəng', 'Örtük növü']
-      },
-      { 
-        id: 'tableware', 
-        name: 'Qab-Qacaq', 
-        desc: 'Premium qab-qacaq dəstləri.',
-        questions: ['Dəst növü', 'Nəfər sayı', 'Model']
-      },
-    ]
-  },
-  'other': {
-    title: 'Digər xidmətlər',
-    description: 'Tədbirinizin mükəmməlliyi üçün əlavə peşəkar xidmətlər.',
-    image: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=1920&auto=format&fit=crop',
-    subItems: [
-      { id: 'dj', name: 'DJ Xidməti', desc: 'Peşəkar musiqi tərtibatı.', questions: ['Tədbir növü', 'Müddət (saat)', 'Avadanlıq tələbi'] },
-      { id: 'singer', name: 'Müğənni Xidməti', desc: 'Canlı musiqi performansı.', questions: ['Janr', 'Müddət', 'Səs sistemi tələbi'] },
-      { id: 'host', name: 'Aparıcı Xidməti', desc: 'Təcrübəli tədbir aparıcıları.', questions: ['Tədbir dili', 'Tədbir növü'] },
-      { id: 'organization', name: 'Tədbirlərin Təşkili Xidməti', desc: 'A-dan Z-yə təşkilatçılıq.', questions: ['Tədbir növü', 'Qonaq sayı', 'Büdcə aralığı'] },
-      { id: 'designer', name: 'Dizayner Xidməti', desc: 'Vizual konseptlərin yaradılması.', questions: ['Dizayn növü', 'Müddət'] },
-    ]
-  }
-};
+import { ArrowLeft, CheckCircle2, ShoppingCart, Plus, Minus, X } from 'lucide-react';
+import { useSiteContent } from '../content.context';
+import { t, ta, getServiceCategoryBySlug, getServiceSubItemBySlug } from '../content';
 
 export default function ServiceDetail() {
   const { category, id } = useParams();
   const navigate = useNavigate();
+  const { content, locale } = useSiteContent();
   const [isOrdering, setIsOrdering] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [showSuccess, setShowSuccess] = useState(false);
-  
-  const currentCategory = serviceData[category || ''];
-  const currentItem = id ? currentCategory?.subItems.find((item: any) => item.id === id) : null;
+
+  const currentCategory = getServiceCategoryBySlug(content, category || '');
+  const currentItem = id && category ? getServiceSubItemBySlug(content, category, id) : null;
 
   if (!currentCategory) return <div className="p-20 text-center">Xidmət tapılmadı.</div>;
+
+  const categoryTitle = t(locale, currentCategory.title);
+  const categoryDescription = t(locale, currentCategory.description);
 
   const handleAddToCart = () => {
     const cart = JSON.parse(localStorage.getItem('cart') || '[]');
     const newItem = {
-      productId: currentItem.id,
+      productId: currentItem!.id,
       quantity,
       technicalAnswers: answers,
-      name: currentItem.name, // For display in cart
-      image: `https://picsum.photos/seed/${currentItem.id}/800/800`,
-      category: currentCategory.title
+      name: t(locale, currentItem!.name),
+      image: `https://picsum.photos/seed/${currentItem!.id}/800/800`,
+      category: categoryTitle,
     };
-    
+
     cart.push(newItem);
     localStorage.setItem('cart', JSON.stringify(cart));
     window.dispatchEvent(new Event('storage'));
-    
+
     setShowSuccess(true);
     setTimeout(() => {
       setShowSuccess(false);
@@ -116,10 +50,10 @@ export default function ServiceDetail() {
       {/* Hero Section */}
       <section className="relative h-[500px] -mt-8 -mx-4 sm:-mx-6 lg:-mx-8 overflow-hidden flex items-center justify-center text-center">
         <div className="absolute inset-0 bg-black">
-          <img 
-            src={currentCategory.image} 
+          <img
+            src={currentCategory.image}
             className="w-full h-full object-cover opacity-40"
-            alt={currentCategory.title}
+            alt={categoryTitle}
             referrerPolicy="no-referrer"
           />
         </div>
@@ -127,20 +61,20 @@ export default function ServiceDetail() {
           <Link to="/services" className="inline-flex items-center gap-2 text-white/60 hover:text-white transition-colors text-xs font-bold uppercase tracking-widest">
             <ArrowLeft className="w-4 h-4" /> Xidmətlərə qayıt
           </Link>
-          <motion.h1 
+          <motion.h1
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             className="text-5xl md:text-7xl font-bold text-white tracking-tighter"
           >
-            {currentItem ? currentItem.name : currentCategory.title}
+            {currentItem ? t(locale, currentItem.name) : categoryTitle}
           </motion.h1>
-          <motion.p 
+          <motion.p
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.1 }}
             className="text-xl text-white/60 font-light max-w-2xl mx-auto"
           >
-            {currentItem ? currentItem.desc : currentCategory.description}
+            {currentItem ? t(locale, currentItem.desc) : categoryDescription}
           </motion.p>
         </div>
       </section>
@@ -149,7 +83,7 @@ export default function ServiceDetail() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {!id ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {currentCategory.subItems.map((item: any, i: number) => (
+            {currentCategory.subItems.map((item, i) => (
               <motion.div
                 key={item.id}
                 initial={{ opacity: 0, y: 20 }}
@@ -158,16 +92,16 @@ export default function ServiceDetail() {
                 className="group p-8 bg-gray-50 rounded-[40px] hover:bg-black hover:text-white transition-all duration-500"
               >
                 <div className="aspect-square rounded-3xl overflow-hidden mb-8 border-4 border-white shadow-xl">
-                  <img 
-                    src={`https://picsum.photos/seed/${item.id}/800/800`} 
+                  <img
+                    src={`https://picsum.photos/seed/${item.id}/800/800`}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                    alt={item.name}
+                    alt={t(locale, item.name)}
                     referrerPolicy="no-referrer"
                   />
                 </div>
-                <h3 className="text-2xl font-bold tracking-tight mb-4">{item.name}</h3>
-                <p className="text-gray-500 group-hover:text-gray-400 font-light mb-8">{item.desc}</p>
-                <Link 
+                <h3 className="text-2xl font-bold tracking-tight mb-4">{t(locale, item.name)}</h3>
+                <p className="text-gray-500 group-hover:text-gray-400 font-light mb-8">{t(locale, item.desc)}</p>
+                <Link
                   to={`/services/${category}/${item.id}`}
                   className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest group-hover:text-white"
                 >
@@ -179,21 +113,21 @@ export default function ServiceDetail() {
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
             <div className="aspect-square rounded-[60px] overflow-hidden border-8 border-gray-50 shadow-2xl sticky top-24">
-              <img 
-                src={`https://picsum.photos/seed/${currentItem.id}/1000/1000`} 
+              <img
+                src={`https://picsum.photos/seed/${currentItem!.id}/1000/1000`}
                 className="w-full h-full object-cover"
-                alt={currentItem.name}
+                alt={t(locale, currentItem!.name)}
                 referrerPolicy="no-referrer"
               />
             </div>
             <div className="space-y-12">
               <div className="space-y-8">
                 <div className="inline-block px-6 py-2 bg-black text-white rounded-full text-[10px] font-bold uppercase tracking-widest">
-                  {currentCategory.title}
+                  {categoryTitle}
                 </div>
-                <h2 className="text-4xl md:text-6xl font-bold tracking-tighter">{currentItem.name}</h2>
+                <h2 className="text-4xl md:text-6xl font-bold tracking-tighter">{t(locale, currentItem!.name)}</h2>
                 <p className="text-xl text-gray-500 font-light leading-relaxed">
-                  {currentItem.desc} üçün biz ən müasir texnologiyalar və peşəkar komandamızla xidmətinizdəyik. 
+                  {t(locale, currentItem!.desc)} üçün biz ən müasir texnologiyalar və peşəkar komandamızla xidmətinizdəyik.
                   Hər bir layihəyə fərdi yanaşaraq, sizin tələblərinizə uyğun ən optimal həlli təklif edirik.
                 </p>
                 <div className="space-y-4">
@@ -207,14 +141,14 @@ export default function ServiceDetail() {
               </div>
 
               {!isOrdering ? (
-                <button 
+                <button
                   onClick={() => setIsOrdering(true)}
                   className="inline-flex items-center gap-3 bg-black text-white px-12 py-6 rounded-full font-bold text-xl hover:bg-gray-800 transition-all shadow-2xl shadow-black/20 active:scale-95"
                 >
                   Sifariş et <ShoppingCart className="w-6 h-6" />
                 </button>
               ) : (
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   className="bg-gray-50 rounded-[40px] p-10 space-y-8 border border-gray-100"
@@ -231,14 +165,14 @@ export default function ServiceDetail() {
                     <div className="space-y-3">
                       <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Say</label>
                       <div className="flex items-center gap-4 bg-white p-2 rounded-2xl border border-gray-100 w-fit">
-                        <button 
+                        <button
                           onClick={() => setQuantity(Math.max(1, quantity - 1))}
                           className="w-10 h-10 flex items-center justify-center hover:bg-gray-50 rounded-xl transition-colors"
                         >
                           <Minus className="w-4 h-4" />
                         </button>
                         <span className="text-xl font-bold w-12 text-center">{quantity}</span>
-                        <button 
+                        <button
                           onClick={() => setQuantity(quantity + 1)}
                           className="w-10 h-10 flex items-center justify-center hover:bg-gray-50 rounded-xl transition-colors"
                         >
@@ -248,11 +182,11 @@ export default function ServiceDetail() {
                     </div>
 
                     {/* Dynamic Questions */}
-                    {currentItem.questions?.map((q: string) => (
+                    {ta(locale, currentItem!.questions).map((q: string) => (
                       <div key={q} className="space-y-3">
                         <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">{q}</label>
-                        <input 
-                          type="text" 
+                        <input
+                          type="text"
                           placeholder={`${q} daxil edin...`}
                           className="w-full px-6 py-4 bg-white border border-gray-100 rounded-2xl text-sm font-bold focus:outline-none focus:ring-4 focus:ring-red-500/5 focus:border-red-500 transition-all"
                           value={answers[q] || ''}
@@ -262,7 +196,7 @@ export default function ServiceDetail() {
                     ))}
 
                     <div className="pt-4">
-                      <button 
+                      <button
                         onClick={handleAddToCart}
                         className="w-full bg-red-600 text-white py-6 rounded-3xl font-bold text-lg hover:bg-red-700 transition-all shadow-xl shadow-red-600/20 flex items-center justify-center gap-3"
                       >
@@ -275,7 +209,7 @@ export default function ServiceDetail() {
 
               <AnimatePresence>
                 {showSuccess && (
-                  <motion.div 
+                  <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.9 }}
