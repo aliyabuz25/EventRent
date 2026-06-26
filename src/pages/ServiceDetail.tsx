@@ -17,7 +17,10 @@ export default function ServiceDetail() {
   const currentCategory = getServiceCategoryBySlug(content, category || '');
   const currentItem = id && category ? getServiceSubItemBySlug(content, category, id) : null;
 
-  if (!currentCategory) return <div className="p-20 text-center">Xidmət tapılmadı.</div>;
+  const notFoundLabel = { az: 'Xidmət tapılmadı.', en: 'Service not found.', ru: 'Услуга не найдена.', tr: 'Hizmet bulunamadı.' };
+
+  if (!currentCategory) return <p>{t(locale, notFoundLabel)}</p>;
+  if (id && !currentItem) return <p>{t(locale, notFoundLabel)}</p>;
 
   const categoryTitle = t(locale, currentCategory.title);
   const categoryDescription = t(locale, currentCategory.description);
