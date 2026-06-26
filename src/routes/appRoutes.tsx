@@ -1,4 +1,3 @@
-import React from 'react';
 import Home from '../pages/Home';
 import About from '../pages/About';
 import Services from '../pages/Services';
@@ -17,7 +16,7 @@ import Login from '../pages/Login';
 import Profile from '../pages/Profile';
 import Premium from '../pages/Premium';
 
-export const appRoutes: { path: string; element: React.ReactElement }[] = [
+export const appRoutes: { path: string; element: JSX.Element }[] = [
   { path: '/', element: <Home /> },
   { path: '/about', element: <About /> },
   { path: '/services', element: <Services /> },
@@ -37,3 +36,4 @@ export const appRoutes: { path: string; element: React.ReactElement }[] = [
   { path: '/profile', element: <Profile /> },
   { path: '/premium', element: <Premium /> },
 ];
+
