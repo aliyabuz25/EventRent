@@ -17,16 +17,10 @@ export default function ServiceDetail() {
   const currentCategory = getServiceCategoryBySlug(content, category || '');
   const currentItem = id && category ? getServiceSubItemBySlug(content, category, id) : null;
 
-  const notFoundLabel = { az: 'Xidmət tapılmadı.', en: 'Service not found.', ru: 'Услуга не найдена.', tr: 'Hizmet bulunamadı.' };
-
-  if (!currentCategory) return <p>{t(locale, notFoundLabel)}</p>;
-  if (id && !currentItem) return <p>{t(locale, notFoundLabel)}</p>;
+  if (!currentCategory) return <div className="p-20 text-center">Xidmət tapılmadı.</div>;
 
   const categoryTitle = t(locale, currentCategory.title);
   const categoryDescription = t(locale, currentCategory.description);
-  const itemName = currentItem ? t(locale, currentItem.name) : null;
-  const itemDesc = currentItem ? t(locale, currentItem.desc) : null;
-  const itemQuestions = currentItem ? ta(locale, currentItem.questions) : [];
 
   const handleAddToCart = () => {
     const cart = JSON.parse(localStorage.getItem('cart') || '[]');
@@ -34,9 +28,9 @@ export default function ServiceDetail() {
       productId: currentItem!.id,
       quantity,
       technicalAnswers: answers,
-      name: itemName,
+      name: t(locale, currentItem!.name),
       image: `https://picsum.photos/seed/${currentItem!.id}/800/800`,
-      category: categoryTitle
+      category: categoryTitle,
     };
 
     cart.push(newItem);
@@ -72,7 +66,7 @@ export default function ServiceDetail() {
             animate={{ y: 0, opacity: 1 }}
             className="text-5xl md:text-7xl font-bold text-white tracking-tighter"
           >
-            {itemName ?? categoryTitle}
+            {currentItem ? t(locale, currentItem.name) : categoryTitle}
           </motion.h1>
           <motion.p
             initial={{ y: 20, opacity: 0 }}
@@ -80,7 +74,7 @@ export default function ServiceDetail() {
             transition={{ delay: 0.1 }}
             className="text-xl text-white/60 font-light max-w-2xl mx-auto"
           >
-            {itemDesc ?? categoryDescription}
+            {currentItem ? t(locale, currentItem.desc) : categoryDescription}
           </motion.p>
         </div>
       </section>
@@ -122,7 +116,7 @@ export default function ServiceDetail() {
               <img
                 src={`https://picsum.photos/seed/${currentItem!.id}/1000/1000`}
                 className="w-full h-full object-cover"
-                alt={itemName ?? ''}
+                alt={t(locale, currentItem!.name)}
                 referrerPolicy="no-referrer"
               />
             </div>
@@ -131,9 +125,9 @@ export default function ServiceDetail() {
                 <div className="inline-block px-6 py-2 bg-black text-white rounded-full text-[10px] font-bold uppercase tracking-widest">
                   {categoryTitle}
                 </div>
-                <h2 className="text-4xl md:text-6xl font-bold tracking-tighter">{itemName}</h2>
+                <h2 className="text-4xl md:text-6xl font-bold tracking-tighter">{t(locale, currentItem!.name)}</h2>
                 <p className="text-xl text-gray-500 font-light leading-relaxed">
-                  {itemDesc} üçün biz ən müasir texnologiyalar və peşəkar komandamızla xidmətinizdəyik.
+                  {t(locale, currentItem!.desc)} üçün biz ən müasir texnologiyalar və peşəkar komandamızla xidmətinizdəyik.
                   Hər bir layihəyə fərdi yanaşaraq, sizin tələblərinizə uyğun ən optimal həlli təklif edirik.
                 </p>
                 <div className="space-y-4">
@@ -188,7 +182,7 @@ export default function ServiceDetail() {
                     </div>
 
                     {/* Dynamic Questions */}
-                    {itemQuestions.map((q: string) => (
+                    {ta(locale, currentItem!.questions).map((q: string) => (
                       <div key={q} className="space-y-3">
                         <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">{q}</label>
                         <input

@@ -1,10 +1,9 @@
 import React, { useMemo, useRef } from 'react';
-import { Link } from 'react-router-dom';
-import { useGsap, gsap } from '../motion/useGsap';
+import { useGsap, gsap } from '../../motion/useGsap';
 import { ArrowRight } from 'lucide-react';
 import { motion, useMotionValue, useSpring, useTransform } from 'motion/react';
-import { useSiteContent } from '../content.context';
-import { t } from '../content';
+import { useSiteContent } from '../../content.context';
+import { t } from '../../content';
 
 const fallbackProjects = [
   {
@@ -39,7 +38,7 @@ const fallbackProjects = [
 
 const ProjectCard = ({ project }: { project: any }) => {
   const cardRef = useRef<HTMLDivElement>(null);
-  
+
   const x = useMotionValue(0);
   const y = useMotionValue(0);
 
@@ -53,14 +52,8 @@ const ProjectCard = ({ project }: { project: any }) => {
     const rect = cardRef.current?.getBoundingClientRect();
     if (!rect) return;
 
-    const width = rect.width;
-    const height = rect.height;
-
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-
-    const xPct = mouseX / width - 0.5;
-    const yPct = mouseY / height - 0.5;
+    const xPct = (e.clientX - rect.left) / rect.width - 0.5;
+    const yPct = (e.clientY - rect.top) / rect.height - 0.5;
 
     x.set(xPct);
     y.set(yPct);
@@ -72,23 +65,19 @@ const ProjectCard = ({ project }: { project: any }) => {
   };
 
   return (
-    <motion.div 
+    <motion.div
       ref={cardRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      style={{
-        rotateX,
-        rotateY,
-        transformStyle: "preserve-3d",
-      }}
+      style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
       className="project-card relative group shrink-0 w-[80vw] md:w-[60vw] lg:w-[45vw] h-[60vh] rounded-[2.75rem] overflow-hidden bg-brand-card border border-white/8 shadow-[0_28px_80px_rgba(0,0,0,0.32)] perspective-1000"
     >
-      <motion.div 
+      <motion.div
         style={{ transform: "translateZ(50px)" }}
         className="absolute inset-0 overflow-hidden pointer-events-none"
       >
-        <img 
-          src={project.image} 
+        <img
+          src={project.image}
           className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
           referrerPolicy="no-referrer"
           alt={project.title}
@@ -97,8 +86,8 @@ const ProjectCard = ({ project }: { project: any }) => {
       </motion.div>
 
       <div className="absolute inset-0 border-18 border-transparent group-hover:border-white/6 transition-all duration-700 pointer-events-none" />
-      
-      <motion.div 
+
+      <motion.div
         style={{ transform: "translateZ(80px)" }}
         className="project-info absolute bottom-10 left-10 right-10 md:bottom-12 md:left-12 md:right-12 flex justify-between items-end pointer-events-none"
       >
@@ -114,7 +103,7 @@ const ProjectCard = ({ project }: { project: any }) => {
           </h3>
           <p className="text-gray-300/85 font-bold uppercase tracking-[0.22em] text-[10px] leading-relaxed">{project.location}</p>
         </div>
-        
+
         <button className="w-14 h-14 rounded-full glass flex items-center justify-center text-white hover:bg-premium-orange hover:text-white transition-all duration-300 transform group-hover:rotate-45 pointer-events-auto shadow-[0_14px_36px_rgba(0,0,0,0.2)]">
           <ArrowRight className="w-6 h-6" />
         </button>
@@ -123,7 +112,7 @@ const ProjectCard = ({ project }: { project: any }) => {
   );
 };
 
-export default function FeaturedSetups() {
+export default function HomeFeaturedSetups() {
   const component = useRef<HTMLDivElement>(null);
   const slider = useRef<HTMLDivElement>(null);
   const { content, locale } = useSiteContent();
@@ -146,7 +135,7 @@ export default function FeaturedSetups() {
   useGsap(() => {
     const totalWidth = slider.current?.scrollWidth || 0;
     const windowWidth = window.innerWidth;
-    
+
     gsap.to(slider.current, {
       x: () => -(totalWidth - windowWidth),
       ease: 'none',
@@ -171,7 +160,6 @@ export default function FeaturedSetups() {
       }
     });
 
-    // Sub-elements revealing from bottom
     gsap.from('.portfolio-header', {
       scrollTrigger: {
         trigger: component.current,
@@ -186,7 +174,6 @@ export default function FeaturedSetups() {
 
   return (
     <div ref={component} className="overflow-hidden bg-brand-bg relative">
-      {/* Grid Lines for this section */}
       <div className="absolute inset-0 pointer-events-none z-0">
         <div className="grid-vertical left-[40%] opacity-20" />
         <div className="grid-vertical left-[60%] opacity-20" />
@@ -201,28 +188,26 @@ export default function FeaturedSetups() {
         </div>
       </div>
 
-      <div 
-        ref={slider} 
+      <div
+        ref={slider}
         className="flex gap-10 md:gap-12 px-6 md:px-12 h-[70vh] w-fit items-center relative z-10"
       >
         {projects.map((project, i) => (
           <ProjectCard key={i} project={project} />
         ))}
 
-        {/* View All Card */}
-        <Link to="/portfolio" className="shrink-0 w-[40vw] h-[60vh] flex flex-col items-center justify-center gap-6 md:gap-8 group cursor-pointer">
+        <div className="shrink-0 w-[40vw] h-[60vh] flex flex-col items-center justify-center gap-6 md:gap-8 group cursor-pointer">
           <div className="w-28 h-28 md:w-32 md:h-32 rounded-full border border-white/10 flex items-center justify-center group-hover:bg-premium-orange group-hover:border-premium-orange transition-all duration-500 shadow-[0_20px_50px_rgba(0,0,0,0.2)]">
             <ArrowRight className="w-10 h-10 text-white" />
           </div>
           <p className="text-2xl font-black uppercase tracking-ultra-tight text-white/45 group-hover:text-white transition-colors duration-300">
             {t(locale, content.home.featuredSetups.viewAll)}
           </p>
-        </Link>
+        </div>
       </div>
 
-      {/* Horizontal Progress Indicator */}
       <div className="absolute bottom-10 md:bottom-12 left-6 md:left-12 right-6 md:right-12 z-20 h-px bg-white/10">
-        <motion.div 
+        <motion.div
           className="absolute top-0 left-0 h-full bg-premium-orange"
           style={{ width: '0%' }}
           id="horizontal-progress"
