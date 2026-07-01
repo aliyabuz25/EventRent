@@ -9,3 +9,6 @@ coverage/
 .vite/
 .cache/
 out/
+
+# Foreign / misplaced files quarantine
+_foreign_files/

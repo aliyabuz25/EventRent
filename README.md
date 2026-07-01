@@ -1,20 +1,27 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Eventrent.az — Premium Event Solutions Website
 
-# Run and deploy your AI Studio app
+Vite + React + TypeScript + Tailwind CSS + Firebase ile inşa edilmiş çok sayfalı premium etkinlik çözümleri sitesi.
 
-This contains everything you need to run your app locally.
+## Teknoloji Yığını
 
-View your app in AI Studio: https://ai.studio/apps/587b65af-6f1d-448b-9736-88c50160858e
+- **Frontend:** Vite, React 18, TypeScript, Tailwind CSS
+- **Animasyon:** GSAP + ScrollTrigger
+- **Backend/DB:** Firebase (Firestore, Auth)
+- **Deployment:** Docker, Nginx, Portainer
 
-## Run Locally
+## Geliştirme Ortamı
 
-**Prerequisites:**  Node.js
+```bash
+npm install
+npm run dev        # http://localhost:5050
+```
 
+## Build
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+```bash
+npm run build
+```
+
+## Port
+
+Bu proje **5050** portunda çalışır (`vite --port=5050`).
