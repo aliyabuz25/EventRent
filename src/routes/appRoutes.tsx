@@ -1,21 +1,22 @@
-import React from 'react';
-import Home from '../pages/Home';
-import About from '../pages/About';
-import Services from '../pages/Services';
-import ServiceDetail from '../pages/ServiceDetail';
-import Teambuilding from '../pages/Teambuilding';
-import Catering from '../pages/Catering';
-import TV from '../pages/TV';
-import Portfolio from '../pages/Portfolio';
-import Gallery from '../pages/Gallery';
-import Contact from '../pages/Contact';
-import Catalog from '../pages/Catalog';
-import ProductDetail from '../pages/ProductDetail';
-import Cart from '../pages/Cart';
-import Admin from '../pages/Admin';
-import Login from '../pages/Login';
-import Profile from '../pages/Profile';
-import Premium from '../pages/Premium';
+import React, { lazy } from 'react';
+
+const Home = lazy(() => import('../pages/Home'));
+const About = lazy(() => import('../pages/About'));
+const Services = lazy(() => import('../pages/Services'));
+const ServiceDetail = lazy(() => import('../pages/ServiceDetail'));
+const Teambuilding = lazy(() => import('../pages/Teambuilding'));
+const Catering = lazy(() => import('../pages/Catering'));
+const TV = lazy(() => import('../pages/TV'));
+const Portfolio = lazy(() => import('../pages/Portfolio'));
+const Gallery = lazy(() => import('../pages/Gallery'));
+const Contact = lazy(() => import('../pages/Contact'));
+const Catalog = lazy(() => import('../pages/Catalog'));
+const ProductDetail = lazy(() => import('../pages/ProductDetail'));
+const Cart = lazy(() => import('../pages/Cart'));
+const Admin = lazy(() => import('../pages/Admin'));
+const Login = lazy(() => import('../pages/Login'));
+const Profile = lazy(() => import('../pages/Profile'));
+const Premium = lazy(() => import('../pages/Premium'));
 
 export const appRoutes: { path: string; element: React.ReactElement }[] = [
   { path: '/', element: <Home /> },
@@ -37,4 +38,3 @@ export const appRoutes: { path: string; element: React.ReactElement }[] = [
   { path: '/profile', element: <Profile /> },
   { path: '/premium', element: <Premium /> },
 ];
-

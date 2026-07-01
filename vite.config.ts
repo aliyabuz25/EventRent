@@ -158,5 +158,19 @@ export default defineConfig(({ mode }) => {
       port: 4321,
       strictPort: true,
     },
+    build: {
+      chunkSizeWarningLimit: 600,
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+            'vendor-motion': ['motion/react'],
+            'vendor-gsap': ['gsap'],
+            'vendor-firebase': ['firebase/app', 'firebase/auth', 'firebase/firestore'],
+            'vendor-ui': ['lucide-react', 'swiper'],
+          },
+        },
+      },
+    },
   };
 });
