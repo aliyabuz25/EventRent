@@ -103,13 +103,13 @@ export default function Process() {
   }, { scope: containerRef });
 
   return (
-    <section ref={containerRef} className="bg-brand-bg relative py-36 md:py-40 overflow-hidden border-t border-white/5">
+    <section ref={containerRef} className="bg-brand-bg relative py-16 md:py-20 overflow-hidden border-t border-white/5">
       {/* Fixed Sidebar Decor (Visual Anchor) */}
       <div className="absolute left-10 top-0 bottom-0 w-px bg-white/5 hidden xl:block" />
       
       <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
         {/* Section Header */}
-        <div className="process-header mb-24 md:mb-28 flex flex-col md:flex-row justify-between items-end gap-10 md:gap-12">
+        <div className="process-header mb-12 md:mb-16 flex flex-col md:flex-row justify-between items-end gap-6 md:gap-8">
           <div className="space-y-5">
             <span className="text-premium-orange text-[10px] font-black uppercase tracking-[0.26em]">{t(locale, content.home.process.badge)}</span>
             <h2 className="text-6xl md:text-9xl font-black uppercase tracking-ultra-tight leading-[0.94]">
@@ -125,11 +125,11 @@ export default function Process() {
         </div>
 
         {/* Process Steps (Vertical Flow) */}
-        <div className="space-y-10 md:space-y-28 pb-28 md:pb-32">
+        <div className="space-y-6 md:space-y-12 pb-14 md:pb-16">
           {steps.map((step, i) => (
             <div 
               key={i} 
-              className="process-card sticky top-24 w-full flex flex-col md:flex-row bg-brand-card rounded-[2.75rem] overflow-hidden border border-white/8 shadow-[0_28px_80px_rgba(0,0,0,0.32)] group transition-colors duration-300 hover:border-premium-orange/20"
+              className="process-card sticky top-28 w-full flex flex-col md:flex-row bg-brand-card rounded-[2.75rem] overflow-hidden border border-white/8 shadow-[0_28px_80px_rgba(0,0,0,0.32)] group transition-colors duration-300 hover:border-premium-orange/20"
             >
               {/* Index Column */}
               <div className="w-full md:w-24 bg-white/5 flex flex-col items-center justify-between py-12 order-3 md:order-1 border-t md:border-t-0 md:border-r border-white/5">
