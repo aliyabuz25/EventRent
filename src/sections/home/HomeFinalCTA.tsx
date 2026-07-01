@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { useGsap, gsap } from '../../motion/useGsap';
 import { useSiteContent } from '../../content.context';
@@ -101,23 +102,20 @@ export default function FinalCTA() {
         </p>
 
         <div className="cta-buttons flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-5">
-          <a
-            href="/contact"
+          <Link
+            to="/contact"
             className="group relative inline-flex w-full sm:w-auto items-center justify-center gap-3 px-10 py-5 rounded-full font-black text-[11px] uppercase tracking-[0.24em] text-black bg-white transition-all duration-300 hover:bg-premium-orange hover:text-white shadow-[0_20px_50px_rgba(0,0,0,0.3)]"
           >
             {t(locale, content.home.finalCta.primaryCta)}
             <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-          </a>
+          </Link>
 
-          <a
-            href="/catalog"
-            className="group inline-flex w-full sm:w-auto items-center justify-center gap-3 px-10 py-5 rounded-full font-black text-[11px] uppercase tracking-[0.24em] text-white/70 transition-all duration-300 hover:text-white"
-            style={{ border: '1px solid rgba(255,255,255,0.1)' }}
-            onMouseEnter={e => (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.25)'}
-            onMouseLeave={e => (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.1)'}
+          <Link
+            to="/catalog"
+            className="group inline-flex w-full sm:w-auto items-center justify-center gap-3 px-10 py-5 rounded-full font-black text-[11px] uppercase tracking-[0.24em] text-white/70 transition-all duration-300 hover:text-white border border-white/10 hover:border-white/25"
           >
             {t(locale, content.home.finalCta.secondaryCta)}
-          </a>
+          </Link>
         </div>
       </div>
 

@@ -1,4 +1,5 @@
 import React, { useMemo, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { useGsap, gsap } from '../motion/useGsap';
 import { Building2, Music, Heart } from 'lucide-react';
 import { useSiteContent } from '../content.context';
@@ -234,9 +235,9 @@ export default function EventTypes() {
                   {type.description}
                 </p>
                 
-                <button className="min-h-12 px-8 py-3.5 border border-white/20 rounded-full text-[11px] font-black uppercase tracking-[0.24em] hover:bg-white hover:text-black transition-all duration-300">
+                <Link to="/portfolio" className="inline-flex min-h-12 items-center px-8 py-3.5 border border-white/20 rounded-full text-[11px] font-black uppercase tracking-[0.24em] hover:bg-white hover:text-black transition-all duration-300">
                   {t(locale, content.home.eventTypes.cta)}
-                </button>
+                </Link>
               </div>
             </div>
 

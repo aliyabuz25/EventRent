@@ -1,4 +1,5 @@
 import { useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { useGsap, gsap } from '../motion/useGsap';
 import { ArrowRight, Play } from 'lucide-react';
 import { motion } from 'motion/react';
@@ -67,7 +68,7 @@ export default function Hero() {
           poster="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&q=80&w=2070"
           aria-label="Concert atmosphere background"
         >
-          <source src="https://storage.googleapis.com/coverr-main/mp4/Mt_Baker.mp4" type="video/mp4" />
+          <source src="/videos/services-bg.mp4" type="video/mp4" />
         </video>
 
         <div className="absolute inset-0 overflow-hidden">
@@ -118,16 +119,14 @@ export default function Hero() {
       {/* Bottom Bar — absolute so it doesn't push title off center */}
       <motion.div className="hero-sub absolute bottom-16 md:bottom-20 left-0 right-0 z-20 w-full space-y-6 md:space-y-8">
           <div className="flex w-full flex-col items-end gap-4 md:hidden sm:flex-row sm:justify-end mb-8">
-            <button className="min-h-12 px-7 md:px-8 py-3 md:py-3.5 bg-premium-orange text-white rounded-full font-black text-[10px] uppercase tracking-[0.2em] border border-premium-orange/70 transition-all duration-300 hover:bg-premium-orange/90 hover:border-premium-orange/60 active:scale-95 shadow-[0_20px_50px_rgba(227,6,19,0.32)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-premium-orange focus-visible:ring-offset-2 focus-visible:ring-offset-brand-bg">
-              <span className="flex items-center justify-center gap-2.5 md:gap-3">
-                {t(locale, content.home.hero.primaryCta)} <ArrowRight className="w-4 h-4" />
-              </span>
-            </button>
+            <Link to="/contact" className="min-h-12 px-7 md:px-8 py-3 md:py-3.5 bg-premium-orange text-white rounded-full font-black text-[10px] uppercase tracking-[0.2em] border border-premium-orange/70 transition-all duration-300 hover:bg-premium-orange/90 hover:border-premium-orange/60 active:scale-95 shadow-[0_20px_50px_rgba(227,6,19,0.32)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-premium-orange focus-visible:ring-offset-2 focus-visible:ring-offset-brand-bg flex items-center justify-center gap-2.5 md:gap-3">
+              {t(locale, content.home.hero.primaryCta)} <ArrowRight className="w-4 h-4" />
+            </Link>
 
-            <button className="flex min-h-12 items-center justify-center gap-2.5 md:gap-3 px-7 md:px-8 py-3 md:py-3.5 glass-dark rounded-full text-white font-black text-[10px] uppercase tracking-[0.2em] border border-white/20 hover:border-premium-orange/60 hover:bg-black/60 transition-all duration-300 active:scale-95 shadow-[0_12px_36px_rgba(0,0,0,0.22)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.32)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-premium-orange focus-visible:ring-offset-2 focus-visible:ring-offset-brand-bg">
+            <Link to="/portfolio" className="flex min-h-12 items-center justify-center gap-2.5 md:gap-3 px-7 md:px-8 py-3 md:py-3.5 glass-dark rounded-full text-white font-black text-[10px] uppercase tracking-[0.2em] border border-white/20 hover:border-premium-orange/60 hover:bg-black/60 transition-all duration-300 active:scale-95 shadow-[0_12px_36px_rgba(0,0,0,0.22)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.32)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-premium-orange focus-visible:ring-offset-2 focus-visible:ring-offset-brand-bg">
               <Play className="w-4 h-4 fill-current" />
               {t(locale, content.home.hero.secondaryCta)}
-            </button>
+            </Link>
           </div>
 
           <div className="hidden md:block relative left-1/2 w-screen -translate-x-1/2 px-3 md:px-6 lg:px-8 xl:px-10 2xl:px-12 mt-3 lg:mt-4">
@@ -157,16 +156,14 @@ export default function Hero() {
                 </div>
 
                 <div className="flex flex-col lg:flex-row items-end gap-4 lg:gap-5">
-                  <button className="min-h-12 px-7 md:px-8 py-3 md:py-3.5 bg-premium-orange text-white rounded-full font-black text-[10px] uppercase tracking-[0.2em] border border-premium-orange/70 transition-all duration-300 hover:bg-premium-orange/90 hover:border-premium-orange/60 active:scale-95 shadow-[0_20px_50px_rgba(227,6,19,0.32)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-premium-orange focus-visible:ring-offset-2 focus-visible:ring-offset-brand-bg">
-                    <span className="flex items-center gap-2.5 md:gap-3">
-                      {t(locale, content.home.hero.primaryCta)} <ArrowRight className="w-4 h-4" />
-                    </span>
-                  </button>
+                  <Link to="/contact" className="min-h-12 px-7 md:px-8 py-3 md:py-3.5 bg-premium-orange text-white rounded-full font-black text-[10px] uppercase tracking-[0.2em] border border-premium-orange/70 transition-all duration-300 hover:bg-premium-orange/90 hover:border-premium-orange/60 active:scale-95 shadow-[0_20px_50px_rgba(227,6,19,0.32)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-premium-orange focus-visible:ring-offset-2 focus-visible:ring-offset-brand-bg flex items-center gap-2.5 md:gap-3">
+                    {t(locale, content.home.hero.primaryCta)} <ArrowRight className="w-4 h-4" />
+                  </Link>
 
-                  <button className="flex min-h-12 items-center gap-2.5 md:gap-3 px-7 md:px-8 py-3 md:py-3.5 glass-dark rounded-full text-white font-black text-[10px] uppercase tracking-[0.2em] border border-white/20 hover:border-premium-orange/60 hover:bg-black/60 transition-all duration-300 active:scale-95 shadow-[0_12px_36px_rgba(0,0,0,0.22)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.32)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-premium-orange focus-visible:ring-offset-2 focus-visible:ring-offset-brand-bg">
+                  <Link to="/portfolio" className="flex min-h-12 items-center gap-2.5 md:gap-3 px-7 md:px-8 py-3 md:py-3.5 glass-dark rounded-full text-white font-black text-[10px] uppercase tracking-[0.2em] border border-white/20 hover:border-premium-orange/60 hover:bg-black/60 transition-all duration-300 active:scale-95 shadow-[0_12px_36px_rgba(0,0,0,0.22)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.32)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-premium-orange focus-visible:ring-offset-2 focus-visible:ring-offset-brand-bg">
                     <Play className="w-4 h-4 fill-current" />
                     {t(locale, content.home.hero.secondaryCta)}
-                  </button>
+                  </Link>
                 </div>
               </div>
             </div>

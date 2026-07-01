@@ -1,4 +1,5 @@
 import React, { useMemo, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { useGsap, gsap } from '../motion/useGsap';
 import { ArrowRight } from 'lucide-react';
 import { motion, useMotionValue, useSpring, useTransform } from 'motion/react';
@@ -209,14 +210,14 @@ export default function FeaturedSetups() {
         ))}
 
         {/* View All Card */}
-        <div className="shrink-0 w-[40vw] h-[60vh] flex flex-col items-center justify-center gap-6 md:gap-8 group cursor-pointer">
+        <Link to="/portfolio" className="shrink-0 w-[40vw] h-[60vh] flex flex-col items-center justify-center gap-6 md:gap-8 group cursor-pointer">
           <div className="w-28 h-28 md:w-32 md:h-32 rounded-full border border-white/10 flex items-center justify-center group-hover:bg-premium-orange group-hover:border-premium-orange transition-all duration-500 shadow-[0_20px_50px_rgba(0,0,0,0.2)]">
             <ArrowRight className="w-10 h-10 text-white" />
           </div>
           <p className="text-2xl font-black uppercase tracking-ultra-tight text-white/45 group-hover:text-white transition-colors duration-300">
             {t(locale, content.home.featuredSetups.viewAll)}
           </p>
-        </div>
+        </Link>
       </div>
 
       {/* Horizontal Progress Indicator */}
