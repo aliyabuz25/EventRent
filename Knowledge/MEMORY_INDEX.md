@@ -12,6 +12,12 @@
 - SPA navigation polish (Link migrations)
 - Home page section completeness
 
+## Session Log — 2026-07-01 (cleanup)
+
+- Fact: 4 yabancı dosya temizlendi — NocoDB roadmap, znuny-7.3.1.tar.gz, Google AI Studio metadata+README, duplicate SEO skill
+- Why: Başka projelerden kazara karışmış; repo gürültüsü ve ~35MB gereksiz ağırlık yarattı
+- Next: _foreign_files/ klasörü incelendikten sonra silinebilir; ORBHR2 projesine ait herhangi bir dosya YOK
+
 ## Session Log — 2026-07-01
 
 - Fact: appRoutes JSX.Element → React.ReactElement TS fix; all routes lazy-loaded with Suspense
