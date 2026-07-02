@@ -10,7 +10,7 @@ export default function ContactForm() {
   const [error, setError] = useState<string | null>(null);
 
   const inputClassName =
-    'w-full min-h-11 px-0 py-4 bg-transparent border-b border-white/20 text-xl text-white transition-all placeholder:text-white/30 focus:outline-none focus:border-premium-orange rounded-none';
+    'w-full min-h-[60px] px-6 py-4 bg-white/5 border border-white/10 rounded-2xl text-xl text-white transition-all duration-300 placeholder:text-white/20 focus:outline-none focus:bg-white/10 focus:border-premium-orange focus:shadow-[0_0_30px_rgba(227,6,19,0.15)]';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,7 +39,10 @@ export default function ContactForm() {
 
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
-      <div className="lg:col-span-2 bg-white/5 border border-white/10 rounded-5xl p-12 md:p-20 shadow-2xl shadow-black">
+      <div className="lg:col-span-2 bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[40px] p-8 md:p-16 shadow-2xl shadow-black relative overflow-hidden">
+        {/* Glow behind the form */}
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-premium-orange/10 rounded-full blur-[120px] pointer-events-none -z-10" />
+        
         {success ? (
           <div className="flex flex-col items-center justify-center py-12 text-center space-y-6">
             <div className="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center">
@@ -117,7 +120,7 @@ export default function ContactForm() {
               />
             </div>
             {error && (
-              <div className="flex items-center gap-3 p-4 bg-red-50 border border-red-100 rounded-2xl text-red-600 text-sm font-medium">
+              <div className="flex items-center gap-3 p-4 bg-red-500/10 border border-red-500/20 rounded-2xl text-red-400 text-sm font-medium backdrop-blur-md">
                 <AlertCircle className="w-5 h-5 shrink-0" />
                 {error}
               </div>
@@ -125,13 +128,16 @@ export default function ContactForm() {
             <button
               type="submit"
               disabled={loading}
-              className="group min-h-11 bg-white text-black px-12 py-6 rounded-full font-bold text-xl hover:bg-gray-200 transition-all active:scale-95 flex items-center justify-center gap-4 shadow-2xl shadow-black/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 disabled:opacity-50"
+              className="group relative overflow-hidden bg-white text-black px-12 py-5 rounded-full font-black text-lg hover:text-white transition-colors duration-500 flex items-center justify-center gap-4 shadow-[0_0_40px_rgba(255,255,255,0.1)] hover:shadow-[0_0_40px_rgba(227,6,19,0.3)] disabled:opacity-50"
             >
-              {loading ? (
-                <span className="h-6 w-6 border-2 border-black border-t-transparent rounded-full animate-spin" />
-              ) : (
-                <>Göndər <ArrowUpRight aria-hidden="true" className="w-6 h-6 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" /></>
-              )}
+              <div className="absolute inset-0 bg-premium-orange translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out" />
+              <span className="relative z-10 flex items-center gap-4">
+                {loading ? (
+                  <span className="h-6 w-6 border-2 border-black group-hover:border-white border-t-transparent rounded-full animate-spin transition-colors" />
+                ) : (
+                  <>Göndər <ArrowUpRight aria-hidden="true" className="w-6 h-6 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" /></>
+                )}
+              </span>
             </button>
           </form>
         )}
@@ -143,14 +149,15 @@ export default function ContactForm() {
           { icon: Mail, title: 'Email', value: 'sales@eventrent.az', sub: '24 saat ərzində cavab' },
           { icon: MapPin, title: 'Ünvan', value: 'Bakı, Əhməd Rəcəbli küç.', sub: 'Nərimanov rayonu' },
         ].map((info, i) => (
-          <div key={i} className="p-10 bg-white/5 border border-white/10 rounded-5xl space-y-6 hover:bg-white/10 hover:border-white/20 transition-all duration-700 group">
-            <div className="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center text-premium-orange shadow-sm group-hover:bg-white/20 group-hover:text-white transition-colors">
+          <div key={i} className="relative p-10 bg-white/5 backdrop-blur-xl border border-white/10 rounded-[40px] space-y-6 hover:bg-white/10 hover:border-white/20 transition-all duration-700 group overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <div className="relative z-10 w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center text-premium-orange shadow-sm group-hover:bg-premium-orange group-hover:text-white group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
               <info.icon className="w-7 h-7" />
             </div>
-            <div className="space-y-2">
-              <h4 className="text-xs font-bold uppercase tracking-[0.3em] text-white/40 group-hover:text-white/60">{info.title}</h4>
-              <p className="text-2xl font-bold tracking-tight text-white">{info.value}</p>
-              <p className="text-sm text-white/50 group-hover:text-white/40 font-light">{info.sub}</p>
+            <div className="relative z-10 space-y-2">
+              <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30 group-hover:text-white/60 transition-colors">{info.title}</h4>
+              <p className="text-xl md:text-2xl font-bold tracking-tight text-white">{info.value}</p>
+              <p className="text-sm text-white/40 group-hover:text-white/60 font-light transition-colors">{info.sub}</p>
             </div>
           </div>
         ))}
