@@ -37,7 +37,7 @@ export default function CartCheckout({
                   required
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full pl-14 pr-6 py-5 bg-white/5 border border-transparent rounded-[24px] text-sm font-bold focus:outline-none focus:ring-4 focus:ring-red-500/5 focus:border-red-500 transition-all"
+                  className="w-full pl-14 pr-6 py-5 bg-white/5 border border-white/10 rounded-[24px] text-sm font-bold text-white focus:outline-none focus:bg-white/10 focus:border-premium-orange focus:shadow-[0_0_20px_rgba(227,6,19,0.1)] transition-all duration-300 placeholder:text-white/20"
                   placeholder="Tural Rəhimov"
                 />
               </div>
@@ -52,7 +52,7 @@ export default function CartCheckout({
                   required
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="w-full pl-14 pr-6 py-5 bg-white/5 border border-transparent rounded-[24px] text-sm font-bold focus:outline-none focus:ring-4 focus:ring-red-500/5 focus:border-red-500 transition-all"
+                  className="w-full pl-14 pr-6 py-5 bg-white/5 border border-white/10 rounded-[24px] text-sm font-bold text-white focus:outline-none focus:bg-white/10 focus:border-premium-orange focus:shadow-[0_0_20px_rgba(227,6,19,0.1)] transition-all duration-300 placeholder:text-white/20"
                   placeholder="+994 50 000 00 00"
                 />
               </div>
@@ -67,7 +67,7 @@ export default function CartCheckout({
                   required
                   value={formData.location}
                   onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                  className="w-full pl-14 pr-6 py-5 bg-white/5 border border-transparent rounded-[24px] text-sm font-bold focus:outline-none focus:ring-4 focus:ring-red-500/5 focus:border-red-500 transition-all"
+                  className="w-full pl-14 pr-6 py-5 bg-white/5 border border-white/10 rounded-[24px] text-sm font-bold text-white focus:outline-none focus:bg-white/10 focus:border-premium-orange focus:shadow-[0_0_20px_rgba(227,6,19,0.1)] transition-all duration-300 placeholder:text-white/20"
                   placeholder="Tədbir keçiriləcək məkan"
                 />
               </div>
@@ -82,14 +82,14 @@ export default function CartCheckout({
                   required
                   value={formData.eventDate}
                   onChange={(e) => setFormData({ ...formData, eventDate: e.target.value })}
-                  className="w-full pl-14 pr-6 py-5 bg-white/5 border border-transparent rounded-[24px] text-sm font-bold focus:outline-none focus:ring-4 focus:ring-red-500/5 focus:border-red-500 transition-all"
+                  className="w-full pl-14 pr-6 py-5 bg-white/5 border border-white/10 rounded-[24px] text-sm font-bold text-white focus:outline-none focus:bg-white/10 focus:border-premium-orange focus:shadow-[0_0_20px_rgba(227,6,19,0.1)] transition-all duration-300 placeholder:text-white/20"
                 />
               </div>
             </div>
           </div>
 
           {error && (
-            <div className="flex items-center gap-3 p-4 bg-red-50 text-red-500 rounded-2xl text-xs font-bold">
+            <div className="flex items-center gap-3 p-4 bg-red-500/10 border border-red-500/20 text-red-400 rounded-2xl text-xs font-bold backdrop-blur-md">
               <AlertCircle className="w-5 h-5" />
               {error}
             </div>
@@ -98,18 +98,21 @@ export default function CartCheckout({
           <button
             type="submit"
             disabled={isSubmitting || itemsCount === 0}
-            className="w-full bg-red-600 text-white py-6 rounded-[24px] font-bold text-lg hover:bg-red-700 transition-all shadow-xl shadow-red-600/20 disabled:opacity-50 flex items-center justify-center gap-3"
+            className="group relative overflow-hidden w-full bg-white text-black py-6 rounded-[24px] font-black text-lg hover:text-white transition-colors duration-500 shadow-[0_0_40px_rgba(255,255,255,0.1)] hover:shadow-[0_0_40px_rgba(227,6,19,0.3)] disabled:opacity-50 flex items-center justify-center gap-3"
           >
-            {isSubmitting ? (
-              <>
-                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                Göndərilir...
-              </>
-            ) : (
-              <>
-                Sifarişi Tamamla <CheckCircle2 className="w-6 h-6" />
-              </>
-            )}
+            <div className="absolute inset-0 bg-premium-orange translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out" />
+            <span className="relative z-10 flex items-center gap-3">
+              {isSubmitting ? (
+                <>
+                  <div className="w-5 h-5 border-2 border-black group-hover:border-white border-t-transparent rounded-full animate-spin transition-colors" />
+                  Göndərilir...
+                </>
+              ) : (
+                <>
+                  Sifarişi Tamamla <CheckCircle2 className="w-6 h-6 group-hover:scale-110 transition-transform" />
+                </>
+              )}
+            </span>
           </button>
         </form>
       </div>

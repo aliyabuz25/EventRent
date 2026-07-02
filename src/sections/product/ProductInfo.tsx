@@ -44,10 +44,13 @@ export default function ProductInfo({ product, onOpenModal }: ProductInfoProps) 
       <div className="pt-6">
         <button 
           onClick={onOpenModal}
-          className="w-full sm:w-auto flex items-center justify-center gap-4 bg-black text-white px-12 py-5 rounded-[2rem] font-black text-sm uppercase tracking-widest hover:bg-premium-orange transition-all active:scale-95 shadow-2xl shadow-black/10 group"
+          className="group relative overflow-hidden w-full sm:w-auto flex items-center justify-center gap-4 bg-white text-black px-12 py-5 rounded-[2rem] font-black text-sm uppercase tracking-widest hover:text-white transition-colors duration-500 shadow-[0_0_40px_rgba(255,255,255,0.1)] hover:shadow-[0_0_40px_rgba(227,6,19,0.3)] active:scale-95"
         >
-          <ShoppingCart className="w-5 h-5 transition-transform group-hover:scale-110" />
-          Sorğuya əlavə et
+          <div className="absolute inset-0 bg-premium-orange translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out" />
+          <span className="relative z-10 flex items-center gap-4">
+            <ShoppingCart className="w-5 h-5 transition-transform group-hover:scale-110" />
+            Sorğuya əlavə et
+          </span>
         </button>
       </div>
     </div>

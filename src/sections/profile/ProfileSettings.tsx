@@ -56,7 +56,7 @@ export default function ProfileSettings({
               type="text"
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
-              className="w-full px-6 py-4 bg-white/5 border border-transparent rounded-2xl text-sm font-bold focus:outline-none focus:ring-4 focus:ring-premium-orange/5 focus:border-premium-orange transition-all"
+              className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-2xl text-sm font-bold text-white focus:outline-none focus:bg-white/10 focus:border-premium-orange focus:shadow-[0_0_20px_rgba(227,6,19,0.1)] transition-all duration-300 placeholder:text-white/20"
               placeholder={t(locale, labels.namePlaceholder)}
             />
           </div>
@@ -67,7 +67,7 @@ export default function ProfileSettings({
               value={user?.email || ''}
               disabled
               placeholder={t(locale, labels.email)}
-              className="w-full px-6 py-4 bg-gray-100 border border-transparent rounded-2xl text-sm font-bold text-white/40 cursor-not-allowed"
+              className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-2xl text-sm font-bold text-white/30 cursor-not-allowed opacity-50"
             />
           </div>
         </div>
@@ -82,15 +82,18 @@ export default function ProfileSettings({
           <button
             type="submit"
             disabled={isSaving}
-            className="flex items-center gap-2 bg-black text-white px-10 py-4 rounded-2xl font-bold hover:bg-premium-orange transition-all shadow-xl shadow-black/10 disabled:opacity-50"
+            className="group relative overflow-hidden flex items-center justify-center gap-3 bg-white text-black px-10 py-4 rounded-[24px] font-black hover:text-white transition-colors duration-500 shadow-[0_0_40px_rgba(255,255,255,0.1)] hover:shadow-[0_0_40px_rgba(227,6,19,0.3)] disabled:opacity-50"
           >
-            <Save className="w-5 h-5" />
-            {isSaving ? t(locale, labels.saving) : t(locale, labels.save)}
+            <div className="absolute inset-0 bg-premium-orange translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out" />
+            <span className="relative z-10 flex items-center gap-2">
+              <Save className="w-5 h-5 group-hover:scale-110 transition-transform" />
+              {isSaving ? t(locale, labels.saving) : t(locale, labels.save)}
+            </span>
           </button>
         </div>
       </form>
 
-      <div className="pt-10 border-t border-gray-50 space-y-6">
+      <div className="pt-10 border-t border-white/10 space-y-6">
         <h3 className="text-xl font-bold">{t(locale, labels.security)}</h3>
         <div className="flex items-center justify-between p-6 bg-white/5 rounded-3xl border border-white/10">
           <div className="flex items-center gap-4">
