@@ -82,7 +82,7 @@ export default function ProfileSettings({
           <button
             type="submit"
             disabled={isSaving}
-            className="group relative overflow-hidden flex items-center justify-center gap-3 bg-premium-orange text-white px-10 py-4 rounded-[24px] font-black hover:text-black transition-colors duration-500 shadow-[0_0_40px_rgba(227,6,19,0.3)] hover:shadow-[0_0_40px_rgba(255,255,255,0.2)] disabled:opacity-50"
+            className="group relative overflow-hidden cursor-pointer flex items-center justify-center gap-3 bg-premium-orange text-white px-10 py-4 rounded-[24px] font-black hover:text-black transition-colors duration-500 shadow-[0_0_40px_rgba(227,6,19,0.3)] hover:shadow-[0_0_40px_rgba(255,255,255,0.2)] disabled:opacity-50"
           >
             <div className="absolute inset-0 bg-white translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out" />
             <span className="relative z-10 flex items-center gap-2">
