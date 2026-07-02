@@ -137,9 +137,9 @@ export default function TechnicalQuestionsModal({
 
               <button
                 onClick={handleConfirm}
-                className="group relative overflow-hidden cursor-pointer w-full bg-premium-orange text-white py-5 rounded-[24px] font-black text-sm uppercase tracking-widest hover:text-black transition-colors duration-500 shadow-[0_0_40px_rgba(227,6,19,0.3)] hover:shadow-[0_0_40px_rgba(255,255,255,0.2)] mt-8"
+                onMouseMove={(e) => { const rect = e.currentTarget.getBoundingClientRect(); e.currentTarget.style.setProperty('--x', `${e.clientX - rect.left}px`); e.currentTarget.style.setProperty('--y', `${e.clientY - rect.top}px`); }} className="group relative overflow-hidden cursor-pointer w-full bg-white text-black py-5 rounded-[24px] font-black text-sm uppercase tracking-widest hover:text-white transition-colors duration-500 shadow-[0_0_40px_rgba(255,255,255,0.1)] hover:shadow-[0_0_40px_rgba(227,6,19,0.3)] mt-8"
               >
-                <div className="absolute inset-0 bg-white translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out" />
+                <div className="absolute inset-0 bg-premium-orange pointer-events-none z-0 [clip-path:circle(0px_at_var(--x,50%)_var(--y,50%))] group-hover:[clip-path:circle(150%_at_var(--x,50%)_var(--y,50%))] transition-[clip-path] duration-500 ease-out" />
                 <span className="relative z-10 flex items-center justify-center gap-3">
                   Səbətə əlavə et <ShoppingBag className="w-5 h-5 group-hover:scale-110 transition-transform" />
                 </span>
