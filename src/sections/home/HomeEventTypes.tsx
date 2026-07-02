@@ -138,7 +138,7 @@ export default function HomeEventTypes() {
               {t(locale, content.home.eventTypes.title)} <br /> <span className="text-premium-orange">{t(locale, content.home.eventTypes.titleAccent)}</span>
             </h2>
           </div>
-          <p className="et-desc text-lg md:text-xl text-gray-400 max-w-sm font-medium leading-[1.75]">
+          <p className="et-desc text-lg md:text-xl text-white/40 max-w-sm font-medium leading-[1.75]">
             {t(locale, content.home.eventTypes.description)}
           </p>
         </div>
@@ -167,15 +167,15 @@ export default function HomeEventTypes() {
                   <div className="w-12 h-12 rounded-2xl bg-white/7 backdrop-blur-sm flex items-center justify-center border border-white/12 shadow-[0_16px_40px_rgba(0,0,0,0.2)]">
                     <type.icon className="w-6 h-6 text-premium-orange" />
                   </div>
-                  <span className="text-sm font-bold uppercase tracking-[0.16em] text-gray-300/85">{type.subtitle}</span>
+                  <span className="text-sm font-bold uppercase tracking-[0.16em] text-white/30/85">{type.subtitle}</span>
                 </div>
 
                 <h3 className="text-5xl md:text-7xl font-black tracking-ultra-tight uppercase leading-[0.94]">{type.title}</h3>
-                <p className="text-lg text-gray-300/90 max-w-md font-medium leading-[1.75]">
+                <p className="text-lg text-white/30/90 max-w-md font-medium leading-[1.75]">
                   {type.description}
                 </p>
 
-                <button className="min-h-12 px-8 py-3.5 border border-white/20 rounded-full text-[11px] font-black uppercase tracking-[0.24em] hover:bg-white hover:text-black transition-all duration-300">
+                <button className="min-h-12 px-8 py-3.5 border border-white/20 rounded-full text-[11px] font-black uppercase tracking-[0.24em] hover:bg-white hover:text-premium-orange transition-all duration-300">
                   {t(locale, content.home.eventTypes.cta)}
                 </button>
               </div>

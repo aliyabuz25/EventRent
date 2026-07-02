@@ -7,11 +7,11 @@ interface CartEmptyProps {
 
 export default function CartEmpty({ onNavigate }: CartEmptyProps) {
   return (
-    <div className="bg-gray-50 rounded-[60px] p-20 text-center space-y-6" role="status" aria-live="polite">
-      <div className="w-20 h-20 bg-white rounded-[32px] flex items-center justify-center mx-auto text-gray-200 shadow-sm">
+    <div className="bg-white/5 rounded-[60px] p-20 text-center space-y-6" role="status" aria-live="polite">
+      <div className="w-20 h-20 bg-white/10 rounded-[32px] flex items-center justify-center mx-auto text-white/20 shadow-sm">
         <Package aria-hidden="true" className="w-10 h-10" />
       </div>
-      <p id="empty-cart-message" className="text-xl text-gray-400 font-light">Səbətiniz boşdur.</p>
+      <p id="empty-cart-message" className="text-xl text-white/40 font-light">Səbətiniz boşdur.</p>
       <button
         type="button"
         onClick={onNavigate}

@@ -10,7 +10,7 @@ export default function ContactForm() {
   const [error, setError] = useState<string | null>(null);
 
   const inputClassName =
-    'w-full min-h-11 px-0 py-4 bg-transparent border-b text-xl transition-all placeholder:text-gray-300 focus:outline-none focus:border-black focus-visible:ring-2 focus:ring-black/10 focus-visible:ring-offset-2 rounded-sm';
+    'w-full min-h-11 px-0 py-4 bg-transparent border-b border-white/20 text-xl text-white transition-all placeholder:text-white/30 focus:outline-none focus:border-premium-orange rounded-none';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,19 +39,19 @@ export default function ContactForm() {
 
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
-      <div className="lg:col-span-2 bg-white border border-gray-100 rounded-5xl p-12 md:p-20 shadow-2xl shadow-black/5">
+      <div className="lg:col-span-2 bg-white/5 border border-white/10 rounded-5xl p-12 md:p-20 shadow-2xl shadow-black">
         {success ? (
           <div className="flex flex-col items-center justify-center py-12 text-center space-y-6">
             <div className="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center">
               <CheckCircle2 className="w-10 h-10 text-green-500" />
             </div>
             <div>
-              <h3 className="text-2xl font-black tracking-tight">Mesajınız göndərildi!</h3>
-              <p className="text-gray-500 mt-2">Ən qısa zamanda sizinlə əlaqə saxlanılacaq.</p>
+              <h3 className="text-2xl font-black tracking-tight text-white">Mesajınız göndərildi!</h3>
+              <p className="text-white/50 mt-2">Ən qısa zamanda sizinlə əlaqə saxlanılacaq.</p>
             </div>
             <button
               onClick={() => setSuccess(false)}
-              className="px-8 py-3 border-2 border-black rounded-full font-bold text-sm hover:bg-black hover:text-white transition-all"
+              className="px-8 py-3 border-2 border-white text-white rounded-full font-bold text-sm hover:bg-white hover:text-premium-orange transition-all"
             >
               Yeni mesaj yaz
             </button>
@@ -60,7 +60,7 @@ export default function ContactForm() {
           <form onSubmit={handleSubmit} className="space-y-12" aria-label="Əlaqə formu">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-12">
               <div className="space-y-4">
-                <label htmlFor="contact-name" className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.3em] ml-1">Ad Soyad</label>
+                <label htmlFor="contact-name" className="text-[10px] font-bold text-white/50 uppercase tracking-[0.3em] ml-1">Ad Soyad</label>
                 <input
                   id="contact-name"
                   name="name"
@@ -74,7 +74,7 @@ export default function ContactForm() {
                 />
               </div>
               <div className="space-y-4">
-                <label htmlFor="contact-phone" className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.3em] ml-1">Telefon</label>
+                <label htmlFor="contact-phone" className="text-[10px] font-bold text-white/50 uppercase tracking-[0.3em] ml-1">Telefon</label>
                 <input
                   id="contact-phone"
                   name="phone"
@@ -90,7 +90,7 @@ export default function ContactForm() {
               </div>
             </div>
             <div className="space-y-4">
-              <label htmlFor="contact-email" className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.3em] ml-1">Email</label>
+              <label htmlFor="contact-email" className="text-[10px] font-bold text-white/50 uppercase tracking-[0.3em] ml-1">Email</label>
               <input
                 id="contact-email"
                 name="email"
@@ -104,7 +104,7 @@ export default function ContactForm() {
               />
             </div>
             <div className="space-y-4">
-              <label htmlFor="contact-message" className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.3em] ml-1">Mesajınız</label>
+              <label htmlFor="contact-message" className="text-[10px] font-bold text-white/50 uppercase tracking-[0.3em] ml-1">Mesajınız</label>
               <textarea
                 id="contact-message"
                 name="message"
@@ -125,10 +125,10 @@ export default function ContactForm() {
             <button
               type="submit"
               disabled={loading}
-              className="group min-h-11 bg-black text-white px-12 py-6 rounded-full font-bold text-xl hover:bg-gray-800 transition-all active:scale-95 flex items-center justify-center gap-4 shadow-2xl shadow-black/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 disabled:opacity-50"
+              className="group min-h-11 bg-white text-black px-12 py-6 rounded-full font-bold text-xl hover:bg-gray-200 transition-all active:scale-95 flex items-center justify-center gap-4 shadow-2xl shadow-black/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 disabled:opacity-50"
             >
               {loading ? (
-                <span className="h-6 w-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                <span className="h-6 w-6 border-2 border-black border-t-transparent rounded-full animate-spin" />
               ) : (
                 <>Göndər <ArrowUpRight aria-hidden="true" className="w-6 h-6 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" /></>
               )}
@@ -143,14 +143,14 @@ export default function ContactForm() {
           { icon: Mail, title: 'Email', value: 'sales@eventrent.az', sub: '24 saat ərzində cavab' },
           { icon: MapPin, title: 'Ünvan', value: 'Bakı, Əhməd Rəcəbli küç.', sub: 'Nərimanov rayonu' },
         ].map((info, i) => (
-          <div key={i} className="p-10 bg-gray-50 rounded-5xl space-y-6 hover:bg-black hover:text-white transition-all duration-700 group">
-            <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-black shadow-sm group-hover:bg-white/10 group-hover:text-white transition-colors">
+          <div key={i} className="p-10 bg-white/5 border border-white/10 rounded-5xl space-y-6 hover:bg-white/10 hover:border-white/20 transition-all duration-700 group">
+            <div className="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center text-premium-orange shadow-sm group-hover:bg-white/20 group-hover:text-white transition-colors">
               <info.icon className="w-7 h-7" />
             </div>
             <div className="space-y-2">
-              <h4 className="text-xs font-bold uppercase tracking-[0.3em] text-gray-400 group-hover:text-white/40">{info.title}</h4>
-              <p className="text-2xl font-bold tracking-tight">{info.value}</p>
-              <p className="text-sm text-gray-500 group-hover:text-gray-400 font-light">{info.sub}</p>
+              <h4 className="text-xs font-bold uppercase tracking-[0.3em] text-white/40 group-hover:text-white/60">{info.title}</h4>
+              <p className="text-2xl font-bold tracking-tight text-white">{info.value}</p>
+              <p className="text-sm text-white/50 group-hover:text-white/40 font-light">{info.sub}</p>
             </div>
           </div>
         ))}

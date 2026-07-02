@@ -120,7 +120,7 @@ export default function HomeCapabilities() {
                   ))}
                 </h2>
 
-                <p className="text-lg md:text-xl text-gray-300/90 max-w-md font-medium leading-[1.75]">
+                <p className="text-lg md:text-xl text-white/30/90 max-w-md font-medium leading-[1.75]">
                   {cap.description}
                 </p>
 
@@ -151,7 +151,7 @@ export default function HomeCapabilities() {
                   style={{ transform: `scaleX(${(i + 1) / capabilities.length})` }}
                 />
               </div>
-              <span className="text-xs font-bold text-gray-500">0{capabilities.length}</span>
+              <span className="text-xs font-bold text-white/50">0{capabilities.length}</span>
             </div>
           </div>
         ))}

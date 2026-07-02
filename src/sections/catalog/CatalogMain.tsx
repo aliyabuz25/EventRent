@@ -31,13 +31,13 @@ export default function CatalogMain({
         
         <div className="flex flex-wrap gap-4 w-full md:w-auto">
           <div className="relative flex-1 md:w-80">
-            <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+            <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-white/50" />
             <input
               type="text"
               placeholder="Search inventory..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-14 pr-6 py-5 bg-brand-card border border-white/5 rounded-3xl text-sm font-bold text-white placeholder:text-gray-600 focus:outline-none focus:ring-4 focus:ring-premium-orange/5 focus:border-premium-orange transition-all"
+              className="w-full pl-14 pr-6 py-5 bg-brand-card border border-white/5 rounded-3xl text-sm font-bold text-white placeholder:text-white/70 focus:outline-none focus:ring-4 focus:ring-premium-orange/5 focus:border-premium-orange transition-all"
             />
           </div>
         </div>
@@ -49,7 +49,7 @@ export default function CatalogMain({
           <div className="sticky top-24 space-y-12 bg-brand-card p-10 rounded-[3rem] border border-white/5 shadow-2xl">
             <div className="space-y-8">
               <div className="flex items-center justify-between border-b border-white/5 pb-4">
-                <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500">Categories</h3>
+                <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/50">Categories</h3>
                 <Filter className="w-4 h-4 text-premium-orange" />
               </div>
               <div className="flex flex-col gap-2">
@@ -61,7 +61,7 @@ export default function CatalogMain({
                       "text-left px-6 py-4 rounded-2xl text-xs font-black uppercase tracking-widest transition-all relative overflow-hidden group",
                       selectedCategory === cat 
                         ? "bg-premium-orange text-white shadow-xl shadow-premium-orange/20" 
-                        : "text-gray-500 hover:bg-white/5 hover:text-white"
+                        : "text-white/50 hover:bg-white/5 hover:text-white"
                     )}
                   >
                     <span className="relative z-10">{cat}</span>
@@ -83,10 +83,10 @@ export default function CatalogMain({
           ) : (
             <div className="text-center py-40 border-2 border-dashed border-white/5 rounded-[4rem]">
               <div className="w-24 h-24 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-8">
-                <Search className="w-10 h-10 text-gray-600" />
+                <Search className="w-10 h-10 text-white/70" />
               </div>
               <h3 className="text-2xl font-black uppercase tracking-tighter mb-4">No Gear Found</h3>
-              <p className="text-gray-500 font-medium mb-10 uppercase text-xs tracking-widest">Adjust your search parameters.</p>
+              <p className="text-white/50 font-medium mb-10 uppercase text-xs tracking-widest">Adjust your search parameters.</p>
               <button 
                 onClick={() => {setSearch(''); onCategorySelect('Hamısı');}}
                 className="px-10 py-4 bg-premium-orange text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:scale-105 transition-all"

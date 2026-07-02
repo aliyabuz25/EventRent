@@ -12,7 +12,7 @@ export default function ProductGallery({ product }: ProductGalleryProps) {
       <motion.div 
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="aspect-[4/3] rounded-[3rem] overflow-hidden bg-white border-8 border-white shadow-2xl shadow-black/5"
+        className="aspect-[4/3] rounded-[3rem] overflow-hidden bg-white border-8 border-white shadow-2xl shadow-black/20"
       >
         <img 
           src={product.images[0]} 

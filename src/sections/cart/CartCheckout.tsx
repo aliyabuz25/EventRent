@@ -20,69 +20,69 @@ export default function CartCheckout({
 }: CartCheckoutProps) {
   return (
     <aside className="lg:w-[450px]">
-      <div className="bg-white border border-gray-100 rounded-[60px] p-10 shadow-2xl shadow-black/5 sticky top-32 space-y-8">
+      <div className="bg-white/5 border border-white/10 rounded-[60px] p-10 shadow-2xl shadow-black/20 sticky top-32 space-y-8">
         <div className="space-y-2">
           <h2 className="text-3xl font-bold tracking-tighter">Sifarişi Tamamla</h2>
-          <p className="text-sm text-gray-400 font-medium">Məlumatları daxil edərək sifarişi yekunlaşdırın.</p>
+          <p className="text-sm text-white/40 font-medium">Məlumatları daxil edərək sifarişi yekunlaşdırın.</p>
         </div>
 
         <form onSubmit={onSubmit} className="space-y-6">
           <div className="space-y-4">
             <div className="space-y-2">
-              <label className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] ml-1">Ad Soyad / Şirkət</label>
+              <label className="text-[10px] font-bold text-white/40 uppercase tracking-[0.2em] ml-1">Ad Soyad / Şirkət</label>
               <div className="relative">
-                <UserIcon className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-300" />
+                <UserIcon className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-white/30" />
                 <input
                   type="text"
                   required
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full pl-14 pr-6 py-5 bg-gray-50 border border-transparent rounded-[24px] text-sm font-bold focus:outline-none focus:ring-4 focus:ring-red-500/5 focus:border-red-500 transition-all"
+                  className="w-full pl-14 pr-6 py-5 bg-white/5 border border-transparent rounded-[24px] text-sm font-bold focus:outline-none focus:ring-4 focus:ring-red-500/5 focus:border-red-500 transition-all"
                   placeholder="Tural Rəhimov"
                 />
               </div>
             </div>
 
             <div className="space-y-2">
-              <label className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] ml-1">Telefon</label>
+              <label className="text-[10px] font-bold text-white/40 uppercase tracking-[0.2em] ml-1">Telefon</label>
               <div className="relative">
-                <Phone className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-300" />
+                <Phone className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-white/30" />
                 <input
                   type="tel"
                   required
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="w-full pl-14 pr-6 py-5 bg-gray-50 border border-transparent rounded-[24px] text-sm font-bold focus:outline-none focus:ring-4 focus:ring-red-500/5 focus:border-red-500 transition-all"
+                  className="w-full pl-14 pr-6 py-5 bg-white/5 border border-transparent rounded-[24px] text-sm font-bold focus:outline-none focus:ring-4 focus:ring-red-500/5 focus:border-red-500 transition-all"
                   placeholder="+994 50 000 00 00"
                 />
               </div>
             </div>
 
             <div className="space-y-2">
-              <label className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] ml-1">Məkan</label>
+              <label className="text-[10px] font-bold text-white/40 uppercase tracking-[0.2em] ml-1">Məkan</label>
               <div className="relative">
-                <MapPin className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-300" />
+                <MapPin className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-white/30" />
                 <input
                   type="text"
                   required
                   value={formData.location}
                   onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                  className="w-full pl-14 pr-6 py-5 bg-gray-50 border border-transparent rounded-[24px] text-sm font-bold focus:outline-none focus:ring-4 focus:ring-red-500/5 focus:border-red-500 transition-all"
+                  className="w-full pl-14 pr-6 py-5 bg-white/5 border border-transparent rounded-[24px] text-sm font-bold focus:outline-none focus:ring-4 focus:ring-red-500/5 focus:border-red-500 transition-all"
                   placeholder="Tədbir keçiriləcək məkan"
                 />
               </div>
             </div>
 
             <div className="space-y-2">
-              <label className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] ml-1">Tarix</label>
+              <label className="text-[10px] font-bold text-white/40 uppercase tracking-[0.2em] ml-1">Tarix</label>
               <div className="relative">
-                <Calendar className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-300" />
+                <Calendar className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-white/30" />
                 <input
                   type="date"
                   required
                   value={formData.eventDate}
                   onChange={(e) => setFormData({ ...formData, eventDate: e.target.value })}
-                  className="w-full pl-14 pr-6 py-5 bg-gray-50 border border-transparent rounded-[24px] text-sm font-bold focus:outline-none focus:ring-4 focus:ring-red-500/5 focus:border-red-500 transition-all"
+                  className="w-full pl-14 pr-6 py-5 bg-white/5 border border-transparent rounded-[24px] text-sm font-bold focus:outline-none focus:ring-4 focus:ring-red-500/5 focus:border-red-500 transition-all"
                 />
               </div>
             </div>

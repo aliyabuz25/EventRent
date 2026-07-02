@@ -44,7 +44,7 @@ export default function ProfileSidebar({
 
   return (
     <aside className="lg:w-80 space-y-8">
-      <div className="bg-white border border-gray-100 rounded-[40px] p-8 shadow-2xl shadow-black/5 space-y-8">
+      <div className="bg-white/5 border border-white/10 rounded-[40px] p-8 shadow-2xl shadow-black/20 space-y-8">
         <div className="text-center space-y-4">
           <div className="relative inline-block group">
             <div className="w-24 h-24 bg-red-50 rounded-[32px] flex items-center justify-center text-red-500 overflow-hidden border-4 border-white shadow-xl">
@@ -59,8 +59,8 @@ export default function ProfileSidebar({
             </button>
           </div>
           <div>
-            <h3 className="text-xl font-bold text-gray-900">{user?.displayName || t(locale, labels.userPlaceholder)}</h3>
-            <p className="text-sm text-gray-400 font-medium">{user?.email}</p>
+            <h3 className="text-xl font-bold text-white">{user?.displayName || t(locale, labels.userPlaceholder)}</h3>
+            <p className="text-sm text-white/40 font-medium">{user?.email}</p>
           </div>
         </div>
 
@@ -74,7 +74,7 @@ export default function ProfileSidebar({
                 "w-full flex items-center justify-between px-6 py-4 rounded-2xl text-sm font-bold transition-all group",
                 activeTab === item.id 
                   ? "bg-black text-white shadow-xl shadow-black/10" 
-                  : "text-gray-400 hover:bg-gray-50 hover:text-black"
+                  : "text-white/40 hover:bg-white/5 hover:text-premium-orange"
               )}
             >
               <div className="flex items-center gap-4">

@@ -101,7 +101,7 @@ const ProjectCard = ({ project }: { project: any }) => {
           <h3 className="text-4xl md:text-5xl font-black text-white uppercase tracking-ultra-tight leading-[0.94]">
             {project.title}
           </h3>
-          <p className="text-gray-300/85 font-bold uppercase tracking-[0.22em] text-[10px] leading-relaxed">{project.location}</p>
+          <p className="text-white/30/85 font-bold uppercase tracking-[0.22em] text-[10px] leading-relaxed">{project.location}</p>
         </div>
 
         <button className="w-14 h-14 rounded-full glass flex items-center justify-center text-white hover:bg-premium-orange hover:text-white transition-all duration-300 transform group-hover:rotate-45 pointer-events-auto shadow-[0_14px_36px_rgba(0,0,0,0.2)]">

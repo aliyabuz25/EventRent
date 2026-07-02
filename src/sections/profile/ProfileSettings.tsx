@@ -45,29 +45,29 @@ export default function ProfileSettings({
     : null;
 
   return (
-    <div className="bg-white border border-gray-100 rounded-[40px] p-10 shadow-2xl shadow-black/5 space-y-10">
+    <div className="bg-white/5 border border-white/10 rounded-[40px] p-10 shadow-2xl shadow-black/20 space-y-10">
       <h2 className="text-3xl font-bold tracking-tighter">{t(locale, labels.accountSettings)}</h2>
 
       <form onSubmit={onSubmit} className="space-y-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="space-y-2">
-            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">{t(locale, labels.fullName)}</label>
+            <label className="text-[10px] font-bold text-white/40 uppercase tracking-widest ml-1">{t(locale, labels.fullName)}</label>
             <input
               type="text"
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
-              className="w-full px-6 py-4 bg-gray-50 border border-transparent rounded-2xl text-sm font-bold focus:outline-none focus:ring-4 focus:ring-premium-orange/5 focus:border-premium-orange transition-all"
+              className="w-full px-6 py-4 bg-white/5 border border-transparent rounded-2xl text-sm font-bold focus:outline-none focus:ring-4 focus:ring-premium-orange/5 focus:border-premium-orange transition-all"
               placeholder={t(locale, labels.namePlaceholder)}
             />
           </div>
           <div className="space-y-2">
-            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">{t(locale, labels.email)}</label>
+            <label className="text-[10px] font-bold text-white/40 uppercase tracking-widest ml-1">{t(locale, labels.email)}</label>
             <input
               type="email"
               value={user?.email || ''}
               disabled
               placeholder={t(locale, labels.email)}
-              className="w-full px-6 py-4 bg-gray-100 border border-transparent rounded-2xl text-sm font-bold text-gray-400 cursor-not-allowed"
+              className="w-full px-6 py-4 bg-gray-100 border border-transparent rounded-2xl text-sm font-bold text-white/40 cursor-not-allowed"
             />
           </div>
         </div>
@@ -92,14 +92,14 @@ export default function ProfileSettings({
 
       <div className="pt-10 border-t border-gray-50 space-y-6">
         <h3 className="text-xl font-bold">{t(locale, labels.security)}</h3>
-        <div className="flex items-center justify-between p-6 bg-gray-50 rounded-3xl border border-gray-100">
+        <div className="flex items-center justify-between p-6 bg-white/5 rounded-3xl border border-white/10">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-gray-400 shadow-sm">
+            <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-white/40 shadow-sm">
               <Shield className="w-6 h-6" />
             </div>
             <div>
-              <p className="font-bold text-gray-900">{t(locale, labels.changePassword)}</p>
-              <p className="text-xs text-gray-400">{t(locale, labels.securityHint)}</p>
+              <p className="font-bold text-white">{t(locale, labels.changePassword)}</p>
+              <p className="text-xs text-white/40">{t(locale, labels.securityHint)}</p>
             </div>
           </div>
           <button type="button" className="text-premium-orange font-bold text-sm hover:underline">{t(locale, labels.update)}</button>

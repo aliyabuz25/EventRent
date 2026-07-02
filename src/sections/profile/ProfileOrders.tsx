@@ -44,12 +44,12 @@ export default function ProfileOrders({ orders }: ProfileOrdersProps) {
       <h2 className="text-3xl font-bold tracking-tighter">{t(locale, labels.myOrders)}</h2>
       <div className="grid gap-6">
         {orders.map((order) => (
-          <div key={order.id} className="bg-white border border-gray-100 rounded-[40px] overflow-hidden shadow-2xl shadow-black/5 group">
+          <div key={order.id} className="bg-white/5 border border-white/10 rounded-[40px] overflow-hidden shadow-2xl shadow-black/20 group">
             <div className="p-8 space-y-8">
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div className="space-y-1">
-                  <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{t(locale, labels.orderId)} {order.id.slice(0, 8)}</p>
-                  <div className="flex items-center gap-2 text-sm text-gray-500">
+                  <p className="text-[10px] font-bold text-white/40 uppercase tracking-widest">{t(locale, labels.orderId)} {order.id.slice(0, 8)}</p>
+                  <div className="flex items-center gap-2 text-sm text-white/50">
                     <Clock className="w-4 h-4" />
                     {format(new Date(order.createdAt), 'dd MMMM yyyy, HH:mm')}
                   </div>
@@ -63,17 +63,17 @@ export default function ProfileOrders({ orders }: ProfileOrdersProps) {
                 {order.items.map((item, idx) => {
                   const product = MOCK_PRODUCTS.find(p => p.id === item.productId);
                   return (
-                    <div key={idx} className="flex items-center gap-4 p-4 bg-gray-50 rounded-3xl border border-gray-100">
-                      <div className="w-12 h-12 rounded-2xl bg-white border border-gray-100 flex items-center justify-center overflow-hidden flex-shrink-0">
+                    <div key={idx} className="flex items-center gap-4 p-4 bg-white/5 rounded-3xl border border-white/10">
+                      <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden flex-shrink-0">
                         {product?.images?.[0] ? (
                           <img src={product.images[0]} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                         ) : (
-                          <Package className="w-6 h-6 text-gray-200" />
+                          <Package className="w-6 h-6 text-white/20" />
                         )}
                       </div>
                       <div className="min-w-0">
-                        <p className="text-xs font-bold text-gray-900 truncate">{product?.name || t(locale, labels.product)}</p>
-                        <p className="text-[10px] text-gray-400">{item.quantity} {t(locale, labels.quantity)}</p>
+                        <p className="text-xs font-bold text-white truncate">{product?.name || t(locale, labels.product)}</p>
+                        <p className="text-[10px] text-white/40">{item.quantity} {t(locale, labels.quantity)}</p>
                       </div>
                     </div>
                   );
@@ -82,21 +82,21 @@ export default function ProfileOrders({ orders }: ProfileOrdersProps) {
 
               <div className="pt-8 border-t border-gray-50 grid grid-cols-1 sm:grid-cols-2 gap-8">
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-2xl bg-gray-50 flex items-center justify-center text-gray-400">
+                  <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center text-white/40">
                     <MapPin className="w-6 h-6" />
                   </div>
                   <div>
-                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{t(locale, labels.location)}</p>
-                    <p className="text-sm text-gray-900 font-bold">{order.location || t(locale, labels.notSpecified)}</p>
+                    <p className="text-[10px] font-bold text-white/40 uppercase tracking-widest">{t(locale, labels.location)}</p>
+                    <p className="text-sm text-white font-bold">{order.location || t(locale, labels.notSpecified)}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-2xl bg-gray-50 flex items-center justify-center text-gray-400">
+                  <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center text-white/40">
                     <Calendar className="w-6 h-6" />
                   </div>
                   <div>
-                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{t(locale, labels.date)}</p>
-                    <p className="text-sm text-gray-900 font-bold">
+                    <p className="text-[10px] font-bold text-white/40 uppercase tracking-widest">{t(locale, labels.date)}</p>
+                    <p className="text-sm text-white font-bold">
                       {order.eventDate ? format(new Date(order.eventDate), 'dd MMMM yyyy') : t(locale, labels.notSpecified)}
                     </p>
                   </div>
@@ -106,11 +106,11 @@ export default function ProfileOrders({ orders }: ProfileOrdersProps) {
           </div>
         ))}
         {orders.length === 0 && (
-          <div className="bg-white border border-gray-100 rounded-[40px] p-20 text-center space-y-6 shadow-2xl shadow-black/5">
-            <div className="w-20 h-20 bg-gray-50 rounded-[32px] flex items-center justify-center mx-auto text-gray-300">
+          <div className="bg-white/5 border border-white/10 rounded-[40px] p-20 text-center space-y-6 shadow-2xl shadow-black/20">
+            <div className="w-20 h-20 bg-white/5 rounded-[32px] flex items-center justify-center mx-auto text-white/30">
               <Package className="w-10 h-10" />
             </div>
-            <p className="text-xl text-gray-400 font-light">{t(locale, labels.noOrders)}</p>
+            <p className="text-xl text-white/40 font-light">{t(locale, labels.noOrders)}</p>
           </div>
         )}
       </div>

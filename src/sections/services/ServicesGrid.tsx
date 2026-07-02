@@ -80,7 +80,7 @@ export default function ServicesGrid() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
               <div className="absolute inset-0 p-12 flex flex-col justify-end">
-                <div className="service-card-icon w-16 h-16 bg-white/10 backdrop-blur-md rounded-3xl flex items-center justify-center text-white border border-white/10 group-hover:bg-white group-hover:text-black transition-all duration-500 mb-6">
+                <div className="service-card-icon w-16 h-16 bg-white/10 backdrop-blur-md rounded-3xl flex items-center justify-center text-white border border-white/10 group-hover:bg-white group-hover:text-premium-orange transition-all duration-500 mb-6">
                   <Icon className="w-8 h-8" />
                 </div>
                 <h3 className="text-4xl font-bold text-white tracking-tighter">{title}</h3>

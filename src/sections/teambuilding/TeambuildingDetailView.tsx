@@ -32,7 +32,7 @@ export default function TeambuildingDetailView({
     >
       <button 
         onClick={() => setStep('list')}
-        className="flex items-center gap-2 text-gray-400 hover:text-premium-orange font-bold uppercase text-[10px] tracking-widest mb-12 transition-colors group"
+        className="flex items-center gap-2 text-white/40 hover:text-premium-orange font-bold uppercase text-[10px] tracking-widest mb-12 transition-colors group"
       >
         <X className="w-4 h-4 transition-transform group-hover:rotate-90" /> Oyunlara qayıt
       </button>
@@ -55,9 +55,9 @@ export default function TeambuildingDetailView({
           <div className="space-y-8">
             <div className="flex items-center gap-4">
               <div className="w-1.5 h-10 bg-premium-orange rounded-full" />
-              <h2 className="text-[10px] font-black text-gray-400 uppercase tracking-[0.4em]">Oyun Haqqında</h2>
+              <h2 className="text-[10px] font-black text-white/40 uppercase tracking-[0.4em]">Oyun Haqqında</h2>
             </div>
-            <p className="text-gray-400 text-xl font-medium leading-relaxed">
+            <p className="text-white/40 text-xl font-medium leading-relaxed">
               {selectedGame.details}
             </p>
           </div>
@@ -67,7 +67,7 @@ export default function TeambuildingDetailView({
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                   <div className="w-1.5 h-10 bg-premium-orange rounded-full" />
-                  <h2 className="text-[10px] font-black text-gray-400 uppercase tracking-[0.4em]">Konsepsiya Seçin</h2>
+                  <h2 className="text-[10px] font-black text-white/40 uppercase tracking-[0.4em]">Konsepsiya Seçin</h2>
                 </div>
                 {selectedConcept && (
                   <span className="text-[10px] font-black text-premium-orange uppercase tracking-widest bg-premium-orange/5 px-4 py-2 rounded-full border border-premium-orange/10">
@@ -97,11 +97,11 @@ export default function TeambuildingDetailView({
             <div className="space-y-8">
               <div className="flex items-center gap-4">
                 <div className="w-1.5 h-10 bg-premium-orange rounded-full" />
-                <h2 className="text-[10px] font-black text-gray-400 uppercase tracking-[0.4em]">Tədbir Detalları</h2>
+                <h2 className="text-[10px] font-black text-white/40 uppercase tracking-[0.4em]">Tədbir Detalları</h2>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-4">Məkan</label>
+                  <label className="text-[9px] font-black text-white/40 uppercase tracking-widest ml-4">Məkan</label>
                   <input 
                     type="text"
                     placeholder="Məs: Şamaxı, Meşə ərazisi"
@@ -111,7 +111,7 @@ export default function TeambuildingDetailView({
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-4">İştirakçı sayı</label>
+                  <label className="text-[9px] font-black text-white/40 uppercase tracking-widest ml-4">İştirakçı sayı</label>
                   <input 
                     type="text"
                     placeholder="Məs: 50 nəfər"
@@ -121,7 +121,7 @@ export default function TeambuildingDetailView({
                   />
                 </div>
                 <div className="space-y-2 sm:col-span-2">
-                  <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest ml-4">Tarix</label>
+                  <label className="text-[9px] font-black text-white/40 uppercase tracking-widest ml-4">Tarix</label>
                   <input 
                     type="date"
                     className="w-full px-8 py-5 bg-white/5 rounded-[2rem] border-2 border-transparent focus:border-premium-orange focus:bg-white/10 transition-all text-sm font-bold text-white"
@@ -141,7 +141,7 @@ export default function TeambuildingDetailView({
                 <ShoppingCart className="w-6 h-6 group-hover:scale-110 transition-transform" />
                 Sifarişi Tamamla
               </button>
-              <p className="text-center text-[10px] text-gray-400 font-bold uppercase tracking-[0.2em] mt-8">
+              <p className="text-center text-[10px] text-white/40 font-bold uppercase tracking-[0.2em] mt-8">
                 Sifarişiniz səbətə əlavə olunacaq
               </p>
             </div>

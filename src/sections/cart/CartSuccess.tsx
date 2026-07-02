@@ -14,7 +14,7 @@ export default function CartSuccess() {
         <CheckCircle2 className="w-12 h-12" />
       </motion.div>
       <h2 className="text-4xl font-bold tracking-tighter">Təşəkkür edirik!</h2>
-      <p className="text-gray-500 text-lg font-light">Sifarişiniz qəbul olundu. Tezliklə sizinlə əlaqə saxlayacağıq. Profilinizdən sifarişi izləyə bilərsiniz.</p>
+      <p className="text-white/50 text-lg font-light">Sifarişiniz qəbul olundu. Tezliklə sizinlə əlaqə saxlayacağıq. Profilinizdən sifarişi izləyə bilərsiniz.</p>
       <Link to="/profile" className="inline-block bg-black text-white px-10 py-4 rounded-full font-bold hover:bg-gray-800 transition-all">Profilə keç</Link>
     </div>
   );

@@ -110,7 +110,7 @@ export default function ServicesProcess() {
           </div>
           <div className="max-w-xs space-y-6">
             <div className="h-px w-20 bg-premium-orange" />
-            <p className="text-gray-400 font-medium leading-[1.75]">
+            <p className="text-white/40 font-medium leading-[1.75]">
               {t(locale, content.home.process.description)}
             </p>
           </div>
@@ -143,7 +143,7 @@ export default function ServicesProcess() {
                   </h3>
                 </div>
 
-                <p className="text-xl md:text-2xl text-gray-300/90 font-medium leading-[1.7] max-w-2xl">
+                <p className="text-xl md:text-2xl text-white/30/90 font-medium leading-[1.7] max-w-2xl">
                   {step.description}
                 </p>
 

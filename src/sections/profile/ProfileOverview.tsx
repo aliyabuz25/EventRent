@@ -41,38 +41,38 @@ export default function ProfileOverview({ orders, onViewAll }: ProfileOverviewPr
   return (
     <div className="space-y-8">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white border border-gray-100 p-8 rounded-[40px] shadow-2xl shadow-black/5">
+        <div className="bg-white/5 border border-white/10 p-8 rounded-[40px] shadow-2xl shadow-black/20">
           <Package className="w-8 h-8 text-red-500 mb-4" />
           <p className="text-3xl font-bold">{orders.length}</p>
-          <p className="text-sm text-gray-400 font-medium">{t(locale, labels.totalOrders)}</p>
+          <p className="text-sm text-white/40 font-medium">{t(locale, labels.totalOrders)}</p>
         </div>
-        <div className="bg-white border border-gray-100 p-8 rounded-[40px] shadow-2xl shadow-black/5">
+        <div className="bg-white/5 border border-white/10 p-8 rounded-[40px] shadow-2xl shadow-black/20">
           <Clock className="w-8 h-8 text-blue-500 mb-4" />
           <p className="text-3xl font-bold">{orders.filter(o => o.status === 'new').length}</p>
-          <p className="text-sm text-gray-400 font-medium">{t(locale, labels.pending)}</p>
+          <p className="text-sm text-white/40 font-medium">{t(locale, labels.pending)}</p>
         </div>
-        <div className="bg-white border border-gray-100 p-8 rounded-[40px] shadow-2xl shadow-black/5">
+        <div className="bg-white/5 border border-white/10 p-8 rounded-[40px] shadow-2xl shadow-black/20">
           <CheckCircle2 className="w-8 h-8 text-green-500 mb-4" />
           <p className="text-3xl font-bold">{orders.filter(o => o.status === 'won').length}</p>
-          <p className="text-sm text-gray-400 font-medium">{t(locale, labels.completed)}</p>
+          <p className="text-sm text-white/40 font-medium">{t(locale, labels.completed)}</p>
         </div>
       </div>
 
-      <div className="bg-white border border-gray-100 rounded-[40px] p-8 shadow-2xl shadow-black/5">
+      <div className="bg-white/5 border border-white/10 rounded-[40px] p-8 shadow-2xl shadow-black/20">
         <div className="flex items-center justify-between mb-8">
           <h3 className="text-2xl font-bold tracking-tight">{t(locale, labels.recentOrders)}</h3>
           <button type="button" onClick={onViewAll} className="text-red-500 font-bold text-sm hover:underline">{t(locale, labels.viewAll)}</button>
         </div>
         <div className="space-y-4">
           {orders.slice(0, 3).map(order => (
-            <div key={order.id} className="flex items-center justify-between p-6 bg-gray-50 rounded-3xl border border-gray-100">
+            <div key={order.id} className="flex items-center justify-between p-6 bg-white/5 rounded-3xl border border-white/10">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-gray-400 shadow-sm">
+                <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-white/40 shadow-sm">
                   <Package className="w-6 h-6" />
                 </div>
                 <div>
-                  <p className="font-bold text-gray-900">{t(locale, labels.order)} #{order.id.slice(0, 8)}</p>
-                  <p className="text-xs text-gray-400">{format(new Date(order.createdAt), 'dd MMM yyyy')}</p>
+                  <p className="font-bold text-white">{t(locale, labels.order)} #{order.id.slice(0, 8)}</p>
+                  <p className="text-xs text-white/40">{format(new Date(order.createdAt), 'dd MMM yyyy')}</p>
                 </div>
               </div>
               <div className={cn("px-4 py-1.5 rounded-full text-[10px] font-bold border capitalize", STATUS_COLORS[order.status])}>
@@ -81,7 +81,7 @@ export default function ProfileOverview({ orders, onViewAll }: ProfileOverviewPr
             </div>
           ))}
           {orders.length === 0 && (
-            <p className="text-center py-10 text-gray-400">{t(locale, labels.noOrders)}</p>
+            <p className="text-center py-10 text-white/40">{t(locale, labels.noOrders)}</p>
           )}
         </div>
       </div>

@@ -29,14 +29,14 @@ export default function CatalogHero() {
               THE <span className="text-premium-orange">TECHNICAL</span> <br />
               <span className="text-stroke-solid">INVENTORY</span>
             </h1>
-            <p className="text-xl text-gray-400 font-medium max-w-lg leading-relaxed">
+            <p className="text-xl text-white/40 font-medium max-w-lg leading-relaxed">
               Premium audio-visual equipment from the world's leading manufacturers, maintained to the highest industry standards.
             </p>
             <div className="flex flex-wrap gap-4 pt-4">
               <button className="px-10 py-5 bg-premium-orange text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:scale-105 transition-all active:scale-95 shadow-xl shadow-premium-orange/20">
                 Explore Catalog
               </button>
-              <button className="px-10 py-5 glass-dark text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-all active:scale-95">
+              <button className="px-10 py-5 glass-dark text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-white hover:text-premium-orange transition-all active:scale-95">
                 Request Info
               </button>
             </div>

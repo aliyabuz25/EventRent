@@ -18,25 +18,25 @@ export default function ProfileSupport() {
   };
 
   return (
-    <div className="bg-white border border-gray-100 rounded-[40px] p-10 shadow-2xl shadow-black/5 space-y-8">
+    <div className="bg-white/5 border border-white/10 rounded-[40px] p-10 shadow-2xl shadow-black/20 space-y-8">
       <h2 className="text-3xl font-bold tracking-tighter">{t(locale, labels.supportCenter)}</h2>
-      <p className="text-gray-500 font-medium">{t(locale, labels.supportHint)}</p>
+      <p className="text-white/50 font-medium">{t(locale, labels.supportHint)}</p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="p-8 bg-gray-50 rounded-[32px] border border-gray-100 space-y-4">
-          <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-premium-orange shadow-sm">
+        <div className="p-8 bg-white/5 rounded-[32px] border border-white/10 space-y-4">
+          <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-premium-orange shadow-sm">
             <Bell className="w-6 h-6" />
           </div>
           <h4 className="text-xl font-bold">{t(locale, labels.faqTitle)}</h4>
-          <p className="text-sm text-gray-400 leading-relaxed">{t(locale, labels.faqHint)}</p>
+          <p className="text-sm text-white/40 leading-relaxed">{t(locale, labels.faqHint)}</p>
           <button type="button" className="text-premium-orange font-bold text-sm hover:underline">{t(locale, labels.seeBtn)}</button>
         </div>
-        <div className="p-8 bg-gray-50 rounded-[32px] border border-gray-100 space-y-4">
-          <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-premium-orange shadow-sm">
+        <div className="p-8 bg-white/5 rounded-[32px] border border-white/10 space-y-4">
+          <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-premium-orange shadow-sm">
             <HelpCircle className="w-6 h-6" />
           </div>
           <h4 className="text-xl font-bold">{t(locale, labels.liveSupportTitle)}</h4>
-          <p className="text-sm text-gray-400 leading-relaxed">{t(locale, labels.liveSupportHint)}</p>
+          <p className="text-sm text-white/40 leading-relaxed">{t(locale, labels.liveSupportHint)}</p>
           <button type="button" className="text-premium-orange font-bold text-sm hover:underline">{t(locale, labels.openChat)}</button>
         </div>
       </div>

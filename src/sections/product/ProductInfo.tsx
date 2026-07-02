@@ -17,24 +17,24 @@ export default function ProductInfo({ product, onOpenModal }: ProductInfoProps) 
           </span>
           <div className="h-px flex-1 bg-gray-100" />
         </div>
-        <h1 className="text-5xl font-black tracking-tighter text-gray-900 leading-tight">{product.name}</h1>
-        <p className="text-xl text-gray-500 leading-relaxed font-medium">{product.description}</p>
+        <h1 className="text-5xl font-black tracking-tighter text-white leading-tight">{product.name}</h1>
+        <p className="text-xl text-white/50 leading-relaxed font-medium">{product.description}</p>
       </div>
 
       <div className="space-y-8">
         <div className="flex items-center gap-3">
-          <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">Texniki Xüsusiyyətlər</h3>
-          <div className="h-px flex-1 bg-gray-50" />
+          <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40">Texniki Xüsusiyyətlər</h3>
+          <div className="h-px flex-1 bg-white/5" />
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {Object.entries(product.technicalSpecs).map(([key, value]) => (
-            <div key={key} className="flex items-center gap-4 p-5 bg-white border border-gray-100 rounded-3xl shadow-sm hover:shadow-md transition-shadow">
+            <div key={key} className="flex items-center gap-4 p-5 bg-white/5 border border-white/10 rounded-3xl shadow-sm hover:shadow-md transition-shadow">
               <div className="w-10 h-10 bg-premium-orange/5 rounded-xl flex items-center justify-center">
                 <Zap className="w-5 h-5 text-premium-orange" />
               </div>
               <div>
-                <p className="text-[10px] font-black text-gray-400 uppercase tracking-wider">{key}</p>
-                <p className="text-sm font-bold text-gray-900">{value}</p>
+                <p className="text-[10px] font-black text-white/40 uppercase tracking-wider">{key}</p>
+                <p className="text-sm font-bold text-white">{value}</p>
               </div>
             </div>
           ))}

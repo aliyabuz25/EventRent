@@ -45,7 +45,7 @@ export default function TeambuildingAuthModal({
             onClick={e => e.stopPropagation()}
           >
             <button 
-              className="absolute top-6 right-6 w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center text-gray-400 hover:text-premium-orange transition-all z-10"
+              className="absolute top-6 right-6 w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center text-white/40 hover:text-premium-orange transition-all z-10"
               onClick={() => setStep('list')}
             >
               <X className="w-5 h-5" />
@@ -58,7 +58,7 @@ export default function TeambuildingAuthModal({
                     <Users className="w-8 h-8" />
                   </div>
                   <h2 className="text-2xl font-black tracking-tight uppercase text-white">Məlumatlar</h2>
-                  <p className="text-gray-500 text-[10px] font-black uppercase tracking-widest leading-relaxed">
+                  <p className="text-white/50 text-[10px] font-black uppercase tracking-widest leading-relaxed">
                     Zəhmət olmasa anket məlumatlarını doldurun
                   </p>
                 </div>
@@ -87,7 +87,7 @@ export default function TeambuildingAuthModal({
                     value={formData.company}
                     onChange={e => setFormData({...formData, company: e.target.value})}
                   />
-                  <button type="submit" className="w-full bg-premium-orange text-white py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-all flex items-center justify-center gap-3 shadow-xl shadow-premium-orange/20">
+                  <button type="submit" className="w-full bg-premium-orange text-white py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:bg-white hover:text-premium-orange transition-all flex items-center justify-center gap-3 shadow-xl shadow-premium-orange/20">
                     Kod göndər <Send className="w-4 h-4" />
                   </button>
                 </form>
@@ -101,7 +101,7 @@ export default function TeambuildingAuthModal({
                     <Lock className="w-8 h-8" />
                   </div>
                   <h2 className="text-2xl font-black tracking-tight uppercase text-white">OTP Təsdiq</h2>
-                  <p className="text-gray-500 text-[10px] font-black uppercase tracking-widest text-white/40">Telefon nömrənizə SMS kodu göndəriləcək</p>
+                  <p className="text-white/50 text-[10px] font-black uppercase tracking-widest text-white/40">Telefon nömrənizə SMS kodu göndəriləcək</p>
                 </div>
                 <form onSubmit={handleVerifyOtp} className="space-y-6">
                   <input
