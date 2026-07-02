@@ -10,7 +10,7 @@ export default function CartLoginPrompt() {
         animate={{ opacity: 1, y: 0 }}
         className="bg-white/5 border border-white/10 rounded-[60px] p-12 text-center space-y-8 shadow-2xl shadow-black/20"
       >
-        <div className="w-24 h-24 bg-red-50 rounded-[40px] flex items-center justify-center mx-auto text-red-500">
+        <div className="w-24 h-24 bg-premium-orange/10 border border-premium-orange/20 rounded-[40px] flex items-center justify-center mx-auto text-premium-orange shadow-inner">
           <LogIn className="w-10 h-10" />
         </div>
         <div className="space-y-4">
@@ -26,9 +26,12 @@ export default function CartLoginPrompt() {
               localStorage.setItem('demo_user_name', 'Tural Rəhimov');
               window.location.reload();
             }}
-            className="w-full sm:w-auto bg-black text-white px-12 py-5 rounded-full font-bold text-lg hover:bg-gray-800 transition-all shadow-xl shadow-black/20 flex items-center justify-center gap-3"
+            className="group relative overflow-hidden w-full sm:w-auto bg-white text-black px-12 py-5 rounded-[24px] font-black text-lg hover:text-white transition-colors duration-500 shadow-[0_0_40px_rgba(255,255,255,0.1)] hover:shadow-[0_0_40px_rgba(227,6,19,0.3)] flex items-center justify-center gap-3"
           >
-            Daxil ol <ArrowRight className="w-5 h-5" />
+            <div className="absolute inset-0 bg-premium-orange translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out" />
+            <span className="relative z-10 flex items-center justify-center gap-3">
+              Daxil ol <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </span>
           </button>
         </div>
       </motion.div>

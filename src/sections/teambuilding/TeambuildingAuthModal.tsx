@@ -67,7 +67,7 @@ export default function TeambuildingAuthModal({
                     required
                     type="text"
                     placeholder="Ad Soyad"
-                    className="w-full px-6 py-4 bg-white/5 rounded-2xl border-2 border-transparent focus:border-premium-orange focus:bg-white/10 transition-all text-sm font-bold text-white"
+                    className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-2xl text-sm font-bold text-white focus:outline-none focus:bg-white/10 focus:border-premium-orange focus:shadow-[0_0_20px_rgba(227,6,19,0.1)] transition-all duration-300 placeholder:text-white/20"
                     value={formData.name}
                     onChange={e => setFormData({...formData, name: e.target.value})}
                   />
@@ -75,7 +75,7 @@ export default function TeambuildingAuthModal({
                     required
                     type="tel"
                     placeholder="Telefon"
-                    className="w-full px-6 py-4 bg-white/5 rounded-2xl border-2 border-transparent focus:border-premium-orange focus:bg-white/10 transition-all text-sm font-bold text-white"
+                    className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-2xl text-sm font-bold text-white focus:outline-none focus:bg-white/10 focus:border-premium-orange focus:shadow-[0_0_20px_rgba(227,6,19,0.1)] transition-all duration-300 placeholder:text-white/20"
                     value={phone}
                     onChange={e => setPhone(e.target.value)}
                   />
@@ -83,12 +83,15 @@ export default function TeambuildingAuthModal({
                     required
                     type="text"
                     placeholder="Şirkət"
-                    className="w-full px-6 py-4 bg-white/5 rounded-2xl border-2 border-transparent focus:border-premium-orange focus:bg-white/10 transition-all text-sm font-bold text-white"
+                    className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-2xl text-sm font-bold text-white focus:outline-none focus:bg-white/10 focus:border-premium-orange focus:shadow-[0_0_20px_rgba(227,6,19,0.1)] transition-all duration-300 placeholder:text-white/20"
                     value={formData.company}
                     onChange={e => setFormData({...formData, company: e.target.value})}
                   />
-                  <button type="submit" className="w-full bg-premium-orange text-white py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:bg-white hover:text-premium-orange transition-all flex items-center justify-center gap-3 shadow-xl shadow-premium-orange/20">
-                    Kod göndər <Send className="w-4 h-4" />
+                  <button type="submit" className="group relative overflow-hidden w-full bg-white text-black py-5 rounded-[24px] font-black text-xs uppercase tracking-[0.2em] hover:text-white transition-colors duration-500 flex items-center justify-center gap-3 shadow-[0_0_40px_rgba(255,255,255,0.1)] hover:shadow-[0_0_40px_rgba(227,6,19,0.3)] mt-6">
+                    <div className="absolute inset-0 bg-premium-orange translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out" />
+                    <span className="relative z-10 flex items-center gap-3">
+                      Kod göndər <Send className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                    </span>
                   </button>
                 </form>
               </div>
@@ -112,8 +115,9 @@ export default function TeambuildingAuthModal({
                     value={otp}
                     onChange={e => setOtp(e.target.value)}
                   />
-                  <button type="submit" className="w-full bg-white text-black py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:bg-premium-orange hover:text-white transition-all shadow-xl">
-                    Təsdiqlə
+                  <button type="submit" className="group relative overflow-hidden w-full bg-white text-black py-5 rounded-[24px] font-black text-xs uppercase tracking-[0.2em] hover:text-white transition-colors duration-500 shadow-[0_0_40px_rgba(255,255,255,0.1)] hover:shadow-[0_0_40px_rgba(227,6,19,0.3)] mt-6">
+                    <div className="absolute inset-0 bg-premium-orange translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out" />
+                    <span className="relative z-10">Təsdiqlə</span>
                   </button>
                 </form>
               </div>

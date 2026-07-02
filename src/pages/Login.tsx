@@ -120,77 +120,66 @@ export default function Login() {
 
   return (
     <div className="max-w-md mx-auto py-20 px-4">
-      <div className="bg-white border border-gray-100 rounded-[32px] p-8 shadow-2xl shadow-black/5 space-y-8">
-        <div className="text-center space-y-2">
-          <div className="w-16 h-16 bg-red-50 rounded-2xl flex items-center justify-center mx-auto text-red-500">
+      <div className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[40px] p-8 md:p-12 shadow-2xl shadow-black relative overflow-hidden">
+        {/* Ambient Glow */}
+        <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-premium-orange/10 rounded-full blur-[80px] pointer-events-none -z-10" />
+
+        <div className="text-center space-y-2 relative z-10">
+          <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center mx-auto text-premium-orange shadow-inner">
             <LogIn className="w-8 h-8" />
           </div>
-          <h1 className="text-2xl font-bold tracking-tight">{t(locale, labels.welcomeTitle)}</h1>
-          <p className="text-gray-500 text-sm">{t(locale, labels.welcomeSubtitle)}<br/><span className="text-red-500 font-bold">{t(locale, labels.noPasswordNote)}</span></p>
+          <h1 className="text-3xl font-black tracking-tighter text-white mt-4">{t(locale, labels.welcomeTitle)}</h1>
+          <p className="text-white/50 text-sm font-medium">{t(locale, labels.welcomeSubtitle)}<br/><span className="text-premium-orange font-bold">{t(locale, labels.noPasswordNote)}</span></p>
         </div>
 
         {error && (
-          <div className="bg-red-50 text-red-500 p-4 rounded-2xl flex items-center gap-3 text-sm animate-in fade-in slide-in-from-top-2">
+          <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-4 rounded-2xl flex items-center gap-3 text-sm font-bold backdrop-blur-md relative z-10 mt-8">
             <AlertCircle className="w-5 h-5 flex-shrink-0" />
             <p>{error}</p>
           </div>
         )}
 
-        <div className="space-y-6">
+        <div className="space-y-6 relative z-10 mt-8">
           <button
             onClick={handleQuickLogin}
             disabled={isLoading}
-            className="w-full bg-red-600 text-white py-6 rounded-3xl font-bold text-xl hover:bg-red-700 transition-all active:scale-95 shadow-2xl shadow-red-600/20 disabled:opacity-50 flex items-center justify-center gap-3"
+            className="group relative w-full overflow-hidden flex items-center justify-center gap-3 bg-white text-black py-6 rounded-[24px] font-black text-xl hover:text-white transition-colors duration-500 shadow-[0_0_40px_rgba(255,255,255,0.1)] hover:shadow-[0_0_40px_rgba(227,6,19,0.3)] disabled:opacity-50"
           >
-            {isLoading ? (
-              <>
-                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                {t(locale, labels.loggingIn)}
-              </>
-            ) : (
-              <>
-                {t(locale, labels.loginBtn)} <ArrowRight className="w-6 h-6" />
-              </>
-            )}
+            <div className="absolute inset-0 bg-premium-orange translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out" />
+            <span className="relative z-10 flex items-center gap-3">
+              {isLoading ? (
+                <>
+                  <div className="w-5 h-5 border-2 border-black group-hover:border-white border-t-transparent rounded-full animate-spin transition-colors" />
+                  {t(locale, labels.loggingIn)}
+                </>
+              ) : (
+                <>
+                  {t(locale, labels.loginBtn)} <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
+                </>
+              )}
+            </span>
           </button>
 
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-100"></div>
+              <div className="w-full border-t border-white/10"></div>
             </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-white px-4 text-gray-400 font-bold tracking-widest">{t(locale, labels.orDivider)}</span>
+            <div className="relative flex justify-center text-xs uppercase tracking-widest">
+              <span className="bg-[#111] px-4 text-white/30 font-black">{t(locale, labels.orDivider)}</span>
             </div>
           </div>
 
           <button
             onClick={handleGoogleLogin}
-            className="w-full flex items-center justify-center gap-3 bg-white border border-gray-100 py-5 rounded-3xl font-bold hover:bg-gray-50 transition-all active:scale-95 shadow-sm"
+            className="w-full flex items-center justify-center gap-3 bg-white/5 border border-white/10 text-white py-5 rounded-[24px] font-bold hover:bg-white/10 hover:border-white/20 transition-all active:scale-95 shadow-sm"
           >
             <img src="https://www.google.com/favicon.ico" className="w-5 h-5" alt="Google" />
             {t(locale, labels.googleBtn)}
           </button>
         </div>
 
-        <div className="relative">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-100"></div>
-          </div>
-          <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-white px-4 text-gray-400 font-bold tracking-widest">və ya</span>
-          </div>
-        </div>
-
-        <button
-          onClick={handleGoogleLogin}
-          className="w-full flex items-center justify-center gap-3 bg-white border border-gray-100 py-4 rounded-2xl font-bold hover:bg-gray-50 transition-all active:scale-95"
-        >
-          <img src="https://www.google.com/favicon.ico" className="w-5 h-5" alt="Google" />
-          {t(locale, labels.googleBtn)}
-        </button>
-
-        <p className="text-center text-sm text-gray-500">
-          {t(locale, labels.noAccountText)} <button type="button" className="text-red-600 font-bold hover:underline">{t(locale, labels.registerBtn)}</button>
+        <p className="text-center text-sm text-white/40 mt-8 relative z-10">
+          {t(locale, labels.noAccountText)} <button type="button" className="text-premium-orange font-bold hover:underline">{t(locale, labels.registerBtn)}</button>
         </p>
       </div>
     </div>
