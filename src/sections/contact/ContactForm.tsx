@@ -128,7 +128,12 @@ export default function ContactForm() {
             <button
               type="submit"
               disabled={loading}
-              onMouseMove={(e) => {
+              onMouseEnter={(e) => {
+                const rect = e.currentTarget.getBoundingClientRect();
+                e.currentTarget.style.setProperty('--x', `${e.clientX - rect.left}px`);
+                e.currentTarget.style.setProperty('--y', `${e.clientY - rect.top}px`);
+              }}
+              onMouseLeave={(e) => {
                 const rect = e.currentTarget.getBoundingClientRect();
                 e.currentTarget.style.setProperty('--x', `${e.clientX - rect.left}px`);
                 e.currentTarget.style.setProperty('--y', `${e.clientY - rect.top}px`);
@@ -138,7 +143,7 @@ export default function ContactForm() {
               <div className="absolute inset-0 bg-premium-orange pointer-events-none z-0 [clip-path:circle(0px_at_var(--x,50%)_var(--y,50%))] group-hover:[clip-path:circle(150%_at_var(--x,50%)_var(--y,50%))] transition-[clip-path] duration-500 ease-out" />
               <span className="relative z-10 flex items-center gap-4">
                 {loading ? (
-                  <span className="h-6 w-6 border-2 border-white group-hover:border-black border-t-transparent rounded-full animate-spin transition-colors" />
+                  <span className="h-6 w-6 border-2 border-black group-hover:border-white border-t-transparent rounded-full animate-spin transition-colors" />
                 ) : (
                   <>Göndər <ArrowUpRight aria-hidden="true" className="w-6 h-6 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" /></>
                 )}
