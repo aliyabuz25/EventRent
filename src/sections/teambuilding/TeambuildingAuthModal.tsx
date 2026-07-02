@@ -87,8 +87,8 @@ export default function TeambuildingAuthModal({
                     value={formData.company}
                     onChange={e => setFormData({...formData, company: e.target.value})}
                   />
-                  <button type="submit" className="group relative overflow-hidden w-full bg-white text-black py-5 rounded-[24px] font-black text-xs uppercase tracking-[0.2em] hover:text-white transition-colors duration-500 flex items-center justify-center gap-3 shadow-[0_0_40px_rgba(255,255,255,0.1)] hover:shadow-[0_0_40px_rgba(227,6,19,0.3)] mt-6">
-                    <div className="absolute inset-0 bg-premium-orange translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out" />
+                  <button type="submit" className="group relative overflow-hidden w-full bg-premium-orange text-white py-5 rounded-[24px] font-black text-xs uppercase tracking-[0.2em] hover:text-black transition-colors duration-500 flex items-center justify-center gap-3 shadow-[0_0_40px_rgba(227,6,19,0.3)] hover:shadow-[0_0_40px_rgba(255,255,255,0.2)] mt-6">
+                    <div className="absolute inset-0 bg-white translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out" />
                     <span className="relative z-10 flex items-center gap-3">
                       Kod göndər <Send className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                     </span>
@@ -115,8 +115,8 @@ export default function TeambuildingAuthModal({
                     value={otp}
                     onChange={e => setOtp(e.target.value)}
                   />
-                  <button type="submit" className="group relative overflow-hidden w-full bg-white text-black py-5 rounded-[24px] font-black text-xs uppercase tracking-[0.2em] hover:text-white transition-colors duration-500 shadow-[0_0_40px_rgba(255,255,255,0.1)] hover:shadow-[0_0_40px_rgba(227,6,19,0.3)] mt-6">
-                    <div className="absolute inset-0 bg-premium-orange translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out" />
+                  <button type="submit" className="group relative overflow-hidden w-full bg-premium-orange text-white py-5 rounded-[24px] font-black text-xs uppercase tracking-[0.2em] hover:text-black transition-colors duration-500 shadow-[0_0_40px_rgba(227,6,19,0.3)] hover:shadow-[0_0_40px_rgba(255,255,255,0.2)] mt-6">
+                    <div className="absolute inset-0 bg-white translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out" />
                     <span className="relative z-10">Təsdiqlə</span>
                   </button>
                 </form>
