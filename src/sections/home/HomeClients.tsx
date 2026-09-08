@@ -1,19 +1,7 @@
-import React, { useRef } from 'react';
+import React, { useRef, useMemo } from 'react';
 import { useGsap, gsap } from '../../motion/useGsap';
 import { useSiteContent } from '../../content.context';
 import { t } from '../../content';
-
-const LOGOS = [
-  { name: 'ABB', sub: 'Bank', img: '/logos/abb.png', url: 'https://abb-bank.az' },
-  { name: 'SOCAR', sub: 'Enerji', img: '/logos/socar.svg', url: 'https://socar.az' },
-  { name: 'Kapital', sub: 'Bank', img: '/logos/kapital-bank.svg', url: 'https://kapitalbank.az' },
-  { name: 'AzərGold', sub: '', img: null, url: 'https://azergold.az' },
-  { name: 'Bakcell', sub: '', img: '/logos/bakcell.svg', url: 'https://bakcell.com' },
-  { name: 'Nar', sub: 'Mobile', img: null, url: 'https://nar.az' },
-  { name: 'Silk Way', sub: 'Airlines', img: '/logos/silkway.svg', url: 'https://silkwayairlines.com' },
-  { name: 'Atlas', sub: 'Group', img: null, url: 'https://atlasgroup.az' },
-  { name: 'İpoteka', sub: 'Bank', img: null, url: 'https://ipotekabank.az' },
-];
 
 function LogoItem({ name, sub, img, url }: { name: string; sub: string; img: string | null; url: string }) {
   const [imgFailed, setImgFailed] = React.useState(false);
@@ -79,6 +67,17 @@ export default function HomeClients() {
   const outerRef = useRef<HTMLDivElement>(null);
   const { content, locale } = useSiteContent();
   const metrics = content?.home?.metrics?.items || [];
+
+  // Müştəri siyahısını content'den dinamik olaraq götür
+  const LOGOS = useMemo(() => {
+    const clients = content?.home?.clients?.clients || [];
+    return clients.map((c) => ({
+      name: c.name,
+      sub: '',
+      img: c.logo,
+      url: c.url,
+    }));
+  }, [content?.home?.clients]);
 
   const parseValue = (v: string) => {
     const match = v.match(/^([\d.,]+)(.*)$/);
