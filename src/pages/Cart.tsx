@@ -63,6 +63,18 @@ export default function Cart() {
           }
         };
       }
+      if (item.type === 'catering') {
+        return {
+          ...item,
+          product: {
+            id: item.id,
+            name: item.name,
+            category: 'Ketrinq',
+            images: [item.image],
+            description: ''
+          }
+        };
+      }
       let product = MOCK_PRODUCTS.find(p => p.id === item.productId);
       if (!product) {
         const concept = MOCK_CONCEPTS.find(c => c.id === item.productId);
