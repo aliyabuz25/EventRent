@@ -1,47 +1,56 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Zap } from 'lucide-react';
 
 export default function CatalogHero() {
   return (
-    <section className="relative h-[80vh] -mt-8 -mx-4 sm:-mx-6 lg:-mx-8 overflow-hidden rounded-b-[4rem] bg-brand-bg">
-      <img 
-        src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&q=80&w=2070" 
-        className="absolute inset-0 w-full h-full object-cover grayscale brightness-50"
-        alt="Catalog Hero"
-        referrerPolicy="no-referrer"
-      />
-      <div className="absolute inset-0 bg-gradient-to-r from-brand-bg via-brand-bg/60 to-transparent" />
-      
-      <div className="absolute inset-0 flex items-center">
-        <div className="max-w-7xl mx-auto px-8 w-full">
-          <motion.div 
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            className="max-w-2xl space-y-8"
-          >
-            <div className="inline-flex items-center gap-2 px-4 py-2 glass-dark rounded-full text-white/80 text-[10px] font-black uppercase tracking-widest">
-              <Zap className="w-4 h-4 text-premium-orange fill-current" />
-              Professional Production Gear
-            </div>
-            <h1 className="text-6xl md:text-8xl font-black text-white leading-[0.9] tracking-ultra-tight uppercase italic">
-              THE <span className="text-premium-orange">TECHNICAL</span> <br />
-              <span className="text-stroke-solid">INVENTORY</span>
-            </h1>
-            <p className="text-xl text-white/70 font-medium max-w-lg leading-relaxed">
-              Premium audio-visual equipment from the world's leading manufacturers, maintained to the highest industry standards.
-            </p>
-            <div className="flex flex-wrap gap-4 pt-4">
-              <button className="px-10 py-5 bg-premium-orange text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:scale-105 transition-all active:scale-95 shadow-xl shadow-premium-orange/20">
-                Explore Catalog
-              </button>
-              <button className="px-10 py-5 glass-dark text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-white hover:text-premium-orange transition-all active:scale-95">
-                Request Info
-              </button>
-            </div>
-          </motion.div>
-        </div>
+    <section className="relative pt-32 pb-16 md:pt-40 md:pb-20 bg-gradient-to-b from-brand-bg via-brand-bg to-brand-card overflow-hidden">
+      {/* Nazik ambient glow */}
+      <div className="absolute inset-0 pointer-events-none opacity-[0.04]">
+        <div
+          className="absolute top-0 left-1/4 w-[40vw] h-[50%]"
+          style={{ background: 'radial-gradient(ellipse, rgba(227,6,19,0.06) 0%, transparent 70%)' }}
+        />
+      </div>
+
+      {/* Grid lines */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/4 left-0 right-0 h-px bg-white/5" />
+        <div className="absolute top-2/4 left-0 right-0 h-px bg-white/5" />
+      </div>
+
+      <div className="relative max-w-7xl mx-auto px-6 md:px-12">
+        {/* Badge */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex items-center gap-3 mb-8"
+        >
+          <div className="w-5 h-px bg-premium-orange" />
+          <span className="text-[9px] tracking-[0.35em] uppercase font-inter text-white/60">
+            Avadanlıq Kataloqu
+          </span>
+        </motion.div>
+
+        {/* Başlıq */}
+        <motion.h1
+          initial={{ y: 30, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.1 }}
+          className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter text-white leading-none mb-8"
+        >
+          Texniki <br />
+          <span className="text-white/50 italic">İnventar.</span>
+        </motion.h1>
+
+        {/* Alt başlıq */}
+        <motion.p
+          initial={{ y: 30, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.2 }}
+          className="text-lg md:text-xl text-white/70 max-w-2xl font-light leading-relaxed"
+        >
+          Premium audio-vizual avadanlıqlar — dünyanın aparıcı istehsalçılarından, ən yüksək sənaye standartlarında.
+        </motion.p>
       </div>
     </section>
   );

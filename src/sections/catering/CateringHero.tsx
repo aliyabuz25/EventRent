@@ -3,36 +3,51 @@ import { motion } from 'motion/react';
 
 export default function CateringHero() {
   return (
-    <section className="relative h-[600px] -mt-8 -mx-4 sm:-mx-6 lg:-mx-8 overflow-hidden flex items-center justify-center text-center">
-      <div className="absolute inset-0 bg-black">
-        <img 
-          src="https://images.unsplash.com/photo-1555244162-803834f70033?q=80&w=1920&auto=format&fit=crop" 
-          className="w-full h-full object-cover opacity-30"
-          alt="Catering Hero"
-          referrerPolicy="no-referrer"
+    <section className="relative pt-32 pb-16 md:pt-40 md:pb-20 bg-gradient-to-b from-brand-bg via-brand-bg to-brand-card overflow-hidden">
+      {/* Nazik ambient glow */}
+      <div className="absolute inset-0 pointer-events-none opacity-[0.04]">
+        <div
+          className="absolute top-0 left-1/4 w-[40vw] h-[50%]"
+          style={{ background: 'radial-gradient(ellipse, rgba(227,6,19,0.06) 0%, transparent 70%)' }}
         />
       </div>
-      <div className="relative z-10 max-w-5xl mx-auto px-4 space-y-8">
+
+      {/* Grid lines */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/4 left-0 right-0 h-px bg-white/5" />
+        <div className="absolute top-2/4 left-0 right-0 h-px bg-white/5" />
+      </div>
+
+      <div className="relative max-w-7xl mx-auto px-6 md:px-12">
+        {/* Badge */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="inline-block px-6 py-2 bg-white/10 backdrop-blur-md rounded-full border border-white/20 text-white text-xs font-bold uppercase tracking-[0.3em]"
+          className="flex items-center gap-3 mb-8"
         >
-          Dadlı Təcrübə
+          <div className="w-5 h-px bg-premium-orange" />
+          <span className="text-[9px] tracking-[0.35em] uppercase font-inter text-white/60">
+            Dadlı Təcrübə
+          </span>
         </motion.div>
-        <motion.h1 
+
+        {/* Başlıq */}
+        <motion.h1
           initial={{ y: 30, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.1 }}
-          className="text-6xl md:text-9xl font-bold text-white tracking-tighter leading-[0.9]"
+          className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter text-white leading-none mb-8"
         >
-          Ketrinq <br /> <span className="text-white/70 italic">Xidməti.</span>
+          Ketrinq <br />
+          <span className="text-white/50 italic">Xidməti.</span>
         </motion.h1>
-        <motion.p 
+
+        {/* Alt başlıq */}
+        <motion.p
           initial={{ y: 30, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.2 }}
-          className="text-xl text-white/60 max-w-2xl mx-auto leading-relaxed font-light"
+          className="text-lg md:text-xl text-white/70 max-w-2xl font-light leading-relaxed"
         >
           Tədbirləriniz üçün peşəkar qidalanma və xidmət həlləri.
         </motion.p>

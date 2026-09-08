@@ -47,24 +47,34 @@ export default function ServiceDetail() {
 
   return (
     <div className="space-y-20 pb-20">
-      {/* Hero Section */}
-      <section className="relative h-[500px] -mt-8 -mx-4 sm:-mx-6 lg:-mx-8 overflow-hidden flex items-center justify-center text-center">
-        <div className="absolute inset-0 bg-black">
-          <img
-            src={currentCategory.image}
-            className="w-full h-full object-cover opacity-40"
-            alt={categoryTitle}
-            referrerPolicy="no-referrer"
+      {/* Hero Section — Minimalist */}
+      <section className="relative pt-32 pb-16 md:pt-40 md:pb-20 bg-gradient-to-b from-brand-bg via-brand-bg to-brand-card overflow-hidden">
+        {/* Nazik ambient glow */}
+        <div className="absolute inset-0 pointer-events-none opacity-[0.04]">
+          <div
+            className="absolute top-0 left-1/4 w-[40vw] h-[50%]"
+            style={{ background: 'radial-gradient(ellipse, rgba(227,6,19,0.06) 0%, transparent 70%)' }}
           />
         </div>
-        <div className="relative z-10 max-w-4xl mx-auto px-4 space-y-6">
-          <Link to="/services" className="inline-flex items-center gap-2 text-white/60 hover:text-white transition-colors text-xs font-bold uppercase tracking-widest">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-1/4 left-0 right-0 h-px bg-white/5" />
+          <div className="absolute top-2/4 left-0 right-0 h-px bg-white/5" />
+        </div>
+
+        <div className="relative max-w-7xl mx-auto px-6 md:px-12">
+          <Link to="/services" className="inline-flex items-center gap-2 text-white/60 hover:text-white transition-colors text-xs font-bold uppercase tracking-widest mb-8">
             <ArrowLeft className="w-4 h-4" /> Xidmətlərə qayıt
           </Link>
+          <div className="flex items-center gap-3 mb-8">
+            <div className="w-5 h-px bg-premium-orange" />
+            <span className="text-[9px] tracking-[0.35em] uppercase font-inter text-white/60">
+              {categoryTitle}
+            </span>
+          </div>
           <motion.h1
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            className="text-5xl md:text-7xl font-bold text-white tracking-tighter"
+            className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter text-white leading-none mb-8"
           >
             {currentItem ? t(locale, currentItem.name) : categoryTitle}
           </motion.h1>
@@ -72,7 +82,7 @@ export default function ServiceDetail() {
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.1 }}
-            className="text-xl text-white/60 font-light max-w-2xl mx-auto"
+            className="text-lg md:text-xl text-white/70 font-light max-w-2xl leading-relaxed"
           >
             {currentItem ? t(locale, currentItem.desc) : categoryDescription}
           </motion.p>

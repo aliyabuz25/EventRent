@@ -179,15 +179,27 @@ export default function Teambuilding() {
         />
       ) : (
         <>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-0">
-            <div className="flex items-center gap-2 mb-5">
-              <div className="w-5 h-px bg-premium-orange" />
-              <span className="text-[9px] tracking-[0.35em] uppercase font-inter text-white/60">Team Building</span>
+          <div className="relative pt-32 pb-12 md:pt-40 md:pb-16 bg-gradient-to-b from-brand-bg via-brand-bg to-brand-card overflow-hidden">
+            {/* Nazik ambient glow */}
+            <div className="absolute inset-0 pointer-events-none opacity-[0.04]">
+              <div
+                className="absolute top-0 left-1/4 w-[40vw] h-[50%]"
+                style={{ background: 'radial-gradient(ellipse, rgba(227,6,19,0.06) 0%, transparent 70%)' }}
+              />
             </div>
-            <h1 className="text-4xl md:text-6xl font-black tracking-tighter text-white leading-none">
-              Komanda<br />
-              <span className="text-white/50 italic">Tədbirləri.</span>
-            </h1>
+            <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex items-center gap-3 mb-8">
+                <div className="w-5 h-px bg-premium-orange" />
+                <span className="text-[9px] tracking-[0.35em] uppercase font-inter text-white/60">Team Building</span>
+              </div>
+              <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter text-white leading-none mb-8">
+                Komanda<br />
+                <span className="text-white/50 italic">Tədbirləri.</span>
+              </h1>
+              <p className="text-lg md:text-xl text-white/70 max-w-2xl font-light leading-relaxed">
+                Komandanızı gücləndirən yaradıcı və interaktiv etkinlik həlləri.
+              </p>
+            </div>
           </div>
 
           {/* Tabs */}

@@ -3,22 +3,9 @@ import { useGsap, gsap } from '../../motion/useGsap';
 
 export default function AboutHero() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const bgRef = useRef<HTMLDivElement>(null);
 
   useGsap(() => {
-    // Parallax on background image
-    gsap.to(bgRef.current, {
-      y: '30%',
-      ease: 'none',
-      scrollTrigger: {
-        trigger: containerRef.current,
-        start: 'top top',
-        end: 'bottom top',
-        scrub: true,
-      },
-    });
-
-    // Badge reveal — runs immediately on mount
+    // Badge reveal
     gsap.from('.about-hero-badge', {
       y: 30,
       opacity: 0,
@@ -27,7 +14,7 @@ export default function AboutHero() {
       toggleActions: 'play none none none',
     });
 
-    // Title lines reveal — runs immediately on mount
+    // Title lines reveal
     gsap.from('.about-hero-title-line', {
       y: 60,
       opacity: 0,
@@ -37,7 +24,7 @@ export default function AboutHero() {
       toggleActions: 'play none none none',
     });
 
-    // Subtitle reveal — runs immediately on mount
+    // Subtitle reveal
     gsap.from('.about-hero-subtitle', {
       y: 30,
       opacity: 0,
@@ -49,25 +36,42 @@ export default function AboutHero() {
   }, { scope: containerRef });
 
   return (
-    <section ref={containerRef} className="relative h-[600px] -mt-8 -mx-4 sm:-mx-6 lg:-mx-8 overflow-hidden flex items-center justify-center text-center">
-      <div ref={bgRef} className="absolute inset-0 bg-black will-change-transform">
-        <img
-          src="https://images.unsplash.com/photo-1511578314322-379afb476865?q=80&w=1920&auto=format&fit=crop"
-          className="w-full h-[130%] object-cover opacity-30"
-          alt="About Us Hero"
-          referrerPolicy="no-referrer"
+    <section
+      ref={containerRef}
+      className="relative pt-32 pb-16 md:pt-40 md:pb-20 bg-gradient-to-b from-brand-bg via-brand-bg to-brand-card overflow-hidden"
+    >
+      {/* Nazik ambient glow */}
+      <div className="absolute inset-0 pointer-events-none opacity-[0.04]">
+        <div
+          className="absolute top-0 left-1/4 w-[40vw] h-[50%]"
+          style={{ background: 'radial-gradient(ellipse, rgba(227,6,19,0.06) 0%, transparent 70%)' }}
         />
       </div>
-      <div className="relative z-10 max-w-5xl mx-auto px-4 space-y-8">
-        <div className="about-hero-badge inline-block px-6 py-2 bg-white/10 backdrop-blur-md rounded-full border border-white/20 text-white text-xs font-bold uppercase tracking-[0.3em]">
-          Bizim Hekayəmiz
+
+      {/* Grid lines */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/4 left-0 right-0 h-px bg-white/5" />
+        <div className="absolute top-2/4 left-0 right-0 h-px bg-white/5" />
+      </div>
+
+      <div className="relative max-w-7xl mx-auto px-6 md:px-12">
+        {/* Badge */}
+        <div className="about-hero-badge flex items-center gap-3 mb-8">
+          <div className="w-5 h-px bg-premium-orange" />
+          <span className="text-[9px] tracking-[0.35em] uppercase font-inter text-white/60">
+            Bizim Hekayəmiz
+          </span>
         </div>
-        <h1 className="text-6xl md:text-9xl font-bold text-white tracking-tighter leading-[0.9]">
+
+        {/* Başlıq */}
+        <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter text-white leading-none mb-8">
           <span className="about-hero-title-line block">Keyfiyyət.</span>
-          <span className="about-hero-title-line block text-white/70 italic">Təcrübə.</span>
+          <span className="about-hero-title-line block text-white/50 italic">Təcrübə.</span>
         </h1>
-        <p className="about-hero-subtitle text-xl text-white/60 max-w-2xl mx-auto leading-relaxed font-light">
-          Tədbiriniz üçün hər şey - Operativlik və Bol çeşidin vəhdəti.
+
+        {/* Alt başlıq */}
+        <p className="about-hero-subtitle text-lg md:text-xl text-white/70 max-w-2xl font-light leading-relaxed">
+          Tədbiriniz üçün hər şey — Operativlik və Bol çeşidin vəhdəti.
         </p>
       </div>
     </section>
