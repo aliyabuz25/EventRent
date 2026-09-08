@@ -13,6 +13,7 @@ export const navLinks: NavLink[] = [
   { path: '/teambuilding', name: { az: 'Teambuilding', en: 'Teambuilding', ru: 'Тимбилдинг', tr: 'Takım Oluşturma' } },
   { path: '/catering', name: { az: 'Katering', en: 'Catering', ru: 'Кейтеринг', tr: 'Catering' } },
   { path: '/tv', name: { az: 'TV&LED', en: 'TV&LED', ru: 'ТВ&LED', tr: 'TV&LED' }, hiddenByDefault: true },
+  { path: '/eventgarden', name: { az: 'Eventgarden', en: 'Eventgarden', ru: 'Eventgarden', tr: 'Eventgarden' } },
   { path: '/portfolio', name: { az: 'Portfolio', en: 'Portfolio', ru: 'Портфолио', tr: 'Portföy' } },
   { path: '/about', name: { az: 'Haqqımızda', en: 'About', ru: 'О нас', tr: 'Hakkımızda' } },
   { path: '/contact', name: { az: 'Əlaqə', en: 'Contact', ru: 'Контакт', tr: 'İletişim' } },

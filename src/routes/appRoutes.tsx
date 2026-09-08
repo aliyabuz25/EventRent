@@ -7,6 +7,7 @@ const ServiceDetail = lazy(() => import('../pages/ServiceDetail'));
 const Teambuilding = lazy(() => import('../pages/Teambuilding'));
 const Catering = lazy(() => import('../pages/Catering'));
 const TV = lazy(() => import('../pages/TV'));
+const Eventgarden = lazy(() => import('../pages/Eventgarden'));
 const Portfolio = lazy(() => import('../pages/Portfolio'));
 const Gallery = lazy(() => import('../pages/Gallery'));
 const Contact = lazy(() => import('../pages/Contact'));
@@ -27,6 +28,7 @@ export const appRoutes: { path: string; element: React.ReactElement }[] = [
   { path: '/teambuilding', element: <Teambuilding /> },
   { path: '/catering', element: <Catering /> },
   { path: '/tv', element: <TV /> },
+  { path: '/eventgarden', element: <Eventgarden /> },
   { path: '/portfolio', element: <Portfolio /> },
   { path: '/gallery', element: <Gallery /> },
   { path: '/contact', element: <Contact /> },
