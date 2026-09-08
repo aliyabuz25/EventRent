@@ -200,6 +200,33 @@ export interface ServiceCategoryContent {
   subItems: ServiceSubItem[];
 }
 
+export interface HomeTeamMember {
+  name: LocalizedText;
+  role: LocalizedText;
+  description: LocalizedText;
+  image: string;
+}
+
+export interface HomeTeamSection {
+  badge: LocalizedText;
+  title: LocalizedText;
+  titleAccent: LocalizedText;
+  members: HomeTeamMember[];
+}
+
+export interface HomeClientItem {
+  name: string;
+  logo: string | null;
+  url: string;
+}
+
+export interface HomeClientsSection {
+  badge: LocalizedText;
+  title: LocalizedText;
+  subtitle: LocalizedText;
+  clients: HomeClientItem[];
+}
+
 export interface SiteContent {
   home: {
     hero: HomeHeroSection;
@@ -210,6 +237,8 @@ export interface SiteContent {
     metrics: HomeMetricsSection;
     catalogGateway: HomeCatalogGatewaySection;
     finalCta: HomeFinalCtaSection;
+    team: HomeTeamSection;
+    clients: HomeClientsSection;
   };
   services: {
     categories: ServiceCategoryContent[];
