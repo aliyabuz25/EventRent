@@ -30,12 +30,12 @@ export default function AboutPartnerIntro() {
 
         <div className="api-eyebrow flex items-center gap-3 mb-10">
           <div className="w-5 h-px bg-premium-orange" />
-          <span className="text-[9px] tracking-[0.35em] uppercase font-inter text-white/30">Tərəfdaşınız</span>
+          <span className="text-[9px] tracking-[0.35em] uppercase font-inter text-white/60">Tərəfdaşınız</span>
         </div>
 
         <h1 className="api-title text-5xl md:text-7xl font-black tracking-tighter text-white leading-none mb-14">
           Biz<br />
-          <span className="text-white/20 italic">Kimik.</span>
+          <span className="text-white/50 italic">Kimik.</span>
         </h1>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -55,7 +55,7 @@ export default function AboutPartnerIntro() {
                 <span className="text-5xl md:text-6xl font-black tracking-tighter text-white leading-none">
                   {s.value}
                 </span>
-                <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-white/40 group-hover:text-white/60 transition-colors duration-400 mt-4">
+                <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-white/70 group-hover:text-white/60 transition-colors duration-400 mt-4">
                   {s.label}
                 </p>
               </div>

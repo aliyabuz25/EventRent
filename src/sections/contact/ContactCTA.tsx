@@ -153,7 +153,7 @@ export default function ContactCTA() {
         </div>
 
         {/* sub-text */}
-        <p className="hc-badge mt-5 text-white/30 text-[13px] font-normal tracking-wide max-w-sm leading-relaxed">
+        <p className="hc-badge mt-5 text-white/60 text-[13px] font-normal tracking-wide max-w-sm leading-relaxed">
           Hər soruşa cavab, hər ideyana həll — sizi gözləyirik.
         </p>
       </div>
@@ -180,8 +180,8 @@ export default function ContactCTA() {
       {/* ── BOTTOM CTA ── */}
       <div className="hc-bottom relative max-w-[1400px] mx-auto px-6 md:px-16 py-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 border-t border-white/[0.05]">
         <div>
-          <p className="text-white/20 text-[11px] font-black tracking-[0.35em] uppercase mb-1">Eventrent · Bakı · Azerbaijan</p>
-          <p className="text-white/40 text-[13px] font-normal leading-relaxed max-w-xs">
+          <p className="text-white/50 text-[11px] font-black tracking-[0.35em] uppercase mb-1">Eventrent · Bakı · Azerbaijan</p>
+          <p className="text-white/70 text-[13px] font-normal leading-relaxed max-w-xs">
             Hər tədbirə xüsusi yanaşma, hər müştəriyə xüsusi qayğı.
           </p>
         </div>

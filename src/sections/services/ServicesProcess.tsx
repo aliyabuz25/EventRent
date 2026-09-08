@@ -105,12 +105,12 @@ export default function ServicesProcess() {
           <div className="space-y-5">
             <span className="text-premium-orange text-[10px] font-black uppercase tracking-[0.26em]">{t(locale, content.home.process.badge)}</span>
             <h2 className="text-6xl md:text-9xl font-black uppercase tracking-ultra-tight leading-[0.94]">
-              {t(locale, content.home.process.title)} <span className="text-stroke-solid text-white/40 italic">{t(locale, content.home.process.titleAccent)}</span>
+              {t(locale, content.home.process.title)} <span className="text-stroke-solid text-white/70 italic">{t(locale, content.home.process.titleAccent)}</span>
             </h2>
           </div>
           <div className="max-w-xs space-y-6">
             <div className="h-px w-20 bg-premium-orange" />
-            <p className="text-white/40 font-medium leading-[1.75]">
+            <p className="text-white/70 font-medium leading-[1.75]">
               {t(locale, content.home.process.description)}
             </p>
           </div>
@@ -123,7 +123,7 @@ export default function ServicesProcess() {
               className="process-card sticky top-24 w-full flex flex-col md:flex-row bg-brand-card rounded-[2.75rem] overflow-hidden border border-white/8 shadow-[0_28px_80px_rgba(0,0,0,0.32)] group transition-colors duration-300 hover:border-premium-orange/20"
             >
               <div className="w-full md:w-24 bg-white/5 flex flex-col items-center justify-between py-12 order-3 md:order-1 border-t md:border-t-0 md:border-r border-white/5">
-                <span className="text-sm font-black text-white/20 select-none">{t(locale, content.home.process.phase)}</span>
+                <span className="text-sm font-black text-white/50 select-none">{t(locale, content.home.process.phase)}</span>
                 <span className="text-4xl font-black text-premium-orange select-none">0{i + 1}</span>
                 <div className="w-1 h-32 bg-white/5 rounded-full overflow-hidden hidden md:block">
                   <div
@@ -143,11 +143,11 @@ export default function ServicesProcess() {
                   </h3>
                 </div>
 
-                <p className="text-xl md:text-2xl text-white/30/90 font-medium leading-[1.7] max-w-2xl">
+                <p className="text-xl md:text-2xl text-white/70 font-medium leading-[1.7] max-w-2xl">
                   {step.description}
                 </p>
 
-                <div className="flex items-center gap-6 md:gap-8 text-[10px] font-black uppercase tracking-[0.24em] text-white/25">
+                <div className="flex items-center gap-6 md:gap-8 text-[10px] font-black uppercase tracking-[0.24em] text-white/55">
                   <span>{t(locale, content.home.process.phase)} {i + 1} of {steps.length}</span>
                   <div className="h-px flex-1 bg-white/10" />
                   <span>{t(locale, content.home.process.footer)}</span>

@@ -214,7 +214,7 @@ export default function HomeClients() {
             Etibar Edənlər
           </span>
           <div className="h-px flex-1 bg-white/[0.06]" />
-          <span className="text-[9px] font-black tracking-[0.4em] uppercase text-white/20">
+          <span className="text-[9px] font-black tracking-[0.4em] uppercase text-white/50">
             50+ Brend
           </span>
         </div>
@@ -228,7 +228,7 @@ export default function HomeClients() {
             style={{ WebkitTextStroke: '1.5px rgba(255,255,255,0.25)', color: 'transparent' }}>SOCAR</span>
           <span className="uppercase mx-[0.18em] text-premium-orange/30 font-light text-[0.35em] self-center tracking-[0.2em]">×</span>
           <span className="uppercase text-premium-orange">PASHA</span>
-          <span className="uppercase text-white/15 ml-[0.08em]">Holding</span>
+          <span className="uppercase text-white/45 ml-[0.08em]">Holding</span>
         </div>
 
         {/* Row 2 — medium, right-pushed */}
@@ -268,7 +268,7 @@ export default function HomeClients() {
 
         {/* Logo strip — img with text fallback */}
         <div className="mt-20 pt-10 border-t border-white/[0.05]">
-          <p className="text-[9px] font-black tracking-[0.4em] uppercase text-white/20 mb-8 text-center">
+          <p className="text-[9px] font-black tracking-[0.4em] uppercase text-white/50 mb-8 text-center">
             Güvənilən Brendlər
           </p>
           <div className="flex flex-wrap items-center justify-center gap-5 md:gap-6">

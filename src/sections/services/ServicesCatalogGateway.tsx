@@ -93,7 +93,7 @@ export default function ServicesCatalogGateway() {
               {content.home.catalogGateway.stats[0] && (
                 <div className="absolute -top-5 -right-5 z-20 bg-black/92 backdrop-blur-md text-white p-5 rounded-[1.75rem] shadow-[0_20px_60px_rgba(0,0,0,0.28)] hidden md:block border border-white/8">
                   <p className="text-2xl font-black">{content.home.catalogGateway.stats[0].value}</p>
-                  <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/40">{t(locale, content.home.catalogGateway.stats[0].label)}</p>
+                  <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/70">{t(locale, content.home.catalogGateway.stats[0].label)}</p>
                 </div>
               )}
 

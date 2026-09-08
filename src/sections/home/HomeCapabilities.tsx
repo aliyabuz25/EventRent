@@ -120,7 +120,7 @@ export default function HomeCapabilities() {
                   ))}
                 </h2>
 
-                <p className="text-lg md:text-xl text-white/30/90 max-w-md font-medium leading-[1.75]">
+                <p className="text-lg md:text-xl text-white/70 max-w-md font-medium leading-[1.75]">
                   {cap.description}
                 </p>
 

@@ -45,7 +45,7 @@ export default function TeambuildingAuthModal({
             onClick={e => e.stopPropagation()}
           >
             <button 
-              className="absolute top-6 right-6 w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center text-white/40 hover:text-premium-orange transition-all z-10"
+              className="absolute top-6 right-6 w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center text-white/70 hover:text-premium-orange transition-all z-10"
               onClick={() => setStep('list')}
             >
               <X className="w-5 h-5" />
@@ -67,7 +67,7 @@ export default function TeambuildingAuthModal({
                     required
                     type="text"
                     placeholder="Ad Soyad"
-                    className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-2xl text-sm font-bold text-white focus:outline-none focus:bg-white/10 focus:border-premium-orange focus:shadow-[0_0_20px_rgba(227,6,19,0.1)] transition-all duration-300 placeholder:text-white/20"
+                    className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-2xl text-sm font-bold text-white focus:outline-none focus:bg-white/10 focus:border-premium-orange focus:shadow-[0_0_20px_rgba(227,6,19,0.1)] transition-all duration-300 placeholder:text-white/50"
                     value={formData.name}
                     onChange={e => setFormData({...formData, name: e.target.value})}
                   />
@@ -75,7 +75,7 @@ export default function TeambuildingAuthModal({
                     required
                     type="tel"
                     placeholder="Telefon"
-                    className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-2xl text-sm font-bold text-white focus:outline-none focus:bg-white/10 focus:border-premium-orange focus:shadow-[0_0_20px_rgba(227,6,19,0.1)] transition-all duration-300 placeholder:text-white/20"
+                    className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-2xl text-sm font-bold text-white focus:outline-none focus:bg-white/10 focus:border-premium-orange focus:shadow-[0_0_20px_rgba(227,6,19,0.1)] transition-all duration-300 placeholder:text-white/50"
                     value={phone}
                     onChange={e => setPhone(e.target.value)}
                   />
@@ -83,7 +83,7 @@ export default function TeambuildingAuthModal({
                     required
                     type="text"
                     placeholder="Şirkət"
-                    className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-2xl text-sm font-bold text-white focus:outline-none focus:bg-white/10 focus:border-premium-orange focus:shadow-[0_0_20px_rgba(227,6,19,0.1)] transition-all duration-300 placeholder:text-white/20"
+                    className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-2xl text-sm font-bold text-white focus:outline-none focus:bg-white/10 focus:border-premium-orange focus:shadow-[0_0_20px_rgba(227,6,19,0.1)] transition-all duration-300 placeholder:text-white/50"
                     value={formData.company}
                     onChange={e => setFormData({...formData, company: e.target.value})}
                   />
@@ -113,7 +113,7 @@ export default function TeambuildingAuthModal({
                     <Lock className="w-8 h-8" />
                   </div>
                   <h2 className="text-2xl font-black tracking-tight uppercase text-white">OTP Təsdiq</h2>
-                  <p className="text-white/50 text-[10px] font-black uppercase tracking-widest text-white/40">Telefon nömrənizə SMS kodu göndəriləcək</p>
+                  <p className="text-white/50 text-[10px] font-black uppercase tracking-widest text-white/70">Telefon nömrənizə SMS kodu göndəriləcək</p>
                 </div>
                 <form onSubmit={handleVerifyOtp} className="space-y-6">
                   <input

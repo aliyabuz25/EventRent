@@ -21,7 +21,7 @@ export default function TeambuildingHero() {
           Komanda Ruhu
         </motion.div>
         <h1 className="text-6xl md:text-8xl font-bold text-white tracking-tighter leading-[0.9]">
-          Timbildinq <br /> <span className="text-white/40 italic">Həlləri.</span>
+          Timbildinq <br /> <span className="text-white/70 italic">Həlləri.</span>
         </h1>
       </div>
     </section>

@@ -76,7 +76,7 @@ export default function HomeServicesTeaser() {
 
         <h2 className="hst-title text-6xl md:text-9xl font-bold text-white tracking-tighter leading-[0.9]">
           Peşəkar <br />
-          <span className="text-white/40 italic">Xidmətlər.</span>
+          <span className="text-white/70 italic">Xidmətlər.</span>
         </h2>
 
         <p className="hst-subtitle text-xl text-white/60 max-w-2xl mx-auto leading-relaxed font-light">

@@ -28,7 +28,7 @@ export default function ProfileSupport() {
             <Bell className="w-6 h-6" />
           </div>
           <h4 className="text-xl font-bold">{t(locale, labels.faqTitle)}</h4>
-          <p className="text-sm text-white/40 leading-relaxed">{t(locale, labels.faqHint)}</p>
+          <p className="text-sm text-white/70 leading-relaxed">{t(locale, labels.faqHint)}</p>
           <button type="button" className="text-premium-orange font-bold text-sm hover:underline">{t(locale, labels.seeBtn)}</button>
         </div>
         <div className="p-8 bg-white/5 rounded-[32px] border border-white/10 space-y-4">
@@ -36,7 +36,7 @@ export default function ProfileSupport() {
             <HelpCircle className="w-6 h-6" />
           </div>
           <h4 className="text-xl font-bold">{t(locale, labels.liveSupportTitle)}</h4>
-          <p className="text-sm text-white/40 leading-relaxed">{t(locale, labels.liveSupportHint)}</p>
+          <p className="text-sm text-white/70 leading-relaxed">{t(locale, labels.liveSupportHint)}</p>
           <button type="button" className="text-premium-orange font-bold text-sm hover:underline">{t(locale, labels.openChat)}</button>
         </div>
       </div>

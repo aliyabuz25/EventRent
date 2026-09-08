@@ -51,23 +51,23 @@ export default function ProfileSettings({
       <form onSubmit={onSubmit} className="space-y-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="space-y-2">
-            <label className="text-[10px] font-bold text-white/40 uppercase tracking-widest ml-1">{t(locale, labels.fullName)}</label>
+            <label className="text-[10px] font-bold text-white/70 uppercase tracking-widest ml-1">{t(locale, labels.fullName)}</label>
             <input
               type="text"
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
-              className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-2xl text-sm font-bold text-white focus:outline-none focus:bg-white/10 focus:border-premium-orange focus:shadow-[0_0_20px_rgba(227,6,19,0.1)] transition-all duration-300 placeholder:text-white/20"
+              className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-2xl text-sm font-bold text-white focus:outline-none focus:bg-white/10 focus:border-premium-orange focus:shadow-[0_0_20px_rgba(227,6,19,0.1)] transition-all duration-300 placeholder:text-white/50"
               placeholder={t(locale, labels.namePlaceholder)}
             />
           </div>
           <div className="space-y-2">
-            <label className="text-[10px] font-bold text-white/40 uppercase tracking-widest ml-1">{t(locale, labels.email)}</label>
+            <label className="text-[10px] font-bold text-white/70 uppercase tracking-widest ml-1">{t(locale, labels.email)}</label>
             <input
               type="email"
               value={user?.email || ''}
               disabled
               placeholder={t(locale, labels.email)}
-              className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-2xl text-sm font-bold text-white/30 cursor-not-allowed opacity-50"
+              className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-2xl text-sm font-bold text-white/60 cursor-not-allowed opacity-50"
             />
           </div>
         </div>
@@ -106,12 +106,12 @@ export default function ProfileSettings({
         <h3 className="text-xl font-bold">{t(locale, labels.security)}</h3>
         <div className="flex items-center justify-between p-6 bg-white/5 rounded-3xl border border-white/10">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-white/40 shadow-sm">
+            <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-white/70 shadow-sm">
               <Shield className="w-6 h-6" />
             </div>
             <div>
               <p className="font-bold text-white">{t(locale, labels.changePassword)}</p>
-              <p className="text-xs text-white/40">{t(locale, labels.securityHint)}</p>
+              <p className="text-xs text-white/70">{t(locale, labels.securityHint)}</p>
             </div>
           </div>
           <button type="button" className="text-premium-orange font-bold text-sm hover:underline">{t(locale, labels.update)}</button>

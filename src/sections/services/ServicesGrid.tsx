@@ -53,11 +53,11 @@ export default function ServicesGrid() {
       <div className="mb-16">
         <div className="flex items-center gap-2 mb-4">
           <div className="w-5 h-px bg-premium-orange" />
-          <span className="text-[9px] tracking-[0.35em] uppercase font-inter text-white/30">Xidmətlər</span>
+          <span className="text-[9px] tracking-[0.35em] uppercase font-inter text-white/60">Xidmətlər</span>
         </div>
         <h2 className="text-5xl md:text-7xl font-black tracking-tighter text-white leading-none">
           Nə Təklif<br />
-          <span className="text-white/25 italic">Edirik?</span>
+          <span className="text-white/55 italic">Edirik?</span>
         </h2>
       </div>
 

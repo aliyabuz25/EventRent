@@ -175,7 +175,7 @@ export default function Login() {
               <div className="w-full border-t border-white/10"></div>
             </div>
             <div className="relative flex justify-center text-xs uppercase tracking-widest">
-              <span className="bg-[#111] px-4 text-white/30 font-black">{t(locale, labels.orDivider)}</span>
+              <span className="bg-[#111] px-4 text-white/60 font-black">{t(locale, labels.orDivider)}</span>
             </div>
           </div>
 
@@ -188,7 +188,7 @@ export default function Login() {
           </button>
         </div>
 
-        <p className="text-center text-sm text-white/40 mt-8 relative z-10">
+        <p className="text-center text-sm text-white/70 mt-8 relative z-10">
           {t(locale, labels.noAccountText)} <button type="button" className="text-premium-orange font-bold hover:underline">{t(locale, labels.registerBtn)}</button>
         </p>
       </div>

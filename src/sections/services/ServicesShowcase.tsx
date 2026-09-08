@@ -97,7 +97,7 @@ export default function ServicesShowcase() {
           {/* Eyebrow */}
           <div className="flex items-center gap-2 mb-6">
             <div className="w-5 h-px bg-premium-orange" />
-            <span className="text-[9px] tracking-[0.35em] uppercase font-inter text-white/30">
+            <span className="text-[9px] tracking-[0.35em] uppercase font-inter text-white/60">
               Xidmətlər
             </span>
             <div className="h-px flex-1 bg-white/[0.06]" />
@@ -120,7 +120,7 @@ export default function ServicesShowcase() {
                   <span className="text-[9px] font-black tracking-[0.3em] uppercase font-inter" style={{ color: '#e30613' }}>
                     {svc.num}
                   </span>
-                  <span className="text-[9px] tracking-[0.2em] uppercase font-inter text-white/30">
+                  <span className="text-[9px] tracking-[0.2em] uppercase font-inter text-white/60">
                     {svc.eyebrow}
                   </span>
                 </div>
@@ -152,7 +152,7 @@ export default function ServicesShowcase() {
                       <path d="M1.5 5.5h8M6.5 2.5l3 3-3 3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                   </span>
-                  <span className="text-[9px] tracking-[0.2em] uppercase font-inter text-white/40 group-hover:text-white transition-colors">
+                  <span className="text-[9px] tracking-[0.2em] uppercase font-inter text-white/70 group-hover:text-white transition-colors">
                     Ətraflı
                   </span>
                 </a>
@@ -171,7 +171,7 @@ export default function ServicesShowcase() {
                 }}
               />
             ))}
-            <span className="ml-2 text-[9px] font-inter text-white/25 tracking-wider">
+            <span className="ml-2 text-[9px] font-inter text-white/55 tracking-wider">
               {String(activeIdx + 1).padStart(2, '0')} / {String(SERVICES.length).padStart(2, '0')}
             </span>
           </div>

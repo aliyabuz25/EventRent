@@ -29,7 +29,7 @@ export default function CatalogHero() {
               THE <span className="text-premium-orange">TECHNICAL</span> <br />
               <span className="text-stroke-solid">INVENTORY</span>
             </h1>
-            <p className="text-xl text-white/40 font-medium max-w-lg leading-relaxed">
+            <p className="text-xl text-white/70 font-medium max-w-lg leading-relaxed">
               Premium audio-visual equipment from the world's leading manufacturers, maintained to the highest industry standards.
             </p>
             <div className="flex flex-wrap gap-4 pt-4">

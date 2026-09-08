@@ -128,7 +128,7 @@ export default function Navbar() {
                     to={link.path}
                     className={cn(
                       'group relative rounded-md py-2 text-[10px] font-bold uppercase tracking-[0.14em] transition-colors duration-300 whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-premium-orange focus-visible:ring-offset-2 focus-visible:ring-offset-black',
-                      isActive ? 'text-white' : 'text-white/40 hover:text-white'
+                      isActive ? 'text-white' : 'text-white/70 hover:text-white'
                     )}
                   >
                     {t(locale, link.name)}

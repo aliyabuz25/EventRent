@@ -86,7 +86,7 @@ export default function Metrics() {
       <div className="relative max-w-7xl mx-auto px-6 md:px-12">
         {/* Eyebrow */}
         <div className="metrics-eyebrow flex items-center gap-6 mb-20 md:mb-28">
-          <span className="text-[10px] font-black tracking-[0.4em] uppercase text-white/40">
+          <span className="text-[10px] font-black tracking-[0.4em] uppercase text-white/70">
             [ Rəqəmlərlə BİZ ]
           </span>
           <div className="h-px flex-1 bg-white/[0.06]" />
@@ -123,7 +123,7 @@ export default function Metrics() {
                 </div>
 
                 <div className="metric-label-raw">
-                  <p className="text-[11px] md:text-xs font-bold uppercase tracking-[0.3em] text-white/40 leading-relaxed max-w-[150px]">
+                  <p className="text-[11px] md:text-xs font-bold uppercase tracking-[0.3em] text-white/70 leading-relaxed max-w-[150px]">
                     {t(locale, stat.label)}
                   </p>
                 </div>

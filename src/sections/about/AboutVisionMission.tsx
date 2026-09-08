@@ -115,7 +115,7 @@ export default function AboutVisionMission() {
                 <em className="not-italic font-semibold text-white">avadanlıq</em>{' '}
                 və həlləri bir mərkəzdə birləşdirən komandayıq.
               </p>
-              <div className="flex items-center gap-3 text-white/20 pt-2">
+              <div className="flex items-center gap-3 text-white/50 pt-2">
                 <div className="w-6 h-px bg-white/20" />
                 <span className="text-[9px] font-bold uppercase tracking-[0.35em]">Bir Mərkəz · Tam Həll</span>
               </div>
@@ -172,7 +172,7 @@ export default function AboutVisionMission() {
                       <span className="vm-stat-num text-white" data-target={s.target}>0</span>
                       <span className="text-premium-orange">{s.suffix}</span>
                     </div>
-                    <div className="text-[10px] font-bold text-white/35 leading-snug tracking-wide uppercase">
+                    <div className="text-[10px] font-bold text-white/65 leading-snug tracking-wide uppercase">
                       {s.label}
                     </div>
                   </div>

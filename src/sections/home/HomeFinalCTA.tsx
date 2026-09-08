@@ -97,7 +97,7 @@ export default function FinalCTA() {
           </div>
         </div>
 
-        <p className="cta-description text-lg md:text-xl text-white/40 font-normal max-w-xl mx-auto leading-[1.8] mb-12">
+        <p className="cta-description text-lg md:text-xl text-white/70 font-normal max-w-xl mx-auto leading-[1.8] mb-12">
           {t(locale, content.home.finalCta.description)}
         </p>
 
@@ -123,15 +123,15 @@ export default function FinalCTA() {
       <div className="relative z-10 max-w-5xl mx-auto px-6 md:px-12 pb-20 md:pb-28">
         <div className="cta-rule h-px bg-white/[0.08] mb-8" style={{ transformOrigin: 'left', transform: 'scaleX(0)' }} />
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-          <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/20">
+          <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/50">
             Eventrent · Bakı · Azerbaijan
           </p>
           <div className="flex items-center gap-6">
-            <a href="tel:+994102553555" className="text-[13px] font-medium text-white/30 hover:text-white transition-colors duration-200">
+            <a href="tel:+994102553555" className="text-[13px] font-medium text-white/60 hover:text-white transition-colors duration-200">
               010-255-35-55
             </a>
-            <span className="text-white/10">·</span>
-            <a href="mailto:sales@eventrent.az" className="text-[13px] font-medium text-white/30 hover:text-white transition-colors duration-200">
+            <span className="text-white/70">·</span>
+            <a href="mailto:sales@eventrent.az" className="text-[13px] font-medium text-white/60 hover:text-white transition-colors duration-200">
               sales@eventrent.az
             </a>
           </div>

@@ -62,25 +62,25 @@ export default function TechnicalQuestionsModal({
                 onClick={onClose}
                 className="p-2 hover:bg-white/10 rounded-full transition-colors"
               >
-                <X className="w-6 h-6 text-white/40 hover:text-white" />
+                <X className="w-6 h-6 text-white/70 hover:text-white" />
               </button>
             </div>
 
             <div className="px-8 pb-8 space-y-6 max-h-[70vh] overflow-y-auto custom-scrollbar">
               {/* Quantity */}
               <div className="space-y-3">
-                <label className="text-[10px] font-black text-white/40 uppercase tracking-widest">SAY</label>
+                <label className="text-[10px] font-black text-white/70 uppercase tracking-widest">SAY</label>
                 <div className="flex items-center justify-between w-32 bg-white/5 rounded-2xl p-2 border border-white/10">
                   <button 
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="w-10 h-10 flex items-center justify-center hover:bg-white/10 rounded-xl transition-all text-white/40 hover:text-white"
+                    className="w-10 h-10 flex items-center justify-center hover:bg-white/10 rounded-xl transition-all text-white/70 hover:text-white"
                   >
                     <Minus className="w-4 h-4" />
                   </button>
                   <span className="text-lg font-black text-white">{quantity}</span>
                   <button 
                     onClick={() => setQuantity(quantity + 1)}
-                    className="w-10 h-10 flex items-center justify-center hover:bg-white/10 rounded-xl transition-all text-white/40 hover:text-white"
+                    className="w-10 h-10 flex items-center justify-center hover:bg-white/10 rounded-xl transition-all text-white/70 hover:text-white"
                   >
                     <Plus className="w-4 h-4" />
                   </button>
@@ -89,49 +89,49 @@ export default function TechnicalQuestionsModal({
 
               {/* Size */}
               <div className="space-y-3">
-                <label className="text-[10px] font-black text-white/40 uppercase tracking-widest">ÖLÇÜ (M²)</label>
+                <label className="text-[10px] font-black text-white/70 uppercase tracking-widest">ÖLÇÜ (M²)</label>
                 <input
                   type="text"
                   value={answers.size}
                   onChange={(e) => handleInputChange('size', e.target.value)}
                   placeholder="Ölçü (m²) daxil edin..."
-                  className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-2xl text-sm font-bold text-white focus:outline-none focus:bg-white/10 focus:border-premium-orange focus:shadow-[0_0_20px_rgba(227,6,19,0.1)] transition-all duration-300 placeholder:text-white/20"
+                  className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-2xl text-sm font-bold text-white focus:outline-none focus:bg-white/10 focus:border-premium-orange focus:shadow-[0_0_20px_rgba(227,6,19,0.1)] transition-all duration-300 placeholder:text-white/50"
                 />
               </div>
 
               {/* Material */}
               <div className="space-y-3">
-                <label className="text-[10px] font-black text-white/40 uppercase tracking-widest">MATERIAL NÖVÜ</label>
+                <label className="text-[10px] font-black text-white/70 uppercase tracking-widest">MATERIAL NÖVÜ</label>
                 <input
                   type="text"
                   value={answers.material}
                   onChange={(e) => handleInputChange('material', e.target.value)}
                   placeholder="Material növü daxil edin..."
-                  className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-2xl text-sm font-bold text-white focus:outline-none focus:bg-white/10 focus:border-premium-orange focus:shadow-[0_0_20px_rgba(227,6,19,0.1)] transition-all duration-300 placeholder:text-white/20"
+                  className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-2xl text-sm font-bold text-white focus:outline-none focus:bg-white/10 focus:border-premium-orange focus:shadow-[0_0_20px_rgba(227,6,19,0.1)] transition-all duration-300 placeholder:text-white/50"
                 />
               </div>
 
               {/* Lamination */}
               <div className="space-y-3">
-                <label className="text-[10px] font-black text-white/40 uppercase tracking-widest">LAMINASIYA</label>
+                <label className="text-[10px] font-black text-white/70 uppercase tracking-widest">LAMINASIYA</label>
                 <input
                   type="text"
                   value={answers.lamination}
                   onChange={(e) => handleInputChange('lamination', e.target.value)}
                   placeholder="Laminasiya daxil edin..."
-                  className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-2xl text-sm font-bold text-white focus:outline-none focus:bg-white/10 focus:border-premium-orange focus:shadow-[0_0_20px_rgba(227,6,19,0.1)] transition-all duration-300 placeholder:text-white/20"
+                  className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-2xl text-sm font-bold text-white focus:outline-none focus:bg-white/10 focus:border-premium-orange focus:shadow-[0_0_20px_rgba(227,6,19,0.1)] transition-all duration-300 placeholder:text-white/50"
                 />
               </div>
 
               {/* Installation */}
               <div className="space-y-3">
-                <label className="text-[10px] font-black text-white/40 uppercase tracking-widest">MONTAJ XİDMƏTİ</label>
+                <label className="text-[10px] font-black text-white/70 uppercase tracking-widest">MONTAJ XİDMƏTİ</label>
                 <input
                   type="text"
                   value={answers.installation}
                   onChange={(e) => handleInputChange('installation', e.target.value)}
                   placeholder="Montaj xidməti daxil edin..."
-                  className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-2xl text-sm font-bold text-white focus:outline-none focus:bg-white/10 focus:border-premium-orange focus:shadow-[0_0_20px_rgba(227,6,19,0.1)] transition-all duration-300 placeholder:text-white/20"
+                  className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-2xl text-sm font-bold text-white focus:outline-none focus:bg-white/10 focus:border-premium-orange focus:shadow-[0_0_20px_rgba(227,6,19,0.1)] transition-all duration-300 placeholder:text-white/50"
                 />
               </div>
 

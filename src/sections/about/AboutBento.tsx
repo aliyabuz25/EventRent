@@ -28,7 +28,7 @@ export default function AboutBento() {
 
         <div className="flex items-center gap-3 mb-14">
           <div className="w-5 h-px bg-premium-orange" />
-          <span className="text-[9px] tracking-[0.35em] uppercase font-inter text-white/30">Neden Biz</span>
+          <span className="text-[9px] tracking-[0.35em] uppercase font-inter text-white/60">Neden Biz</span>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-4">
@@ -64,7 +64,7 @@ export default function AboutBento() {
               <div className="w-5 h-px bg-premium-orange mb-4" />
               <h3 className="text-2xl font-black tracking-tight text-white leading-tight">
                 Peşəkar<br />
-                <span className="text-white/40 italic">Komanda.</span>
+                <span className="text-white/70 italic">Komanda.</span>
               </h3>
             </div>
           </div>

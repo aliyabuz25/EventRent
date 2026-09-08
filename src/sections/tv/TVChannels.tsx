@@ -46,7 +46,7 @@ export default function TVChannels() {
           </div>
           <div className="space-y-4">
             <h3 className="text-2xl font-bold tracking-tight text-white">{channel.title}</h3>
-            <p className="text-white/40 text-sm leading-relaxed font-light">{channel.desc}</p>
+            <p className="text-white/70 text-sm leading-relaxed font-light">{channel.desc}</p>
           </div>
         </div>
       ))}

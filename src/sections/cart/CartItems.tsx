@@ -13,7 +13,7 @@ export default function CartItems({ items, onUpdateQuantity, onRemoveItem }: Car
     <div className="flex-1 space-y-8">
       <div className="flex items-center justify-between">
         <h1 className="text-4xl font-bold tracking-tighter">Səbətiniz</h1>
-        <span className="text-white/40 font-bold">{items.length} məhsul</span>
+        <span className="text-white/70 font-bold">{items.length} məhsul</span>
       </div>
 
       <div className="space-y-4">
@@ -35,7 +35,7 @@ export default function CartItems({ items, onUpdateQuantity, onRemoveItem }: Car
             </div>
             <div className="flex-1 min-w-0">
               <h3 className="text-xl font-bold text-white truncate">{item.product.name}</h3>
-              <p className="text-sm text-white/40 font-medium">{item.product.category}</p>
+              <p className="text-sm text-white/70 font-medium">{item.product.category}</p>
               {item.technicalAnswers && Object.keys(item.technicalAnswers).length > 0 && (
                 <div className="flex flex-wrap gap-2 mt-2">
                   {Object.entries(item.technicalAnswers).map(([key, value]) => (
@@ -50,21 +50,21 @@ export default function CartItems({ items, onUpdateQuantity, onRemoveItem }: Car
               <div className="flex items-center bg-white/5 rounded-2xl p-1 border border-white/10">
                 <button
                   onClick={() => onUpdateQuantity(item.productId || item.id, -1)}
-                  className="w-10 h-10 flex items-center justify-center text-white/40 hover:text-premium-orange transition-colors"
+                  className="w-10 h-10 flex items-center justify-center text-white/70 hover:text-premium-orange transition-colors"
                 >
                   <Minus className="w-4 h-4" />
                 </button>
                 <span className="w-12 text-center font-bold">{item.quantity}</span>
                 <button
                   onClick={() => onUpdateQuantity(item.productId || item.id, 1)}
-                  className="w-10 h-10 flex items-center justify-center text-white/40 hover:text-premium-orange transition-colors"
+                  className="w-10 h-10 flex items-center justify-center text-white/70 hover:text-premium-orange transition-colors"
                 >
                   <Plus className="w-4 h-4" />
                 </button>
               </div>
               <button
                 onClick={() => onRemoveItem(item.productId || item.id)}
-                className="w-12 h-12 flex items-center justify-center text-white/30 hover:text-red-500 hover:bg-red-50 rounded-2xl transition-all"
+                className="w-12 h-12 flex items-center justify-center text-white/60 hover:text-red-500 hover:bg-red-50 rounded-2xl transition-all"
               >
                 <Trash2 className="w-5 h-5" />
               </button>

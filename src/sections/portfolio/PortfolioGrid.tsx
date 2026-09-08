@@ -105,7 +105,7 @@ export default function PortfolioGrid() {
             </div>
           </div>
           </div>
-          <div className="flex flex-wrap gap-6 text-xs text-white/40 font-bold uppercase tracking-widest px-4">
+          <div className="flex flex-wrap gap-6 text-xs text-white/70 font-bold uppercase tracking-widest px-4">
             <div className="flex items-center gap-2">
               <Calendar className="w-4 h-4" /> {project.date}
             </div>

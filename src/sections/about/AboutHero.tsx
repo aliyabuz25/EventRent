@@ -64,7 +64,7 @@ export default function AboutHero() {
         </div>
         <h1 className="text-6xl md:text-9xl font-bold text-white tracking-tighter leading-[0.9]">
           <span className="about-hero-title-line block">Keyfiyyət.</span>
-          <span className="about-hero-title-line block text-white/40 italic">Təcrübə.</span>
+          <span className="about-hero-title-line block text-white/70 italic">Təcrübə.</span>
         </h1>
         <p className="about-hero-subtitle text-xl text-white/60 max-w-2xl mx-auto leading-relaxed font-light">
           Tədbiriniz üçün hər şey - Operativlik və Bol çeşidin vəhdəti.

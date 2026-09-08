@@ -91,7 +91,7 @@ export default function CateringContent() {
               </div>
               <div>
                 <h4 className="text-2xl font-bold tracking-tight text-white">{item.title}</h4>
-                <p className="text-sm text-white/40 font-light leading-relaxed">{item.desc}</p>
+                <p className="text-sm text-white/70 font-light leading-relaxed">{item.desc}</p>
               </div>
             </div>
           ))}

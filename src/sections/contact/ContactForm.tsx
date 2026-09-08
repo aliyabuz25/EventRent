@@ -10,7 +10,7 @@ export default function ContactForm() {
   const [error, setError] = useState<string | null>(null);
 
   const inputClassName =
-    'w-full min-h-[60px] px-6 py-4 bg-white/5 border border-white/10 rounded-2xl text-xl text-white transition-all duration-300 placeholder:text-white/20 focus:outline-none focus:bg-white/10 focus:border-premium-orange focus:shadow-[0_0_30px_rgba(227,6,19,0.15)]';
+    'w-full min-h-[60px] px-6 py-4 bg-white/5 border border-white/10 rounded-2xl text-xl text-white transition-all duration-300 placeholder:text-white/50 focus:outline-none focus:bg-white/10 focus:border-premium-orange focus:shadow-[0_0_30px_rgba(227,6,19,0.15)]';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -165,9 +165,9 @@ export default function ContactForm() {
               <info.icon className="w-7 h-7" />
             </div>
             <div className="relative z-10 space-y-2">
-              <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30 group-hover:text-white/60 transition-colors">{info.title}</h4>
+              <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/60 group-hover:text-white/60 transition-colors">{info.title}</h4>
               <p className="text-xl md:text-2xl font-bold tracking-tight text-white">{info.value}</p>
-              <p className="text-sm text-white/40 group-hover:text-white/60 font-light transition-colors">{info.sub}</p>
+              <p className="text-sm text-white/70 group-hover:text-white/60 font-light transition-colors">{info.sub}</p>
             </div>
           </div>
         ))}

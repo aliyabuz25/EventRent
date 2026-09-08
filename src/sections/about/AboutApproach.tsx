@@ -55,12 +55,12 @@ export default function AboutApproach() {
 
         <div className="ap-eyebrow flex items-center gap-4 mb-6">
           <div className="w-5 h-px bg-premium-orange" />
-          <span className="text-[9px] tracking-[0.35em] uppercase font-inter text-white/30">Haqqımızda</span>
+          <span className="text-[9px] tracking-[0.35em] uppercase font-inter text-white/60">Haqqımızda</span>
         </div>
 
         <h2 className="text-4xl md:text-6xl font-black tracking-tighter text-white leading-none mb-12">
           Yanaşma<br />
-          <span className="text-white/20 italic">Fəlsəfəmiz.</span>
+          <span className="text-white/50 italic">Fəlsəfəmiz.</span>
         </h2>
 
         <div className="ap-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-white/[0.08]">

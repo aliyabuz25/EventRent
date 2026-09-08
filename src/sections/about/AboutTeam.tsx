@@ -28,12 +28,12 @@ export default function AboutTeam() {
 
         <div className="team-eyebrow flex items-center gap-3 mb-6">
           <div className="w-5 h-px bg-premium-orange" />
-          <span className="text-[9px] tracking-[0.35em] uppercase font-inter text-white/30">Komanda</span>
+          <span className="text-[9px] tracking-[0.35em] uppercase font-inter text-white/60">Komanda</span>
         </div>
 
         <h2 className="team-eyebrow text-4xl md:text-6xl font-black tracking-tighter text-white leading-none mb-14">
           Arxanızda<br />
-          <span className="text-white/20 italic">Peşəkarlar.</span>
+          <span className="text-white/50 italic">Peşəkarlar.</span>
         </h2>
 
         <div className="team-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

@@ -51,11 +51,11 @@ export default function Catalog() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16">
         <div className="flex items-center gap-2 mb-5">
           <div className="w-5 h-px bg-premium-orange" />
-          <span className="text-[9px] tracking-[0.35em] uppercase font-inter text-white/30">Kataloq</span>
+          <span className="text-[9px] tracking-[0.35em] uppercase font-inter text-white/60">Kataloq</span>
         </div>
         <h1 className="text-4xl md:text-6xl font-black tracking-tighter text-white leading-none">
           Avadanlıq<br />
-          <span className="text-white/20 italic">Kataloqu.</span>
+          <span className="text-white/50 italic">Kataloqu.</span>
         </h1>
       </div>
 

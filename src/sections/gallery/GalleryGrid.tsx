@@ -37,7 +37,7 @@ export default function GalleryGrid() {
             className={`px-10 py-4 rounded-full font-bold text-xs uppercase tracking-widest transition-all ${
               selectedCategory === cat 
                 ? 'bg-black text-white shadow-2xl shadow-black/20 scale-105' 
-                : 'bg-white/5 text-white/40 hover:text-premium-orange hover:bg-gray-100'
+                : 'bg-white/5 text-white/70 hover:text-premium-orange hover:bg-gray-100'
             }`}
           >
             {cat}

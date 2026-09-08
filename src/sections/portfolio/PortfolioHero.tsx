@@ -26,7 +26,7 @@ export default function PortfolioHero() {
           transition={{ delay: 0.1 }}
           className="text-6xl md:text-9xl font-bold text-white tracking-tighter leading-[0.9]"
         >
-          Bizim <br /> <span className="text-white/40 italic">Portfolio.</span>
+          Bizim <br /> <span className="text-white/70 italic">Portfolio.</span>
         </motion.h1>
         <motion.p 
           initial={{ y: 30, opacity: 0 }}

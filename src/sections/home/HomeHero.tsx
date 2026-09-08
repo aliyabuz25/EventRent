@@ -180,7 +180,7 @@ export default function HomeHero() {
         transition={{ delay: 2, duration: 1 }}
         className="absolute bottom-3 md:bottom-4 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-30 pointer-events-none"
       >
-        <p className="text-[9px] font-black uppercase tracking-[0.35em] text-white/35">Scroll</p>
+        <p className="text-[9px] font-black uppercase tracking-[0.35em] text-white/65">Scroll</p>
         <div className="w-5 h-8 rounded-full border-2 border-white/20 bg-black/20 flex justify-center p-1">
           <motion.div
             animate={{ y: [0, 9, 0], opacity: [1, 0.35, 1] }}
@@ -198,7 +198,7 @@ export default function HomeHero() {
 
       {/* Side Label */}
       <div className="hidden lg:block absolute left-12 top-1/2 -translate-y-1/2">
-        <p className="text-[10px] font-black uppercase tracking-[0.5em] text-white/20 vertical-text">
+        <p className="text-[10px] font-black uppercase tracking-[0.5em] text-white/50 vertical-text">
           Est. 2016 — Premium Production
         </p>
       </div>
