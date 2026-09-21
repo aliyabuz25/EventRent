@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'motion/react';
-import { ShoppingCart, Menu, X, ShieldCheck, User as UserIcon, LogIn, ArrowRight, Globe, ChevronDown } from 'lucide-react';
+import { ShoppingCart, Menu, X, ShieldCheck, User as UserIcon, LogIn, ArrowRight, ChevronDown } from 'lucide-react';
+import 'flag-icons/css/flag-icons.min.css';
 import { cn } from '../lib/utils';
 import { useSiteContent } from '../content.context';
 import { t } from '../content';
@@ -48,6 +49,13 @@ export default function Navbar() {
   const menuLabel = { az: 'Menyunu aç', en: 'Open menu', ru: 'Открыть меню', tr: 'Menüyü aç' };
   const closeMenuLabel = { az: 'Menyunu bağla', en: 'Close menu', ru: 'Закрыть меню', tr: 'Menüyü kapat' };
   const languageLabel = { az: 'Dili dəyiş', en: 'Change language', ru: 'Сменить язык', tr: 'Dili değiştir' };
+  const FLAG_CODES: Record<string, string> = { az: 'az', en: 'gb', ru: 'ru', tr: 'tr' };
+  const Flag = ({ code, size = 20 }: { code: string; size?: number }) => (
+    <span
+      className={`fi fi-${code} fis`}
+      style={{ width: size, height: size, borderRadius: '50%', display: 'inline-block', backgroundSize: 'cover', flexShrink: 0 }}
+    />
+  );
   const adminLabel = { az: 'Admin', en: 'Admin', ru: 'Админ', tr: 'Admin' };
   const inquiriesLabel = { az: 'Sorğular', en: 'Inquiries', ru: 'Запросы', tr: 'Talepler' };
   const cartItemsLabel = { az: 'Səbətdə məhsul sayı', en: 'Items in cart', ru: 'Количество товаров в корзине', tr: 'Sepetteki ürün sayısı' };
@@ -162,7 +170,7 @@ export default function Navbar() {
                     : 'text-gray-400 hover:bg-white/[0.06] hover:text-white'
                 )}
               >
-                <Globe aria-hidden="true" className="h-[15px] w-[15px]" />
+                <Flag code={FLAG_CODES[locale]} size={18} />
                 <span>{locale.toUpperCase()}</span>
                 <ChevronDown
                   aria-hidden="true"
@@ -201,6 +209,7 @@ export default function Navbar() {
                             : 'text-gray-400 hover:bg-white/[0.06] hover:text-white'
                         )}
                       >
+                        <Flag code={FLAG_CODES[lang]} size={20} />
                         <span className="font-black">{lang.toUpperCase()}</span>
                         <span className="text-gray-500">{langLabels[lang]}</span>
                         {locale === lang && (
@@ -322,13 +331,14 @@ export default function Navbar() {
                   aria-label={`${t(locale, languageLabel)}: ${langLabels[lang]}`}
                   aria-pressed={locale === lang ? 'true' : 'false'}
                   className={cn(
-                    'rounded-full px-3 py-1.5 text-[11px] font-black uppercase tracking-[0.1em] transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-premium-orange focus-visible:ring-offset-1 focus-visible:ring-offset-brand-bg',
+                    'rounded-full px-3 py-1.5 flex items-center gap-1.5 text-[11px] font-black uppercase tracking-[0.1em] transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-premium-orange focus-visible:ring-offset-1 focus-visible:ring-offset-brand-bg',
                     locale === lang
                       ? 'bg-premium-orange text-white'
                       : 'text-gray-400 hover:text-white'
                   )}
                 >
-                  {lang}
+                  <Flag code={FLAG_CODES[lang]} size={18} />
+                  <span>{lang.toUpperCase()}</span>
                 </button>
               ))}
             </div>

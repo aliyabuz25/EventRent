@@ -1,10 +1,7 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Tent, Lightbulb, Volume2, Trees, ArrowRight } from 'lucide-react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
+import { useGsap, gsap } from '../../motion/useGsap';
 
 const FEATURES = [
   {
@@ -32,50 +29,46 @@ const FEATURES = [
 export default function EventgardenContent() {
   const containerRef = useRef<HTMLElement>(null);
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.fromTo('.eg-feature-card',
-        { y: 50, opacity: 0 },
-        {
-          y: 0, opacity: 1,
-          duration: 0.6, ease: 'power3.out', stagger: 0.1,
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: 'top 75%',
-            toggleActions: 'play none none none',
-          },
-        }
-      );
+  useGsap(() => {
+    gsap.fromTo('.eg-feature-card',
+      { y: 50, opacity: 0 },
+      {
+        y: 0, opacity: 1,
+        duration: 0.6, ease: 'power3.out', stagger: 0.1,
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: 'top 75%',
+          toggleActions: 'play none none none',
+        },
+      }
+    );
 
-      gsap.fromTo('.eg-image',
-        { y: 60, opacity: 0, scale: 0.95 },
-        {
-          y: 0, opacity: 1, scale: 1,
-          duration: 0.8, ease: 'power3.out', stagger: 0.12,
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: 'top 70%',
-            toggleActions: 'play none none none',
-          },
-        }
-      );
+    gsap.fromTo('.eg-image',
+      { y: 60, opacity: 0, scale: 0.95 },
+      {
+        y: 0, opacity: 1, scale: 1,
+        duration: 0.8, ease: 'power3.out', stagger: 0.12,
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: 'top 70%',
+          toggleActions: 'play none none none',
+        },
+      }
+    );
 
-      gsap.fromTo('.eg-cta',
-        { y: 40, opacity: 0 },
-        {
-          y: 0, opacity: 1,
-          duration: 0.8, ease: 'power3.out',
-          scrollTrigger: {
-            trigger: '.eg-cta-section',
-            start: 'top 85%',
-            toggleActions: 'play none none none',
-          },
-        }
-      );
-    }, containerRef);
-
-    return () => ctx.revert();
-  }, []);
+    gsap.fromTo('.eg-cta',
+      { y: 40, opacity: 0 },
+      {
+        y: 0, opacity: 1,
+        duration: 0.8, ease: 'power3.out',
+        scrollTrigger: {
+          trigger: '.eg-cta-section',
+          start: 'top 85%',
+          toggleActions: 'play none none none',
+        },
+      }
+    );
+  }, { dependencies: [], scope: containerRef });
 
   return (
     <section ref={containerRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-20">

@@ -35,7 +35,8 @@ export interface Lead {
   note: string;
   status: LeadStatus;
   items: CartItem[];
-  createdAt: string;
+  createdAt?: string;
+  created_at?: string;
   userId?: string;
 }
 
@@ -75,6 +76,11 @@ export interface LocalizedTextArray {
   tr: string[];
 }
 
+export interface HomeHeroStatItem {
+  label: LocalizedText;
+  value: LocalizedText;
+}
+
 export interface HomeHeroSection {
   titleLine1: LocalizedText;
   titleLine2: LocalizedText;
@@ -82,6 +88,9 @@ export interface HomeHeroSection {
   subtitle: LocalizedText;
   primaryCta: LocalizedText;
   secondaryCta: LocalizedText;
+  scrollLabel: LocalizedText;
+  sideLabel: LocalizedText;
+  stats: HomeHeroStatItem[];
 }
 
 export interface HomeCapabilityItem {
@@ -227,6 +236,208 @@ export interface HomeClientsSection {
   clients: HomeClientItem[];
 }
 
+export interface AboutApproachStep {
+  n: string;
+  title: LocalizedText;
+  text: LocalizedText;
+}
+
+export interface AboutStatItem {
+  value: string;
+  label: LocalizedText;
+}
+
+export interface AboutVisionMissionStat {
+  target: number;
+  suffix: string;
+  label: LocalizedText;
+}
+
+export interface AboutBentoCard {
+  title: LocalizedText;
+  desc: LocalizedText;
+}
+
+export interface AboutValueItem {
+  title: LocalizedText;
+  desc: LocalizedText;
+}
+
+export interface AboutSection {
+  hero: {
+    badge: LocalizedText;
+    titleLine1: LocalizedText;
+    titleLine2: LocalizedText;
+    subtitle: LocalizedText;
+  };
+  partnerIntro: {
+    badge: LocalizedText;
+    titleLine1: LocalizedText;
+    titleLine2: LocalizedText;
+    quote: LocalizedText;
+    stats: AboutStatItem[];
+  };
+  approach: {
+    badge: LocalizedText;
+    titleLine1: LocalizedText;
+    titleLine2: LocalizedText;
+    steps: AboutApproachStep[];
+  };
+  visionMission: {
+    badge: LocalizedText;
+    visionLabel: LocalizedText;
+    visionTitle: LocalizedText;
+    visionBody: LocalizedText;
+    visionTagline: LocalizedText;
+    missionLabel: LocalizedText;
+    missionTitle: LocalizedText;
+    missionBody: LocalizedText;
+    stats: AboutVisionMissionStat[];
+  };
+  bento: {
+    badge: LocalizedText;
+    cards: AboutBentoCard[];
+    imageTitle: LocalizedText;
+    imageTitleAccent: LocalizedText;
+  };
+  team: {
+    badge: LocalizedText;
+    titleLine1: LocalizedText;
+    titleLine2: LocalizedText;
+  };
+  values: {
+    badge: LocalizedText;
+    titleLine1: LocalizedText;
+    titleLine2: LocalizedText;
+    items: AboutValueItem[];
+  };
+}
+
+export interface ContactSection {
+  hero: {
+    badge: LocalizedText;
+    titleLine1: LocalizedText;
+    titleLine2: LocalizedText;
+    subtitle: LocalizedText;
+  };
+  ctaHeroWord: LocalizedText;
+  form: {
+    labelName: LocalizedText;
+    labelPhone: LocalizedText;
+    labelEmail: LocalizedText;
+    labelMessage: LocalizedText;
+    placeholderName: LocalizedText;
+    placeholderPhone: LocalizedText;
+    placeholderEmail: LocalizedText;
+    placeholderMessage: LocalizedText;
+    errorRequired: LocalizedText;
+    successTitle: LocalizedText;
+    successBody: LocalizedText;
+    resetButton: LocalizedText;
+    submitButton: LocalizedText;
+    infoPhone: LocalizedText;
+    infoPhoneValue: LocalizedText;
+    infoPhoneSub: LocalizedText;
+    infoEmail: LocalizedText;
+    infoEmailValue: LocalizedText;
+    infoEmailSub: LocalizedText;
+    infoAddress: LocalizedText;
+    infoAddressValue: LocalizedText;
+    infoAddressSub: LocalizedText;
+  };
+  cta: {
+    badge: LocalizedText;
+    subText: LocalizedText;
+    bottomLabel: LocalizedText;
+    bottomTagline: LocalizedText;
+    bottomCta: LocalizedText;
+    channelPhone: LocalizedText;
+    channelEmail: LocalizedText;
+    channelMap: LocalizedText;
+    channelInstagram: LocalizedText;
+    channelFacebook: LocalizedText;
+channelTagPhone: LocalizedText;
+      channelTagEmail: LocalizedText;
+      channelTagMap: LocalizedText;
+      channelTagInstagram: LocalizedText;
+      channelTagFacebook: LocalizedText;
+      channelPhoneValue: LocalizedText;
+      channelEmailValue: LocalizedText;
+      channelAddressValue: LocalizedText;
+      channelInstagramValue: LocalizedText;
+      channelFacebookValue: LocalizedText;
+    };
+  map: {
+    overlayTitle: LocalizedText;
+    overlaySubtitle: LocalizedText;
+  };
+}
+
+export interface ServicesShowcaseItem {
+  num: string;
+  eyebrow: LocalizedText;
+  title: LocalizedText;
+  description: LocalizedText;
+  tags: string[];
+  image: string;
+  iconKey: string;
+}
+
+export interface ServicesSection {
+  showcase: {
+    badge: LocalizedText;
+    detailLink: LocalizedText;
+    items: ServicesShowcaseItem[];
+  };
+  grid: {
+    badge: LocalizedText;
+    titleLine1: LocalizedText;
+    titleLine2: LocalizedText;
+    cta: LocalizedText;
+  };
+}
+
+export interface FooterSection {
+  tagline: LocalizedText;
+  navHeading: LocalizedText;
+  contactHeading: LocalizedText;
+  navLinks: { label: LocalizedText; path: string }[];
+  whatsappLine: LocalizedText;
+  whatsappCta: LocalizedText;
+  whatsappBadge: LocalizedText;
+  copyright: LocalizedText;
+  privacyPolicy: LocalizedText;
+  termsOfService: LocalizedText;
+}
+
+export interface HomeVisionMissionSection {
+  visionLabel: LocalizedText;
+  visionBody: LocalizedText;
+  missionLabel: LocalizedText;
+  missionBody: LocalizedText;
+}
+
+export interface HomeMetricsEyebrow {
+  text: LocalizedText;
+}
+
+export interface HomeClientsEyebrow {
+  badge: LocalizedText;
+  count: LocalizedText;
+  trustedLabel: LocalizedText;
+}
+
+export interface HomeFinalCtaBadge {
+  text: LocalizedText;
+}
+
+export interface HomeServicesTeaser {
+  badge: LocalizedText;
+  titleLine1: LocalizedText;
+  titleLine2: LocalizedText;
+  subtitle: LocalizedText;
+}
+
 export interface SiteContent {
   home: {
     hero: HomeHeroSection;
@@ -235,12 +446,22 @@ export interface SiteContent {
     featuredSetups: HomeFeaturedSetupsSection;
     process: HomeProcessSection;
     metrics: HomeMetricsSection;
+    metricsEyebrow: HomeMetricsEyebrow;
     catalogGateway: HomeCatalogGatewaySection;
     finalCta: HomeFinalCtaSection;
+    finalCtaBadge: HomeFinalCtaBadge;
     team: HomeTeamSection;
     clients: HomeClientsSection;
+    clientsEyebrow: HomeClientsEyebrow;
+    visionMissionCompact: HomeVisionMissionSection;
+    servicesTeaser: HomeServicesTeaser;
   };
   services: {
     categories: ServiceCategoryContent[];
+    showcase: ServicesSection['showcase'];
+    grid: ServicesSection['grid'];
   };
+  about: AboutSection;
+  contact: ContactSection;
+  footer: FooterSection;
 }

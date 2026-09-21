@@ -4,6 +4,8 @@ import HomeVisionMissionCompact from '../sections/home/HomeVisionMissionCompact'
 import HomeTeam from '../sections/home/HomeTeam';
 import HomeCapabilities from '../sections/home/HomeCapabilities';
 import ServicesShowcase from '../sections/services/ServicesShowcase';
+import HomeEventTypes from '../sections/home/HomeEventTypes';
+import HomeMetrics from '../sections/home/HomeMetrics';
 import HomeClients from '../sections/home/HomeClients';
 import HomeFeaturedSetups from '../sections/home/HomeFeaturedSetups';
 import HomeFinalCTA from '../sections/home/HomeFinalCTA';
@@ -28,6 +30,14 @@ export default function Home() {
       </section>
 
       <ServicesShowcase />
+
+      <section id="event-types-section" aria-label="Tədbir Növləri">
+        <HomeEventTypes />
+      </section>
+
+      <section id="metrics-section" aria-label="Rəqəmlər">
+        <HomeMetrics />
+      </section>
 
       <section id="clients-section" aria-label="Müştərilər">
         <HomeClients />

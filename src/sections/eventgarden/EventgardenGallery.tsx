@@ -1,10 +1,7 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, Maximize2 } from 'lucide-react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
+import { useGsap, gsap } from '../../motion/useGsap';
 
 const IMAGES = [
   { url: 'https://images.unsplash.com/photo-1464366409647-53c3f6b2a0a0?q=80&w=800&auto=format&fit=crop', category: 'Bağça' },
@@ -19,24 +16,20 @@ export default function EventgardenGallery() {
   const containerRef = useRef<HTMLElement>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.fromTo('.eg-gallery-item',
-        { y: 40, opacity: 0 },
-        {
-          y: 0, opacity: 1,
-          duration: 0.6, ease: 'power3.out', stagger: 0.08,
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: 'top 75%',
-            toggleActions: 'play none none none',
-          },
-        }
-      );
-    }, containerRef);
-
-    return () => ctx.revert();
-  }, []);
+  useGsap(() => {
+    gsap.fromTo('.eg-gallery-item',
+      { y: 40, opacity: 0 },
+      {
+        y: 0, opacity: 1,
+        duration: 0.6, ease: 'power3.out', stagger: 0.08,
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: 'top 75%',
+          toggleActions: 'play none none none',
+        },
+      }
+    );
+  }, { dependencies: [], scope: containerRef });
 
   return (
     <section ref={containerRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

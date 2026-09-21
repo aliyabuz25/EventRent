@@ -51,7 +51,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <div className="relative z-10">
           <Navbar />
           
-          <main className="min-h-screen relative z-10">
+          <main className="min-h-screen relative z-10" style={{ paddingTop: 'var(--navbar-h, 72px)' }}>
             {children}
           </main>
 

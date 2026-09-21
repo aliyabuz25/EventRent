@@ -1,31 +1,27 @@
 import { useRef, useState, useEffect } from 'react';
 import { Phone, Mail, MapPin, Instagram, Facebook } from 'lucide-react';
 import { useGsap, gsap } from '../../motion/useGsap';
-
-const CHANNELS = [
-  { icon: Phone,     label: 'Telefon',   value: '010-255-35-55',              href: 'tel:+994102553555',   color: '#e30613', tag: 'ZƏNG ET' },
-  { icon: Mail,      label: 'E-poçt',    value: 'sales@eventrent.az',         href: 'mailto:sales@eventrent.az', color: '#ff6b35', tag: 'YAZ' },
-  { icon: MapPin,    label: 'Ünvan',     value: 'Xocalı Prospekti 55, Bakı',  href: 'https://maps.google.com/?q=Xocalı+Prospekti+55+Bakı', color: '#c2185b', tag: 'XƏRİTƏ' },
-  { icon: Instagram, label: 'Instagram', value: '@eventrent.az',              href: 'https://instagram.com/eventrent.az', color: '#9c27b0', tag: 'İZLƏ' },
-  { icon: Facebook,  label: 'Facebook',  value: 'Event Rent',                 href: 'https://facebook.com/eventrent', color: '#1565c0', tag: 'BƏYƏNdİ' },
-];
+import { useSiteContent } from '../../content.context';
+import { t } from '../../content';
 
 function FloatingOrb({ style }: { style: React.CSSProperties }) {
-  return (
-    <div className="absolute rounded-full pointer-events-none" style={style} />
-  );
+  return <div className="absolute rounded-full pointer-events-none" style={style} />;
 }
 
 export default function ContactCTA() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState<number | null>(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const [time, setTime] = useState(0);
+  const { content, locale } = useSiteContent();
+  const s = content.contact.cta;
 
-  useEffect(() => {
-    const interval = setInterval(() => setTime(t => t + 1), 50);
-    return () => clearInterval(interval);
-  }, []);
+  const CHANNELS = [
+    { icon: Phone,     label: t(locale, s.channelPhone),     value: t(locale, s.channelPhoneValue),     href: 'tel:+994102553555',                     color: '#e30613', tag: t(locale, s.channelTagPhone) },
+    { icon: Mail,      label: t(locale, s.channelEmail),     value: t(locale, s.channelEmailValue),     href: 'mailto:sales@eventrent.az',             color: '#ff6b35', tag: t(locale, s.channelTagEmail) },
+    { icon: MapPin,    label: t(locale, s.channelMap),       value: t(locale, s.channelAddressValue),   href: 'https://maps.google.com/?q=Xocalı+Prospekti+55+Bakı', color: '#c2185b', tag: t(locale, s.channelTagMap) },
+    { icon: Instagram, label: t(locale, s.channelInstagram), value: t(locale, s.channelInstagramValue), href: 'https://instagram.com/eventrent.az',    color: '#9c27b0', tag: t(locale, s.channelTagInstagram) },
+    { icon: Facebook,  label: t(locale, s.channelFacebook),  value: t(locale, s.channelFacebookValue),  href: 'https://facebook.com/eventrent',        color: '#1565c0', tag: t(locale, s.channelTagFacebook) },
+  ];
 
   useEffect(() => {
     const handleMouse = (e: MouseEvent) => {
@@ -42,96 +38,66 @@ export default function ContactCTA() {
   }, []);
 
   useGsap(() => {
-    // Mask reveal for giant heading letters
     gsap.fromTo('.hc-char',
       { yPercent: 120, opacity: 0 },
-      {
-        yPercent: 0, opacity: 1, duration: 1.1, ease: 'expo.out', stagger: 0.05,
-        scrollTrigger: { trigger: sectionRef.current, start: 'top 80%', toggleActions: 'play none none none' },
-      }
+      { yPercent: 0, opacity: 1, duration: 1.1, ease: 'expo.out', stagger: 0.05,
+        scrollTrigger: { trigger: sectionRef.current, start: 'top 80%', toggleActions: 'play none none none' } }
     );
     gsap.fromTo('.hc-badge',
       { scale: 0, opacity: 0, rotate: -15 },
-      {
-        scale: 1, opacity: 1, rotate: 0, duration: 0.8, ease: 'back.out(2)', delay: 0.6,
-        scrollTrigger: { trigger: sectionRef.current, start: 'top 80%', toggleActions: 'play none none none' },
-      }
+      { scale: 1, opacity: 1, rotate: 0, duration: 0.8, ease: 'back.out(2)', delay: 0.6,
+        scrollTrigger: { trigger: sectionRef.current, start: 'top 80%', toggleActions: 'play none none none' } }
     );
     gsap.fromTo('.hc-card',
       { opacity: 0, y: 48, scale: 0.95 },
-      {
-        opacity: 1, y: 0, scale: 1, duration: 0.7, ease: 'power3.out', stagger: 0.08, delay: 0.4,
-        scrollTrigger: { trigger: '.hc-cards-grid', start: 'top 85%', toggleActions: 'play none none none' },
-      }
+      { opacity: 1, y: 0, scale: 1, duration: 0.7, ease: 'power3.out', stagger: 0.08, delay: 0.4,
+        scrollTrigger: { trigger: '.hc-cards-grid', start: 'top 85%', toggleActions: 'play none none none' } }
     );
     gsap.fromTo('.hc-bottom',
       { opacity: 0, y: 30 },
-      {
-        opacity: 1, y: 0, duration: 0.9, ease: 'power3.out', delay: 0.2,
-        scrollTrigger: { trigger: '.hc-bottom', start: 'top 90%', toggleActions: 'play none none none' },
-      }
+      { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out', delay: 0.2,
+        scrollTrigger: { trigger: '.hc-bottom', start: 'top 90%', toggleActions: 'play none none none' } }
     );
   }, { scope: sectionRef });
 
-  const letters = 'BURDAYIQ'.split('');
+  const letters = t(locale, content.contact.ctaHeroWord).split('');
 
   return (
-    <section
-      ref={sectionRef}
-      className="relative bg-[#060606] overflow-hidden"
-      style={{ isolation: 'isolate' }}
-    >
-      {/* top divider */}
+    <section ref={sectionRef} className="relative bg-[#060606] overflow-hidden" style={{ isolation: 'isolate' }}>
       <div className="absolute top-0 left-0 right-0 h-px bg-white/[0.06]" />
-
-      {/* ── Animated ambient orbs ── */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <FloatingOrb style={{
           width: 600, height: 600,
-          left: `${mousePos.x * 0.3}%`,
-          top: `${mousePos.y * 0.2 - 10}%`,
+          left: `${mousePos.x * 0.3}%`, top: `${mousePos.y * 0.2 - 10}%`,
           background: 'radial-gradient(circle, rgba(227,6,19,0.08) 0%, transparent 70%)',
           transform: 'translate(-50%, -50%)',
           transition: 'left 1.2s cubic-bezier(0.25,0.46,0.45,0.94), top 1.2s cubic-bezier(0.25,0.46,0.45,0.94)',
           filter: 'blur(40px)',
         }} />
         <FloatingOrb style={{
-          width: 400, height: 400,
-          right: `${20 + Math.sin(time * 0.02) * 8}%`,
-          bottom: '10%',
+          width: 400, height: 400, right: '20%', bottom: '10%',
           background: 'radial-gradient(circle, rgba(227,6,19,0.05) 0%, transparent 70%)',
-          filter: 'blur(60px)',
+          filter: 'blur(60px)', animation: 'orbFloat 6s ease-in-out infinite',
         }} />
         <FloatingOrb style={{
-          width: 200, height: 200,
-          left: `${5 + Math.cos(time * 0.015) * 3}%`,
-          top: '30%',
+          width: 200, height: 200, left: '5%', top: '30%',
           background: 'radial-gradient(circle, rgba(255,255,255,0.02) 0%, transparent 70%)',
-          filter: 'blur(30px)',
+          filter: 'blur(30px)', animation: 'orbFloat 8s ease-in-out infinite reverse',
         }} />
-        {/* grid lines */}
         <div className="absolute inset-0 grid-lines opacity-30" />
       </div>
 
-      {/* ── HERO HEADING ── */}
       <div className="relative px-6 md:px-16 pt-24 pb-0">
-        {/* label pill */}
         <div className="hc-badge inline-flex items-center gap-2 mb-6 px-4 py-2 rounded-full"
           style={{ background: 'rgba(227,6,19,0.1)', border: '1px solid rgba(227,6,19,0.25)' }}>
           <span className="block w-1.5 h-1.5 rounded-full bg-[#e30613] animate-pulse" />
           <span className="text-[10px] font-black tracking-[0.4em] uppercase text-[#e30613]">
-            Əlaqə Nöqtəsi
+            {t(locale, s.badge)}
           </span>
         </div>
 
-        {/* giant letters */}
         <div className="flex items-end gap-0 overflow-hidden"
-          style={{
-            fontSize: 'clamp(5rem, 14vw, 14rem)',
-            fontWeight: 900,
-            lineHeight: 0.85,
-            letterSpacing: '-0.04em',
-          }}>
+          style={{ fontSize: 'clamp(5rem, 14vw, 14rem)', fontWeight: 900, lineHeight: 0.85, letterSpacing: '-0.04em' }}>
           {letters.map((ch, i) => (
             <div key={i} className="overflow-hidden">
               <span
@@ -152,24 +118,16 @@ export default function ContactCTA() {
           ))}
         </div>
 
-        {/* sub-text */}
         <p className="hc-badge mt-5 text-white/60 text-[13px] font-normal tracking-wide max-w-sm leading-relaxed">
-          Hər soruşa cavab, hər ideyana həll — sizi gözləyirik.
+          {t(locale, s.subText)}
         </p>
       </div>
 
-      {/* ── BENTO CARDS ── */}
       <div className="hc-cards-grid relative max-w-[1400px] mx-auto px-6 md:px-16 pt-16 pb-8">
-
-        {/* Top row — phone + map side by side */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-          {/* PHONE — wide card */}
           <ContactCard ch={CHANNELS[0]} i={0} active={active} setActive={setActive} span="md:col-span-2" />
-          {/* MAP */}
           <ContactCard ch={CHANNELS[2]} i={2} active={active} setActive={setActive} />
         </div>
-
-        {/* Bottom row — email + instagram + facebook */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <ContactCard ch={CHANNELS[1]} i={1} active={active} setActive={setActive} />
           <ContactCard ch={CHANNELS[3]} i={3} active={active} setActive={setActive} />
@@ -177,13 +135,10 @@ export default function ContactCTA() {
         </div>
       </div>
 
-      {/* ── BOTTOM CTA ── */}
       <div className="hc-bottom relative max-w-[1400px] mx-auto px-6 md:px-16 py-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 border-t border-white/[0.05]">
         <div>
-          <p className="text-white/50 text-[11px] font-black tracking-[0.35em] uppercase mb-1">Eventrent · Bakı · Azerbaijan</p>
-          <p className="text-white/70 text-[13px] font-normal leading-relaxed max-w-xs">
-            Hər tədbirə xüsusi yanaşma, hər müştəriyə xüsusi qayğı.
-          </p>
+          <p className="text-white/50 text-[11px] font-black tracking-[0.35em] uppercase mb-1">{t(locale, s.bottomLabel)}</p>
+          <p className="text-white/70 text-[13px] font-normal leading-relaxed max-w-xs">{t(locale, s.bottomTagline)}</p>
         </div>
         <a
           href="/contact"
@@ -198,7 +153,7 @@ export default function ContactCTA() {
             (e.currentTarget as HTMLElement).style.boxShadow = 'none';
           }}
         >
-          <span className="text-[11px] font-black tracking-[0.35em] uppercase text-white relative z-10">Müraciət Formu</span>
+          <span className="text-[11px] font-black tracking-[0.35em] uppercase text-white relative z-10">{t(locale, s.bottomCta)}</span>
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="relative z-10 group-hover:translate-x-1 transition-transform duration-300">
             <path d="M2 12L12 2M12 2H5M12 2V9" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
@@ -208,11 +163,10 @@ export default function ContactCTA() {
   );
 }
 
-/* ─── Individual Bento Contact Card ─── */
 function ContactCard({
   ch, i, active, setActive, span = ''
 }: {
-  ch: typeof CHANNELS[0];
+  ch: { icon: any; label: string; value: string; href: string; color: string; tag: string };
   i: number;
   active: number | null;
   setActive: (v: number | null) => void;
@@ -231,11 +185,8 @@ function ContactCard({
         background: isActive
           ? `linear-gradient(135deg, rgba(${hexToRgb(ch.color)},0.12) 0%, rgba(0,0,0,0.6) 100%)`
           : 'rgba(255,255,255,0.025)',
-        border: isActive
-          ? `1px solid rgba(${hexToRgb(ch.color)},0.35)`
-          : '1px solid rgba(255,255,255,0.06)',
-        backdropFilter: 'blur(12px)',
-        minHeight: '180px',
+        border: isActive ? `1px solid rgba(${hexToRgb(ch.color)},0.35)` : '1px solid rgba(255,255,255,0.06)',
+        backdropFilter: 'blur(12px)', minHeight: '180px',
         boxShadow: isActive
           ? `0 20px 60px rgba(${hexToRgb(ch.color)},0.15), inset 0 1px 0 rgba(255,255,255,0.05)`
           : 'inset 0 1px 0 rgba(255,255,255,0.03)',
@@ -244,15 +195,12 @@ function ContactCard({
       onMouseEnter={() => setActive(i)}
       onMouseLeave={() => setActive(null)}
     >
-      {/* Glow blob inside card */}
       <div className="absolute inset-0 pointer-events-none transition-opacity duration-500"
         style={{
           background: `radial-gradient(circle at 20% 80%, rgba(${hexToRgb(ch.color)},0.15) 0%, transparent 60%)`,
           opacity: isActive ? 1 : 0,
-        }}
-      />
+        }} />
 
-      {/* Top row: icon + tag */}
       <div className="relative flex items-start justify-between mb-8">
         <div className="flex items-center justify-center w-11 h-11 rounded-xl transition-all duration-300"
           style={{
@@ -261,7 +209,6 @@ function ContactCard({
           }}>
           <Icon style={{ width: 18, height: 18, color: isActive ? ch.color : 'rgba(255,255,255,0.35)', transition: 'color 0.3s' }} />
         </div>
-
         <span className="text-[9px] font-black tracking-[0.4em] px-3 py-1 rounded-full transition-all duration-300"
           style={{
             background: isActive ? `rgba(${hexToRgb(ch.color)},0.15)` : 'rgba(255,255,255,0.04)',
@@ -272,7 +219,6 @@ function ContactCard({
         </span>
       </div>
 
-      {/* Value + label */}
       <div className="relative">
         <p className="text-[10px] font-black tracking-[0.35em] uppercase mb-2 transition-colors duration-300"
           style={{ color: isActive ? `rgba(${hexToRgb(ch.color)},0.7)` : 'rgba(255,255,255,0.2)' }}>
@@ -284,12 +230,11 @@ function ContactCard({
         </p>
       </div>
 
-      {/* Arrow */}
       <div className="absolute bottom-6 right-6 flex items-center justify-center w-9 h-9 rounded-full transition-all duration-300"
         style={{
           background: isActive ? ch.color : 'transparent',
           border: isActive ? `1px solid ${ch.color}` : '1px solid rgba(255,255,255,0.1)',
-          transform: isActive ? 'scale(1.1) rotate(0deg)' : 'scale(1) rotate(0deg)',
+          transform: isActive ? 'scale(1.1)' : 'scale(1)',
         }}>
         <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
           <path d="M2 12L12 2M12 2H5M12 2V9"
@@ -298,13 +243,11 @@ function ContactCard({
         </svg>
       </div>
 
-      {/* Corner accent line */}
       <div className="absolute top-0 left-0 w-full h-[2px] rounded-t-2xl transition-all duration-400"
         style={{
           background: `linear-gradient(90deg, ${ch.color}, transparent)`,
           opacity: isActive ? 1 : 0,
-        }}
-      />
+        }} />
     </a>
   );
 }

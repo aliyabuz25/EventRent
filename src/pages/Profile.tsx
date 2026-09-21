@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { auth, db } from '../firebase';
-import { onAuthStateChanged, signOut, User, updateProfile } from 'firebase/auth';
-import { doc, updateDoc, collection, query, orderBy, onSnapshot, where } from 'firebase/firestore';
 import { Lead } from '../types';
 import { motion, AnimatePresence } from 'motion/react';
 import ProfileSidebar from '../sections/profile/ProfileSidebar';
@@ -10,108 +7,83 @@ import ProfileOverview from '../sections/profile/ProfileOverview';
 import ProfileOrders from '../sections/profile/ProfileOrders';
 import ProfileSettings from '../sections/profile/ProfileSettings';
 import ProfileSupport from '../sections/profile/ProfileSupport';
-import { useSiteContent } from '../content.context';
-import { t } from '../content';
+
+const TOKEN_KEY = 'er_admin_token';
+
+export interface DbUser {
+  id: number;
+  name: string;
+  email: string;
+  role: 'admin' | 'sales' | 'viewer';
+  active: number;
+  created_at: string;
+}
 
 type Tab = 'overview' | 'orders' | 'settings' | 'support';
 
 export default function Profile() {
-  const [user, setUser] = useState<User | null>(null);
-  const [orders, setOrders] = useState<Lead[]>([]);
+  const [user, setUser]           = useState<DbUser | null>(null);
+  const [orders, setOrders]       = useState<Lead[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<Tab>('overview');
   const [displayName, setDisplayName] = useState('');
-  const [isSaving, setIsSaving] = useState(false);
-  const [saveMsg, setSaveMsg] = useState<'ok' | 'err' | null>(null);
-  const { locale } = useSiteContent();
+  const [isSaving, setIsSaving]   = useState(false);
+  const [saveMsg, setSaveMsg]     = useState<'ok' | 'err' | null>(null);
   const navigate = useNavigate();
 
-  const labels = {
-    demoUserName: { az: 'Tural Rəhimov', en: 'Tural Rahimov', ru: 'Турал Рагимов', tr: 'Tural Rəhimov' },
-  };
+  const token = localStorage.getItem(TOKEN_KEY) || '';
+  const authHeaders = { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` };
 
+  /* load user from JWT */
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (u) => {
-      if (u) {
+    if (!token) { navigate('/login'); return; }
+    fetch('/api/auth/me', { headers: authHeaders })
+      .then(r => r.ok ? r.json() : null)
+      .then(u => {
+        if (!u) { navigate('/login'); return; }
         setUser(u);
-        setDisplayName(u.displayName || '');
-      } else {
-        const isDemo = localStorage.getItem('demo_mode') === 'true';
-        if (isDemo) {
-          setDisplayName(localStorage.getItem('demo_user_name') || t(locale, labels.demoUserName));
-          setIsLoading(false);
-        } else {
-          navigate('/login');
-        }
-      }
-    });
-    return () => unsubscribe();
-  }, [navigate]);
+        setDisplayName(u.name);
+      })
+      .catch(() => navigate('/login'))
+      .finally(() => setIsLoading(false));
+  }, []);
 
+  /* load user's orders */
   useEffect(() => {
-    const isDemo = localStorage.getItem('demo_mode') === 'true';
-    if (isDemo) {
-      const q = query(collection(db, 'leads'), orderBy('createdAt', 'desc'));
-      const unsubscribe = onSnapshot(q, (snapshot) => {
-        setOrders(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Lead)));
-        setIsLoading(false);
-      });
-      return () => unsubscribe();
-    }
+    if (!token) return;
+    fetch('/api/orders', { headers: authHeaders })
+      .then(r => r.ok ? r.json() : [])
+      .then(data => setOrders(Array.isArray(data) ? data : []))
+      .catch(() => setOrders([]));
+  }, [token]);
 
-    if (!user) return;
-
-    const q = query(
-      collection(db, 'leads'),
-      where('userId', '==', user.uid),
-      orderBy('createdAt', 'desc')
-    );
-
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      setOrders(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Lead)));
-      setIsLoading(false);
-    }, (err) => {
-      console.error('Error fetching orders:', err);
-      setIsLoading(false);
-    });
-
-    return () => unsubscribe();
-  }, [user]);
-
-  const handleLogout = async () => {
-    try {
-      localStorage.removeItem('demo_mode');
-      localStorage.removeItem('demo_user_name');
-      await signOut(auth);
-      navigate('/');
-    } catch (err) {
-      console.error('Logout error:', err);
-    }
+  const handleLogout = () => {
+    localStorage.removeItem(TOKEN_KEY);
+    window.dispatchEvent(new Event('auth-changed'));
+    navigate('/');
   };
 
   const handleUpdateProfile = async (e: React.FormEvent) => {
     e.preventDefault();
-    const isDemo = localStorage.getItem('demo_mode') === 'true';
     setIsSaving(true);
     setSaveMsg(null);
     try {
-      if (isDemo) {
-        localStorage.setItem('demo_user_name', displayName);
-      } else if (user) {
-        await updateProfile(user, { displayName });
-        await updateDoc(doc(db, 'users', user.uid), {
-          displayName,
-          updatedAt: new Date(),
-        });
+      const res  = await fetch('/api/auth/profile', {
+        method: 'PUT',
+        headers: authHeaders,
+        body: JSON.stringify({ name: displayName }),
+      });
+      if (res.ok) {
+        const updated = await res.json();
+        setUser(updated);
+        setDisplayName(updated.name);
+        setSaveMsg('ok');
+        setTimeout(() => setSaveMsg(null), 3000);
+      } else {
+        setSaveMsg('err');
       }
-      setSaveMsg('ok');
-      setTimeout(() => setSaveMsg(null), 3000);
-    } catch (err) {
-      console.error('Update profile error:', err);
-      setSaveMsg('err');
-    } finally {
-      setIsSaving(false);
-    }
+    } catch { setSaveMsg('err'); }
+    finally { setIsSaving(false); }
   };
 
   if (isLoading) {
@@ -122,13 +94,18 @@ export default function Profile() {
     );
   }
 
+  if (!user) return null;
+
+  const isPremium = user.role === 'admin' || user.role === 'sales';
+
   return (
     <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
       <div className="flex flex-col lg:flex-row gap-8">
-        <ProfileSidebar 
-          user={user} 
-          activeTab={activeTab} 
-          setActiveTab={setActiveTab} 
+        <ProfileSidebar
+          user={user}
+          isPremium={isPremium}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
           ordersCount={orders.length}
           onLogout={handleLogout}
         />
@@ -156,6 +133,7 @@ export default function Profile() {
                   isSaving={isSaving}
                   onSubmit={handleUpdateProfile}
                   saveMsg={saveMsg}
+                  token={token}
                 />
               )}
               {activeTab === 'support' && (

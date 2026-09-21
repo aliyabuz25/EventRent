@@ -51,7 +51,7 @@ export default function HomeHero() {
   return (
     <section
       ref={containerRef}
-      className="relative h-svh w-full flex items-center justify-center overflow-hidden bg-brand-bg md:h-dvh"
+      className="relative h-svh w-full flex items-center justify-center overflow-hidden bg-brand-bg md:h-dvh -mt-[72px]"
     >
       {/* Background Layer */}
       <div
@@ -141,17 +141,13 @@ export default function HomeHero() {
 
             <div className="flex w-full justify-between items-end gap-8 lg:gap-10">
               <div className="flex items-start gap-12 lg:gap-16">
-                {[
-                  { label: 'Excellence', value: 'Technical' },
-                  { label: 'Market', value: 'High-End' },
-                  { label: 'Focus', value: 'Cinematic' },
-                ].map((stat, i) => (
+                {(content.home.hero.stats || []).map((stat, i) => (
                   <div
                     key={i}
                     className={`space-y-1 text-left${i === 0 ? '' : ' border-l border-white/10 pl-6'}`}
                   >
-                    <p className="text-left text-[9px] font-black uppercase tracking-widest text-premium-orange">{stat.label}</p>
-                    <p className="text-left text-lg font-black text-white uppercase tracking-tighter">{stat.value}</p>
+                    <p className="text-left text-[9px] font-black uppercase tracking-widest text-premium-orange">{t(locale, stat.label)}</p>
+                    <p className="text-left text-lg font-black text-white uppercase tracking-tighter">{t(locale, stat.value)}</p>
                   </div>
                 ))}
               </div>
@@ -180,7 +176,7 @@ export default function HomeHero() {
         transition={{ delay: 2, duration: 1 }}
         className="absolute bottom-3 md:bottom-4 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-30 pointer-events-none"
       >
-        <p className="text-[9px] font-black uppercase tracking-[0.35em] text-white/65">Scroll</p>
+        <p className="text-[9px] font-black uppercase tracking-[0.35em] text-white/65">{t(locale, content.home.hero.scrollLabel)}</p>
         <div className="w-5 h-8 rounded-full border-2 border-white/20 bg-black/20 flex justify-center p-1">
           <motion.div
             animate={{ y: [0, 9, 0], opacity: [1, 0.35, 1] }}
@@ -199,7 +195,7 @@ export default function HomeHero() {
       {/* Side Label */}
       <div className="hidden lg:block absolute left-12 top-1/2 -translate-y-1/2">
         <p className="text-[10px] font-black uppercase tracking-[0.5em] text-white/50 vertical-text">
-          Est. 2016 — Premium Production
+          {t(locale, content.home.hero.sideLabel)}
         </p>
       </div>
     </section>

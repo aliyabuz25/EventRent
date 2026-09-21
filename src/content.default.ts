@@ -2,6 +2,155 @@ import { SiteContent } from './types';
 
 // Compile-time fallback. Canonical live content is written to data/site-content.json via the admin UI.
 export const DEFAULT_SITE_CONTENT: SiteContent = {
+  about: {
+    hero: {
+      badge: { az: 'Bizim Hekayəmiz', en: 'Our Story', ru: 'Наша история', tr: 'Hikayemiz' },
+      titleLine1: { az: 'Keyfiyyət.', en: 'Quality.', ru: 'Качество.', tr: 'Kalite.' },
+      titleLine2: { az: 'Təcrübə.', en: 'Experience.', ru: 'Опыт.', tr: 'Deneyim.' },
+      subtitle: { az: 'Tədbiriniz üçün hər şey — Operativlik və Bol çeşidin vəhdəti.', en: 'Everything for your event — the unity of efficiency and vast variety.', ru: 'Всё для вашего мероприятия — единство оперативности и богатого ассортимента.', tr: 'Etkinliğiniz için her şey — verimlilik ve geniş çeşitlilik.' },
+    },
+    partnerIntro: {
+      badge: { az: 'Tərəfdaşınız', en: 'Your Partner', ru: 'Ваш партнёр', tr: 'Ortağınız' },
+      titleLine1: { az: 'Biz', en: 'Who', ru: 'Кто', tr: 'Biz' },
+      titleLine2: { az: 'Kimik.', en: 'We Are.', ru: 'Мы есть.', tr: 'Kimiz.' },
+      quote: { az: '"Event Rent" olaraq biz, tədbirlərin təşkili və texniki təchizatı sahəsində uzun illərdir ki, peşəkar xidmət göstəririk. Missiyamız müştərilərimizə ən müasir texnologiyaları və yaradıcı həlləri təqdim edərək, onların tədbirlərini unudulmaz etməyimizdir.', en: 'As "Event Rent", we have been providing professional services in event organization and technical equipment for many years. Our mission is to deliver the latest technologies and creative solutions to our clients, making their events unforgettable.', ru: 'Как «Event Rent» мы уже много лет профессионально оказываем услуги в сфере организации мероприятий и технического оснащения. Наша миссия — предоставлять клиентам передовые технологии и творческие решения, делая их события незабываемыми.', tr: '"Event Rent" olarak yıllardır etkinlik organizasyonu ve teknik teçhizat alanında profesyonel hizmet sunuyoruz. Misyonumuz, müşterilerimize en modern teknolojileri ve yaratıcı çözümleri sunarak etkinliklerini unutulmaz kılmaktır.' },
+      stats: [
+        { value: '500+', label: { az: 'Uğurlu Tədbir', en: 'Successful Events', ru: 'Успешных мероприятий', tr: 'Başarılı Etkinlik' } },
+        { value: '1000+', label: { az: 'Avadanlıq Çeşidi', en: 'Equipment Varieties', ru: 'Видов оборудования', tr: 'Ekipman Çeşidi' } },
+      ],
+    },
+    approach: {
+      badge: { az: 'Haqqımızda', en: 'About Us', ru: 'О нас', tr: 'Hakkımızda' },
+      titleLine1: { az: 'Yanaşma', en: 'Our', ru: 'Наш', tr: 'Yaklaşım' },
+      titleLine2: { az: 'Fəlsəfəmiz.', en: 'Philosophy.', ru: 'Подход.', tr: 'Felsefemiz.' },
+      steps: [
+        { n: '01', title: { az: 'Fərqli Baxış', en: 'Different Perspective', ru: 'Другой взгляд', tr: 'Farklı Bakış' }, text: { az: 'Biz tədbirlərə sadəcə təşkil olunacaq bir iş kimi baxmırıq.', en: 'We do not view events simply as tasks to be organized.', ru: 'Мы не рассматриваем мероприятия просто как работу.', tr: 'Etkinliklere sadece organize edilecek bir iş olarak bakmıyoruz.' } },
+        { n: '02', title: { az: 'Atmosfer Yaradan', en: 'Atmosphere Creator', ru: 'Создатель атмосферы', tr: 'Atmosfer Yaratıcısı' }, text: { az: 'İnsanlar bir tədbirin tərtibatını yox, atmosferini xatırlayırlar.', en: 'People remember the atmosphere of an event, not just its arrangement.', ru: 'Люди запоминают атмосферу мероприятия, а не просто его организацию.', tr: 'İnsanlar etkinliğin düzenini değil, atmosferini hatırlar.' } },
+        { n: '03', title: { az: 'Şablon Yoxdur', en: 'No Templates', ru: 'Без шаблонов', tr: 'Şablon Yok' }, text: { az: 'Hər müştərinin ehtiyacı, hər tədbirin ritmi və hər brendin öz xarakteri var.', en: 'Every client has unique needs, every event its rhythm, every brand its character.', ru: 'У каждого клиента свои потребности, у каждого мероприятия — свой ритм, у каждого бренда — свой характер.', tr: 'Her müşterinin ihtiyacı, her etkinliğin ritmi ve her markanın kendine özgü karakteri vardır.' } },
+        { n: '04', title: { az: 'Dərin Anlama', en: 'Deep Understanding', ru: 'Глубокое понимание', tr: 'Derin Anlayış' }, text: { az: 'Müştərinin məqsədini, auditoriyasını və yaratmaq istədiyi hissi anlayırıq.', en: 'We understand the client\'s goals, audience, and the feeling they want to create.', ru: 'Мы понимаем цели клиента, его аудиторию и ощущение, которое он хочет создать.', tr: 'Müşterinin hedeflerini, kitlesini ve yaratmak istediği hissi anlıyoruz.' } },
+        { n: '05', title: { az: 'Dinamik Fərq', en: 'Dynamic Difference', ru: 'Динамичное отличие', tr: 'Dinamik Fark' }, text: { az: 'Bəzən protokol və dəqiqlik, bəzən emosional enerji tələb olunur.', en: 'Sometimes precision and protocol are needed, sometimes emotional energy.', ru: 'Иногда нужны точность и протокол, иногда — эмоциональная энергия.', tr: 'Bazen hassasiyet ve protokol, bazen duygusal enerji gereklidir.' } },
+        { n: '06', title: { az: 'Vahid Sistem', en: 'Unified System', ru: 'Единая система', tr: 'Birleşik Sistem' }, text: { az: 'İlk ideyadan son saniyəyə kreativlik, texnologiya və operativ təminatı birləşdiririk.', en: 'From first idea to last second, we unite creativity, technology and operational support.', ru: 'От первой идеи до последней секунды мы объединяем творчество, технологии и оперативное обеспечение.', tr: 'İlk fikirden son saniyeye yaratıcılık, teknoloji ve operasyonel desteği birleştiriyoruz.' } },
+      ],
+    },
+    visionMission: {
+      badge: { az: 'Kimik', en: 'Who We Are', ru: 'Кто мы', tr: 'Kimiz' },
+      visionLabel: { az: '01 — Vizyon', en: '01 — Vision', ru: '01 — Видение', tr: '01 — Vizyon' },
+      visionTitle: { az: 'VİZYONUMUZ', en: 'OUR VISION', ru: 'НАШ ВЗГЛЯД', tr: 'VİZYONUMUZ' },
+      visionBody: { az: 'Tədbir üçün bütün infrastruktur, avadanlıq və həlləri bir mərkəzdə birləşdirən komandayıq.', en: 'We are the team that unites all infrastructure, equipment and solutions for events in one center.', ru: 'Мы команда, объединяющая всю инфраструктуру, оборудование и решения для мероприятий в одном центре.', tr: 'Etkinlikler için tüm altyapı, ekipman ve çözümleri tek merkezde birleştiren ekibiz.' },
+      visionTagline: { az: 'Bir Mərkəz · Tam Həll', en: 'One Center · Full Solution', ru: 'Один центр · Полное решение', tr: 'Bir Merkez · Tam Çözüm' },
+      missionLabel: { az: '02 — Missiya', en: '02 — Mission', ru: '02 — Миссия', tr: '02 — Misyon' },
+      missionTitle: { az: 'MİSSİYAMIZ', en: 'OUR MISSION', ru: 'НАША МИССИЯ', tr: 'MİSYONUMUZ' },
+      missionBody: { az: 'Hər ideyanın reallaşması üçün lazım olan texniki və fiziki imkanları bir mərkəzdə birləşdirərək etibarlı tərəfdaşa çevrilmək.', en: 'To become a trusted partner by uniting the technical and physical capabilities needed for every idea to come to life in one center.', ru: 'Стать надёжным партнёром, объединив в одном центре технические и физические возможности, необходимые для реализации каждой идеи.', tr: 'Her fikrin hayata geçmesi için gereken teknik ve fiziksel imkânları tek merkezde birleştirerek güvenilir bir ortağa dönüşmek.' },
+      stats: [
+        { target: 10, suffix: '+', label: { az: 'İllik Təcrübə', en: 'Years Experience', ru: 'Лет опыта', tr: 'Yıl Deneyim' } },
+        { target: 1200, suffix: '+', label: { az: 'Uğurlu Layihə', en: 'Successful Projects', ru: 'Успешных проектов', tr: 'Başarılı Proje' } },
+        { target: 50, suffix: '+', label: { az: 'Tərəfdaş Brend', en: 'Partner Brands', ru: 'Партнёрских брендов', tr: 'Partner Marka' } },
+      ],
+    },
+    bento: {
+      badge: { az: 'Niyə Biz', en: 'Why Us', ru: 'Почему мы', tr: 'Neden Biz' },
+      cards: [
+        { title: { az: '10 İllik Təcrübə', en: '10 Years Experience', ru: '10 лет опыта', tr: '10 Yıl Deneyim' }, desc: { az: 'Bazarda lider mövqeyimizi qoruyaraq hər zaman ən yaxşısını təklif edirik.', en: 'Maintaining our leading position in the market, we always offer the best.', ru: 'Сохраняя лидирующие позиции на рынке, мы всегда предлагаем лучшее.', tr: 'Piyasadaki lider konumumuzu koruyarak her zaman en iyisini sunuyoruz.' } },
+        { title: { az: 'Sürətli Çatdırılma', en: 'Fast Delivery', ru: 'Быстрая доставка', tr: 'Hızlı Teslimat' }, desc: { az: 'Sifarişdən qurğuya qədər hər mərhələ planlanmış və vaxtında.', en: 'Every stage from order to setup is planned and on time.', ru: 'Каждый этап от заказа до монтажа спланирован и выполнен в срок.', tr: 'Siparişten kuruluma kadar her aşama planlanmış ve zamanında.' } },
+        { title: { az: 'Tam Zəmanət', en: 'Full Guarantee', ru: 'Полная гарантия', tr: 'Tam Garanti' }, desc: { az: 'Bütün avadanlıqlar sınaqdan keçmiş, hər işdə etibarlılıq əsas şərtimizdir.', en: 'All equipment is tested, reliability in every job is our primary condition.', ru: 'Всё оборудование протестировано, надёжность в каждой работе — наше главное условие.', tr: 'Tüm ekipmanlar test edilmiştir, her işte güvenilirlik temel şartımızdır.' } },
+      ],
+      imageTitle: { az: 'Peşəkar', en: 'Professional', ru: 'Профессиональная', tr: 'Profesyonel' },
+      imageTitleAccent: { az: 'Komanda.', en: 'Team.', ru: 'Команда.', tr: 'Ekip.' },
+    },
+    team: {
+      badge: { az: 'Komanda', en: 'Team', ru: 'Команда', tr: 'Ekip' },
+      titleLine1: { az: 'Arxanızda', en: 'Behind You', ru: 'За вами', tr: 'Arkanızda' },
+      titleLine2: { az: 'Peşəkarlar.', en: 'Professionals.', ru: 'Профессионалы.', tr: 'Profesyoneller.' },
+    },
+    values: {
+      badge: { az: 'Dəyərlərimiz', en: 'Our Values', ru: 'Наши ценности', tr: 'Değerlerimiz' },
+      titleLine1: { az: 'Prinsiplərimiz', en: 'Our Principles', ru: 'Наши принципы', tr: 'İlkelerimiz' },
+      titleLine2: { az: 'Əsasımız.', en: 'Our Foundation.', ru: 'Наша основа.', tr: 'Temelimiz.' },
+      items: [
+        { title: { az: 'Mükəmməllik', en: 'Excellence', ru: 'Совершенство', tr: 'Mükemmellik' }, desc: { az: 'Hər bir işdə ən yüksək nəticəyə can atırıq. Standart bizim üçün başlanğıc nöqtəsidir, hədəf deyil.', en: 'We strive for the highest result in every task. The standard is our starting point, not our goal.', ru: 'Мы стремимся к наивысшему результату в каждом деле. Стандарт для нас — отправная точка, а не цель.', tr: 'Her işte en yüksek sonucu hedefliyoruz. Standart bizim için başlangıç noktasıdır, hedef değil.' } },
+        { title: { az: 'Etibarlılıq', en: 'Reliability', ru: 'Надёжность', tr: 'Güvenilirlik' }, desc: { az: 'Verdiyimiz vəd və keyfiyyətə tam zəmanət veririk. Müştərimiz narahat olmamalıdır.', en: 'We fully guarantee our promises and quality. Our clients should not worry.', ru: 'Мы полностью гарантируем свои обещания и качество. Наш клиент не должен беспокоиться.', tr: 'Verdiğimiz sözü ve kaliteyi tam olarak garanti ediyoruz. Müşterimiz endişelenmemelidir.' } },
+        { title: { az: 'Müştəri Məmnuniyyəti', en: 'Client Satisfaction', ru: 'Удовлетворённость клиентов', tr: 'Müşteri Memnuniyeti' }, desc: { az: 'Sizin sevincinizdən böyük uğur tanımırıq. Hər tədbiri sizinlə birlikdə yaradırıq.', en: 'We know no greater success than your joy. We create every event together with you.', ru: 'Мы не знаем большего успеха, чем ваша радость. Каждое мероприятие мы создаём вместе с вами.', tr: 'Sizin mutluluğunuzdan büyük bir başarı tanımıyoruz. Her etkinliği sizinle birlikte yaratıyoruz.' } },
+      ],
+    },
+  },
+  contact: {
+    hero: {
+      badge: { az: 'Bizimlə Əlaqə', en: 'Contact Us', ru: 'Свяжитесь с нами', tr: 'Bizimle İletişim' },
+      titleLine1: { az: 'Gəlin', en: "Let's", ru: 'Давайте', tr: 'Hadi' },
+      titleLine2: { az: 'Danışaq.', en: 'Talk.', ru: 'Поговорим.', tr: 'Konuşalım.' },
+      subtitle: { az: 'Tədbiriniz üçün mükəmməl həllər axtarırsınız? Bizimlə əlaqə saxlayın.', en: 'Looking for perfect solutions for your event? Get in touch with us.', ru: 'Ищете идеальные решения для своего мероприятия? Свяжитесь с нами.', tr: 'Etkinliğiniz için mükemmel çözümler mi arıyorsunuz? Bizimle iletişime geçin.' },
+    },
+    form: {
+      labelName: { az: 'Ad Soyad', en: 'Full Name', ru: 'Имя Фамилия', tr: 'Ad Soyad' },
+      labelPhone: { az: 'Telefon', en: 'Phone', ru: 'Телефон', tr: 'Telefon' },
+      labelEmail: { az: 'Email', en: 'Email', ru: 'Email', tr: 'Email' },
+      labelMessage: { az: 'Mesajınız', en: 'Your Message', ru: 'Ваше сообщение', tr: 'Mesajınız' },
+      placeholderName: { az: 'Məs: Tural Rəhimov', en: 'E.g. John Smith', ru: 'Напр: Иван Иванов', tr: 'Ör: Ahmet Yılmaz' },
+      placeholderPhone: { az: '+994 -- --- -- --', en: '+1 --- --- ----', ru: '+7 --- --- ----', tr: '+90 --- --- ----' },
+      placeholderEmail: { az: 'nümunə@mail.com', en: 'example@mail.com', ru: 'пример@mail.com', tr: 'ornek@mail.com' },
+      placeholderMessage: { az: 'Tədbiriniz haqqında qısa məlumat...', en: 'Brief information about your event...', ru: 'Краткая информация о вашем мероприятии...', tr: 'Etkinliğiniz hakkında kısa bilgi...' },
+      errorRequired: { az: 'Bütün sahələri doldurun', en: 'Please fill in all fields', ru: 'Пожалуйста, заполните все поля', tr: 'Lütfen tüm alanları doldurun' },
+      successTitle: { az: 'Mesajınız göndərildi!', en: 'Your message has been sent!', ru: 'Ваше сообщение отправлено!', tr: 'Mesajınız gönderildi!' },
+      successBody: { az: 'Ən qısa zamanda sizinlə əlaqə saxlanılacaq.', en: 'We will get back to you as soon as possible.', ru: 'Мы свяжемся с вами в ближайшее время.', tr: 'En kısa sürede sizinle iletişime geçeceğiz.' },
+      resetButton: { az: 'Yeni mesaj yaz', en: 'Write a new message', ru: 'Написать новое сообщение', tr: 'Yeni mesaj yaz' },
+      submitButton: { az: 'Göndər', en: 'Send', ru: 'Отправить', tr: 'Gönder' },
+      infoPhone: { az: 'Telefon', en: 'Phone', ru: 'Телефон', tr: 'Telefon' },
+      infoPhoneValue: { az: '+994 50 123 45 67', en: '+994 50 123 45 67', ru: '+994 50 123 45 67', tr: '+994 50 123 45 67' },
+      infoPhoneSub: { az: 'Hər gün 09:00 - 21:00', en: 'Every day 09:00 - 21:00', ru: 'Каждый день 09:00 - 21:00', tr: 'Her gün 09:00 - 21:00' },
+      infoEmail: { az: 'Email', en: 'Email', ru: 'Email', tr: 'Email' },
+      infoEmailValue: { az: 'sales@eventrent.az', en: 'sales@eventrent.az', ru: 'sales@eventrent.az', tr: 'sales@eventrent.az' },
+      infoEmailSub: { az: '24 saat ərzində cavab', en: 'Reply within 24 hours', ru: 'Ответ в течение 24 часов', tr: '24 saat içinde yanıt' },
+      infoAddress: { az: 'Ünvan', en: 'Address', ru: 'Адрес', tr: 'Adres' },
+      infoAddressValue: { az: 'Bakı, Əhməd Rəcəbli küç.', en: 'Baku, Ahmed Rajabli St.', ru: 'Баку, ул. Ахмед Раджабли', tr: 'Bakü, Ahmed Recebli Cad.' },
+      infoAddressSub: { az: 'Nərimanov rayonu', en: 'Narimanov district', ru: 'Нариманов район', tr: 'Narimanov ilçesi' },
+    },
+    cta: {
+      badge: { az: 'Əlaqə Nöqtəsi', en: 'Contact Point', ru: 'Точка контакта', tr: 'İletişim Noktası' },
+      subText: { az: 'Hər soruşa cavab, hər ideyana həll — sizi gözləyirik.', en: 'An answer to every question, a solution to every idea — we are waiting for you.', ru: 'Ответ на каждый вопрос, решение для каждой идеи — мы ждём вас.', tr: 'Her soruya yanıt, her fikre çözüm — sizi bekliyoruz.' },
+      bottomLabel: { az: 'Eventrent · Bakı · Azerbaijan', en: 'Eventrent · Baku · Azerbaijan', ru: 'Eventrent · Баку · Азербайджан', tr: 'Eventrent · Bakü · Azerbaycan' },
+      bottomTagline: { az: 'Hər tədbirə xüsusi yanaşma, hər müştəriyə xüsusi qayğı.', en: 'A special approach for every event, special care for every client.', ru: 'Особый подход к каждому мероприятию, особая забота о каждом клиенте.', tr: 'Her etkinliğe özel yaklaşım, her müşteriye özel ilgi.' },
+      bottomCta: { az: 'Müraciət Formu', en: 'Contact Form', ru: 'Форма обращения', tr: 'Başvuru Formu' },
+      channelPhone: { az: 'Telefon', en: 'Phone', ru: 'Телефон', tr: 'Telefon' },
+      channelEmail: { az: 'E-poçt', en: 'Email', ru: 'Эл. почта', tr: 'E-posta' },
+      channelMap: { az: 'Ünvan', en: 'Address', ru: 'Адрес', tr: 'Adres' },
+      channelInstagram: { az: 'Instagram', en: 'Instagram', ru: 'Instagram', tr: 'Instagram' },
+      channelFacebook: { az: 'Facebook', en: 'Facebook', ru: 'Facebook', tr: 'Facebook' },
+      channelTagPhone: { az: 'ZƏNG ET', en: 'CALL', ru: 'ЗВОНИТЬ', tr: 'ARA' },
+      channelTagEmail: { az: 'YAZ', en: 'WRITE', ru: 'НАПИСАТЬ', tr: 'YAZ' },
+      channelTagMap: { az: 'XƏRİTƏ', en: 'MAP', ru: 'КАРТА', tr: 'HARİTA' },
+      channelTagInstagram: { az: 'İZLƏ', en: 'FOLLOW', ru: 'СЛЕДИТЬ', tr: 'TAKİP ET' },
+      channelTagFacebook: { az: 'BƏYƏNdİ', en: 'LIKE', ru: 'НРАВИТСЯ', tr: 'BEĞEN' },
+      channelPhoneValue: { az: '010-255-35-55', en: '010-255-35-55', ru: '010-255-35-55', tr: '010-255-35-55' },
+      channelEmailValue: { az: 'sales@eventrent.az', en: 'sales@eventrent.az', ru: 'sales@eventrent.az', tr: 'sales@eventrent.az' },
+      channelAddressValue: { az: 'Xocalı Prospekti 55, Bakı', en: 'Khojali Ave 55, Baku', ru: 'Проспект Ходжалы 55, Баку', tr: 'Hocalı Bulvarı 55, Bakü' },
+      channelInstagramValue: { az: '@eventrent.az', en: '@eventrent.az', ru: '@eventrent.az', tr: '@eventrent.az' },
+      channelFacebookValue: { az: 'Event Rent', en: 'Event Rent', ru: 'Event Rent', tr: 'Event Rent' },
+    },
+    ctaHeroWord: { az: 'BURDAYIQ', en: 'REACH US', ru: 'МЫ ЗДЕСЬ', tr: 'BURADAYIZ' },
+    map: {
+      overlayTitle: { az: 'Bizim Ofis', en: 'Our Office', ru: 'Наш офис', tr: 'Ofisimiz' },
+      overlaySubtitle: { az: 'Gəlin qonağımız olun, tədbirinizi birlikdə planlaşdıraq.', en: 'Come visit us, let\'s plan your event together.', ru: 'Приходите в гости, давайте вместе спланируем ваше мероприятие.', tr: 'Gelin misafirimiz olun, etkinliğinizi birlikte planlayalım.' },
+    },
+  },
+  footer: {
+    tagline: { az: 'Azərbaycanın premium tədbirləri üçün aparıcı texniki prodakşn tərəfdaşı.', en: "Azerbaijan's leading technical production partner for premium event solutions.", ru: 'Ведущий партнёр по техническому продакшну для премиальных мероприятий Азербайджана.', tr: "Azerbaycan'ın premium etkinlikleri için önde gelen teknik prodüksiyon ortağı." },
+    navHeading: { az: 'Naviqasiya', en: 'Navigation', ru: 'Навигация', tr: 'Navigasyon' },
+    contactHeading: { az: 'Əlaqə', en: 'Contact', ru: 'Контакт', tr: 'İletişim' },
+    navLinks: [
+      { label: { az: 'Ana Səhifə', en: 'Home', ru: 'Главная', tr: 'Ana Sayfa' }, path: '/' },
+      { label: { az: 'Xidmətlər', en: 'Services', ru: 'Услуги', tr: 'Hizmetler' }, path: '/services' },
+      { label: { az: 'Kataloq', en: 'Catalog', ru: 'Каталог', tr: 'Katalog' }, path: '/catalog' },
+      { label: { az: 'Portfolio', en: 'Portfolio', ru: 'Портфолио', tr: 'Portföy' }, path: '/portfolio' },
+      { label: { az: 'Haqqımızda', en: 'About', ru: 'О нас', tr: 'Hakkımızda' }, path: '/about' },
+      { label: { az: 'Əlaqə', en: 'Contact', ru: 'Контакт', tr: 'İletişim' }, path: '/contact' },
+    ],
+    whatsappLine: { az: 'Birbaşa Xətt', en: 'Direct Line', ru: 'Прямая линия', tr: 'Doğrudan Hat' },
+    whatsappCta: { az: 'WhatsApp\'da yazın', en: 'Contact us on WhatsApp', ru: 'Написать в WhatsApp', tr: 'WhatsApp\'ta yazın' },
+    whatsappBadge: { az: 'İndi', en: 'Now', ru: 'Сейчас', tr: 'Şimdi' },
+    copyright: { az: '© 2026 EVENTRENT.AZ. BÜTÜN HÜQUQLAR QORUNUR.', en: '© 2026 EVENTRENT.AZ. ALL RIGHTS RESERVED.', ru: '© 2026 EVENTRENT.AZ. ВСЕ ПРАВА ЗАЩИЩЕНЫ.', tr: '© 2026 EVENTRENT.AZ. TÜM HAKLAR SAKLIDIR.' },
+    privacyPolicy: { az: 'Məxfilik Siyasəti', en: 'Privacy Policy', ru: 'Политика конфиденциальности', tr: 'Gizlilik Politikası' },
+    termsOfService: { az: 'İstifadə Şərtləri', en: 'Terms of Service', ru: 'Условия использования', tr: 'Kullanım Şartları' },
+  },
   home: {
     hero: {
       titleLine1: {
@@ -40,6 +189,13 @@ export const DEFAULT_SITE_CONTENT: SiteContent = {
         ru: 'Смотреть шоурил',
         tr: 'Showreel izle',
       },
+      scrollLabel: { az: 'Diyirla', en: 'Scroll', ru: 'Прокрути', tr: 'Kaydır' },
+      sideLabel: { az: 'Təsis. 2016 — Premium Prodakşn', en: 'Est. 2016 — Premium Production', ru: 'Осн. 2016 — Премиум продакшн', tr: 'Kur. 2016 — Premium Prodüksiyon' },
+      stats: [
+        { label: { az: 'Mükəmməllik', en: 'Excellence', ru: 'Совершенство', tr: 'Mükemmellik' }, value: { az: 'Texniki', en: 'Technical', ru: 'Технический', tr: 'Teknik' } },
+        { label: { az: 'Bazar', en: 'Market', ru: 'Рынок', tr: 'Piyasa' }, value: { az: 'Premium', en: 'High-End', ru: 'Высококлассный', tr: 'Üst Düzey' } },
+        { label: { az: 'Fokus', en: 'Focus', ru: 'Фокус', tr: 'Odak' }, value: { az: 'Sinematik', en: 'Cinematic', ru: 'Кинематический', tr: 'Sinematik' } },
+      ],
     },
     capabilities: {
       badge: {
@@ -455,6 +611,29 @@ export const DEFAULT_SITE_CONTENT: SiteContent = {
         },
       ],
     },
+    metricsEyebrow: {
+      text: { az: '[ Rəqəmlərlə BİZ ]', en: '[ BY THE NUMBERS ]', ru: '[ В ЦИФРАХ ]', tr: '[ RAKAMLARLA BİZ ]' },
+    },
+    finalCtaBadge: {
+      text: { az: 'Sifariş Ver', en: 'Get Started', ru: 'Начать', tr: 'Başlayın' },
+    },
+    clientsEyebrow: {
+      badge: { az: 'Etibar Edənlər', en: 'Trusted By', ru: 'Нам доверяют', tr: 'Güvenenler' },
+      count: { az: '50+ Brend', en: '50+ Brands', ru: '50+ брендов', tr: '50+ Marka' },
+      trustedLabel: { az: 'Güvənilən Brendlər', en: 'Trusted Brands', ru: 'Доверенные бренды', tr: 'Güvenilen Markalar' },
+    },
+    visionMissionCompact: {
+      visionLabel: { az: '01 — Vizyon', en: '01 — Vision', ru: '01 — Видение', tr: '01 — Vizyon' },
+      visionBody: { az: 'Tədbir üçün bütün infrastruktur, avadanlıq və həlləri bir mərkəzdə birləşdirən komandayıq.', en: 'We are the team that unites all infrastructure, equipment and solutions for events in one center.', ru: 'Мы команда, объединяющая всю инфраструктуру, оборудование и решения для мероприятий в одном центре.', tr: 'Etkinlikler için tüm altyapı, ekipman ve çözümleri tek merkezde birleştiren ekibiz.' },
+      missionLabel: { az: '02 — Missiya', en: '02 — Mission', ru: '02 — Миссия', tr: '02 — Misyon' },
+      missionBody: { az: 'İdeyaların reallaşması üçün texniki və fiziki imkanları birləşdirərək, etibarlı təminat tərəfdaşına çevrilmək.', en: 'To become a trusted partner by uniting technical and physical capabilities needed for ideas to come to life.', ru: 'Стать надёжным партнёром, объединив технические и физические возможности, необходимые для реализации идей.', tr: 'Fikirlerin hayata geçmesi için teknik ve fiziksel imkânları birleştirerek güvenilir bir ortağa dönüşmek.' },
+    },
+    servicesTeaser: {
+      badge: { az: 'Nə Təqdim Edirik?', en: 'What We Offer?', ru: 'Что мы предлагаем?', tr: 'Ne Sunuyoruz?' },
+      titleLine1: { az: 'Peşəkar', en: 'Professional', ru: 'Профессиональные', tr: 'Profesyonel' },
+      titleLine2: { az: 'Xidmətlər.', en: 'Services.', ru: 'Услуги.', tr: 'Hizmetler.' },
+      subtitle: { az: 'Tədbirinizin mükəmməl keçməsi üçün lazım olan hər şeyi bir məkanda təqdim edirik.', en: 'Everything you need for a perfect event, all in one place.', ru: 'Всё необходимое для идеального мероприятия — в одном месте.', tr: 'Mükemmel bir etkinlik için ihtiyacınız olan her şeyi tek bir yerde sunuyoruz.' },
+    },
     metrics: {
       items: [
         {
@@ -804,6 +983,23 @@ export const DEFAULT_SITE_CONTENT: SiteContent = {
     },
   },
   services: {
+    showcase: {
+      badge: { az: 'Xidmətlər', en: 'Services', ru: 'Услуги', tr: 'Hizmetler' },
+      detailLink: { az: 'Ətraflı', en: 'Details', ru: 'Подробнее', tr: 'Detaylar' },
+      items: [
+        { num: '01', eyebrow: { az: 'Səhnə avadanlıqları', en: 'Stage Equipment', ru: 'Сценическое оборудование', tr: 'Sahne Ekipmanları' }, title: { az: 'Peşəkar\nSəhnə Qurğusu', en: 'Professional\nStage Setup', ru: 'Профессиональный\nМонтаж сцены', tr: 'Profesyonel\nSahne Kurulumu' }, description: { az: 'Hər ölçüdə tədbirlər üçün yüksək keyfiyyətli səhnə, truss sistemləri, LED ekranlar və texniki infrastruktura.', en: 'High-quality stage, truss systems, LED screens and technical infrastructure for events of any size.', ru: 'Высококачественная сцена, ферменные системы, LED-экраны и техническая инфраструктура для мероприятий любого масштаба.', tr: 'Her ölçekte etkinlik için yüksek kaliteli sahne, truss sistemleri, LED ekranlar ve teknik altyapı.' }, tags: ['Səhnə', 'Truss', 'LED Ekran', 'Texniki Rider'], image: 'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&q=80&w=1000', iconKey: 'stage' },
+        { num: '02', eyebrow: { az: 'Səs sistemləri', en: 'Sound Systems', ru: 'Звуковые системы', tr: 'Ses Sistemleri' }, title: { az: 'Kristal Səs\nHər Nöqtəyə', en: 'Crystal Sound\nEverywhere', ru: 'Кристальный звук\nвезде', tr: 'Kristal Ses\nHer Yere' }, description: { az: 'Line array sistemlərdən monitor qurğularına — peşəkar audio mühəndisliyi ilə hər məkanda mükəmməl akustika.', en: 'From line array systems to monitor setups — perfect acoustics everywhere with professional audio engineering.', ru: 'От линейных массивов до мониторных систем — идеальная акустика везде с профессиональной аудиоинженерией.', tr: 'Line array sistemlerden monitör düzeneklerine — profesyonel ses mühendisliğiyle her yerde mükemmel akustik.' }, tags: ['Line Array', 'Subwoofer', 'Monitor', 'Audio Mix'], image: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&q=80&w=1000', iconKey: 'sound' },
+        { num: '03', eyebrow: { az: 'Çap xidmətləri', en: 'Printing Services', ru: 'Печатные услуги', tr: 'Baskı Hizmetleri' }, title: { az: 'Brendinizi\nGörünən Edin', en: 'Make Your\nBrand Visible', ru: 'Сделайте бренд\nзаметным', tr: 'Markanızı\nGörünür Kılın' }, description: { az: 'Banner, rollup, backdrop, branding materialları — yüksək çözünürlüklü geniş format çap, sürətli çatdırılma.', en: 'Banners, rollups, backdrops, branding materials — high-resolution wide format printing, fast delivery.', ru: 'Баннеры, ролл-апы, бэкдропы, брендинговые материалы — широкоформатная печать высокого разрешения, быстрая доставка.', tr: 'Banner, rollup, backdrop, markalama materyalleri — yüksek çözünürlüklü geniş format baskı, hızlı teslimat.' }, tags: ['Banner', 'Rollup', 'Backdrop', 'Branding'], image: 'https://images.unsplash.com/photo-1562654501-a0ccc0fc3fb1?auto=format&fit=crop&q=80&w=1000', iconKey: 'printing' },
+        { num: '04', eyebrow: { az: 'Dekor xidməti', en: 'Decor Service', ru: 'Услуги декора', tr: 'Dekor Hizmeti' }, title: { az: 'Məkanı\nMəkana Çevir', en: 'Transform\nthe Space', ru: 'Преобрази\nпространство', tr: 'Mekanı\nDönüştür' }, description: { az: 'Fərdi konsept dekorasiya, floral dizayn, tematik qurğular — hər tədbirə özəl estetik atmosfer.', en: 'Individual concept decoration, floral design, thematic setups — unique aesthetic atmosphere for every event.', ru: 'Индивидуальная концептуальная декорация, флористический дизайн, тематические установки — уникальная эстетическая атмосфера для каждого мероприятия.', tr: 'Bireysel konsept dekorasyon, çiçek tasarımı, tematik düzenlemeler — her etkinliğe özgü estetik atmosfer.' }, tags: ['Floral', 'Tematik', 'Fərdi Konsept'], image: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&q=80&w=1000', iconKey: 'decor' },
+        { num: '05', eyebrow: { az: 'İşıqlandırma', en: 'Lighting', ru: 'Освещение', tr: 'Aydınlatma' }, title: { az: 'Atmosferi\nYaradın', en: 'Create the\nAtmosphere', ru: 'Создай\nАтмосферу', tr: 'Atmosferi\nYaratın' }, description: { az: 'Dinamik və ssenariyə uyğun işıq dizaynı — məkanı atmosferə çevirən peşəkar işıqlandırma həlləri.', en: 'Dynamic scenario-based lighting design — professional lighting solutions that transform spaces into atmospheres.', ru: 'Динамичный световой дизайн по сценарию — профессиональные световые решения, превращающие пространство в атмосферу.', tr: 'Dinamik ve senaryoya uygun ışık tasarımı — mekanları atmosfere dönüştüren profesyonel aydınlatma çözümleri.' }, tags: ['Moving Head', 'LED Par', 'Wash', 'Spot'], image: 'https://images.unsplash.com/photo-1511578314322-d37980f25207?auto=format&fit=crop&q=80&w=1000', iconKey: 'lighting' },
+      ],
+    },
+    grid: {
+      badge: { az: 'Xidmətlər', en: 'Services', ru: 'Услуги', tr: 'Hizmetler' },
+      titleLine1: { az: 'Nə Təklif', en: 'What We', ru: 'Что мы', tr: 'Ne Sunuyoruz' },
+      titleLine2: { az: 'Edirik?', en: 'Offer?', ru: 'Предлагаем?', tr: '?' },
+      cta: { az: 'Bütün alt başlıqlar', en: 'All subcategories', ru: 'Все подкатегории', tr: 'Tüm alt başlıklar' },
+    },
     categories: [
       {
         id: 'printing',

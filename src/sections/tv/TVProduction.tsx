@@ -1,44 +1,37 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
 import { Youtube, Radio, Share2, Monitor, ArrowUpRight, Play } from 'lucide-react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
+import { useGsap, gsap } from '../../motion/useGsap';
 
 export default function TVProduction() {
   const containerRef = useRef<HTMLElement>(null);
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.fromTo('.tvp-text',
-        { x: -50, opacity: 0 },
-        {
-          x: 0, opacity: 1,
-          duration: 0.65, ease: 'power3.out',
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: 'top 75%',
-            toggleActions: 'play none none none',
-          },
-        }
-      );
+  useGsap(() => {
+    gsap.fromTo('.tvp-text',
+      { x: -50, opacity: 0 },
+      {
+        x: 0, opacity: 1,
+        duration: 0.65, ease: 'power3.out',
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: 'top 75%',
+          toggleActions: 'play none none none',
+        },
+      }
+    );
 
-      gsap.fromTo('.tvp-image',
-        { x: 50, opacity: 0, scale: 0.96 },
-        {
-          x: 0, opacity: 1, scale: 1,
-          duration: 0.7, ease: 'power3.out',
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: 'top 75%',
-            toggleActions: 'play none none none',
-          },
-        }
-      );
-    }, containerRef);
-
-    return () => ctx.revert();
-  }, []);
+    gsap.fromTo('.tvp-image',
+      { x: 50, opacity: 0, scale: 0.96 },
+      {
+        x: 0, opacity: 1, scale: 1,
+        duration: 0.7, ease: 'power3.out',
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: 'top 75%',
+          toggleActions: 'play none none none',
+        },
+      }
+    );
+  }, { dependencies: [], scope: containerRef });
 
   return (
     <section ref={containerRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

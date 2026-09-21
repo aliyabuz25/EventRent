@@ -41,6 +41,10 @@
     body {
       cursor: none;
     }
+    body.admin-page,
+    body.admin-page * {
+      cursor: auto !important;
+    }
   }
 }
 
@@ -223,5 +227,16 @@ html.lenis, html.lenis body {
   .lenis.lenis-smooth,
   .lenis.lenis-stopped {
     scroll-behavior: auto !important;
+  }
+}
+
+@keyframes orbFloat {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(0, -20px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [style*="orbFloat"] {
+    animation: none !important;
   }
 }

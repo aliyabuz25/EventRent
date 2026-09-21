@@ -152,6 +152,10 @@ export default defineConfig(({ mode }) => {
       strictPort: true,
       allowedHosts: ['eventrent2.octotech.az'],
       hmr: process.env.DISABLE_HMR !== 'true',
+      proxy: {
+        '/api':     'http://localhost:4320',
+        '/uploads': 'http://localhost:4320',
+      },
     },
     preview: {
       host: '0.0.0.0',

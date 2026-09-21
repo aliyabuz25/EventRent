@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react';
 import Lenis from 'lenis';
+import { ScrollTrigger } from '../motion/useGsap';
+import gsap from 'gsap';
 
 interface SmoothScrollProps {
   children: React.ReactNode;
@@ -32,18 +34,15 @@ export default function SmoothScroll({ children }: SmoothScrollProps) {
       infinite: false,
     });
 
-    let frameId = 0;
-
-    const raf = (time: number) => {
-      lenis.raf(time);
-      frameId = window.requestAnimationFrame(raf);
-    };
-
-    frameId = window.requestAnimationFrame(raf);
+    // Bridge Lenis virtual scroll to GSAP ScrollTrigger so pinned/scrubbed
+    // sections stay in sync with the smoothed scroll position.
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+    gsap.ticker.lagSmoothing(0);
 
     return () => {
-      window.cancelAnimationFrame(frameId);
       lenis.destroy();
+      gsap.ticker.remove((time) => { lenis.raf(time * 1000); });
     };
   }, []);
 

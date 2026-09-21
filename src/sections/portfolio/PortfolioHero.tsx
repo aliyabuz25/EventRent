@@ -3,7 +3,7 @@ import { motion } from 'motion/react';
 
 export default function PortfolioHero() {
   return (
-    <section className="relative pt-32 pb-16 md:pt-40 md:pb-20 bg-gradient-to-b from-brand-bg via-brand-bg to-brand-card overflow-hidden">
+    <section className="relative -mt-[72px] pt-32 pb-16 md:pt-40 md:pb-20 bg-gradient-to-b from-brand-bg via-brand-bg to-brand-card overflow-hidden">
       {/* Nazik ambient glow */}
       <div className="absolute inset-0 pointer-events-none opacity-[0.04]">
         <div

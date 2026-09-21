@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { ArrowLeft, CheckCircle2, ShoppingCart, Plus, Minus, X } from 'lucide-react';
 import { useSiteContent } from '../content.context';
 import { t, ta, getServiceCategoryBySlug, getServiceSubItemBySlug } from '../content';
+import { useCart } from '../hooks/useCart';
 
 export default function ServiceDetail() {
   const { category, id } = useParams();
@@ -13,6 +14,7 @@ export default function ServiceDetail() {
   const [quantity, setQuantity] = useState(1);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [showSuccess, setShowSuccess] = useState(false);
+  const { addItem } = useCart();
 
   const currentCategory = getServiceCategoryBySlug(content, category || '');
   const currentItem = id && category ? getServiceSubItemBySlug(content, category, id) : null;
@@ -23,19 +25,14 @@ export default function ServiceDetail() {
   const categoryDescription = t(locale, currentCategory.description);
 
   const handleAddToCart = () => {
-    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-    const newItem = {
+    addItem({
       productId: currentItem!.id,
       quantity,
       technicalAnswers: answers,
       name: t(locale, currentItem!.name),
       image: `https://picsum.photos/seed/${currentItem!.id}/800/800`,
       category: categoryTitle,
-    };
-
-    cart.push(newItem);
-    localStorage.setItem('cart', JSON.stringify(cart));
-    window.dispatchEvent(new Event('storage'));
+    } as any);
 
     setShowSuccess(true);
     setTimeout(() => {
@@ -48,7 +45,7 @@ export default function ServiceDetail() {
   return (
     <div className="space-y-20 pb-20">
       {/* Hero Section — Minimalist */}
-      <section className="relative pt-32 pb-16 md:pt-40 md:pb-20 bg-gradient-to-b from-brand-bg via-brand-bg to-brand-card overflow-hidden">
+      <section className="relative -mt-[72px] pt-32 pb-16 md:pt-40 md:pb-20 bg-gradient-to-b from-brand-bg via-brand-bg to-brand-card overflow-hidden">
         {/* Nazik ambient glow */}
         <div className="absolute inset-0 pointer-events-none opacity-[0.04]">
           <div

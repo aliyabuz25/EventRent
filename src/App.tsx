@@ -13,29 +13,50 @@ function PageLoader() {
   );
 }
 
+function AdminLoader() {
+  return (
+    <div style={{ minHeight: '100vh', background: '#f8f9fa', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ width: 32, height: 32, borderRadius: '50%', border: '3px solid #dee2e6', borderTopColor: '#e30613', animation: 'spin 0.8s linear infinite' }} />
+    </div>
+  );
+}
+
 function AnimatedRoutes() {
   const location = useLocation();
   useEnsureUserDoc();
+  const isAdmin = location.pathname.startsWith('/admin');
 
-  return (
-    <AnimatePresence mode="wait">
-      <Suspense fallback={<PageLoader />}>
-        <Routes location={location} key={location.pathname}>
-          {appRoutes.map((r) => (
+  if (isAdmin) {
+    return (
+      <Suspense fallback={<AdminLoader />}>
+        <Routes location={location} key="admin">
+          {appRoutes.filter(r => r.path.startsWith('/admin')).map(r => (
             <Route key={r.path} path={r.path} element={r.element} />
           ))}
         </Routes>
       </Suspense>
-    </AnimatePresence>
+    );
+  }
+
+  return (
+    <Layout>
+      <AnimatePresence mode="wait">
+        <Suspense fallback={<PageLoader />}>
+          <Routes location={location} key={location.pathname}>
+            {appRoutes.filter(r => !r.path.startsWith('/admin')).map(r => (
+              <Route key={r.path} path={r.path} element={r.element} />
+            ))}
+          </Routes>
+        </Suspense>
+      </AnimatePresence>
+    </Layout>
   );
 }
 
 export default function App() {
   return (
     <Router>
-      <Layout>
-        <AnimatedRoutes />
-      </Layout>
+      <AnimatedRoutes />
     </Router>
   );
 }

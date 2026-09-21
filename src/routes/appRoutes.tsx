@@ -1,6 +1,7 @@
 import React, { lazy } from 'react';
 
 const Home = lazy(() => import('../pages/Home'));
+const NotFound = lazy(() => import('../pages/NotFound'));
 const About = lazy(() => import('../pages/About'));
 const Services = lazy(() => import('../pages/Services'));
 const ServiceDetail = lazy(() => import('../pages/ServiceDetail'));
@@ -12,6 +13,7 @@ const Portfolio = lazy(() => import('../pages/Portfolio'));
 const Gallery = lazy(() => import('../pages/Gallery'));
 const Contact = lazy(() => import('../pages/Contact'));
 const Catalog = lazy(() => import('../pages/Catalog'));
+const CatalogCategory = lazy(() => import('../pages/CatalogCategory'));
 const ProductDetail = lazy(() => import('../pages/ProductDetail'));
 const Cart = lazy(() => import('../pages/Cart'));
 const Admin = lazy(() => import('../pages/Admin'));
@@ -33,10 +35,12 @@ export const appRoutes: { path: string; element: React.ReactElement }[] = [
   { path: '/gallery', element: <Gallery /> },
   { path: '/contact', element: <Contact /> },
   { path: '/catalog', element: <Catalog /> },
+  { path: '/catalog/:category', element: <CatalogCategory /> },
   { path: '/product/:id', element: <ProductDetail /> },
   { path: '/cart', element: <Cart /> },
   { path: '/admin', element: <Admin /> },
   { path: '/login', element: <Login /> },
   { path: '/profile', element: <Profile /> },
   { path: '/premium', element: <Premium /> },
+  { path: '*', element: <NotFound /> },
 ];

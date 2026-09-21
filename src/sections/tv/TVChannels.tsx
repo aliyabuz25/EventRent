@@ -1,9 +1,6 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
 import { Tv } from 'lucide-react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
+import { useGsap, gsap } from '../../motion/useGsap';
 
 const CHANNELS = [
   { title: 'Canlı Yayım', desc: 'Tədbirlərinizin internet üzərinden canlı yayımı.' },
@@ -15,24 +12,20 @@ const CHANNELS = [
 export default function TVChannels() {
   const containerRef = useRef<HTMLElement>(null);
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.fromTo('.tvc-card',
-        { y: 50, opacity: 0 },
-        {
-          y: 0, opacity: 1,
-          duration: 0.55, ease: 'power3.out', stagger: 0.1,
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: 'top 78%',
-            toggleActions: 'play none none none',
-          },
-        }
-      );
-    }, containerRef);
-
-    return () => ctx.revert();
-  }, []);
+  useGsap(() => {
+    gsap.fromTo('.tvc-card',
+      { y: 50, opacity: 0 },
+      {
+        y: 0, opacity: 1,
+        duration: 0.55, ease: 'power3.out', stagger: 0.1,
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: 'top 78%',
+          toggleActions: 'play none none none',
+        },
+      }
+    );
+  }, { dependencies: [], scope: containerRef });
 
   return (
     <section ref={containerRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">

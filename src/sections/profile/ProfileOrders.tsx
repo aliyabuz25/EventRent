@@ -48,10 +48,10 @@ export default function ProfileOrders({ orders }: ProfileOrdersProps) {
             <div className="p-8 space-y-8">
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div className="space-y-1">
-                  <p className="text-[10px] font-bold text-white/70 uppercase tracking-widest">{t(locale, labels.orderId)} {order.id.slice(0, 8)}</p>
+                  <p className="text-[10px] font-bold text-white/70 uppercase tracking-widest">{t(locale, labels.orderId)} #{String(order.id).padStart(4, '0')}</p>
                   <div className="flex items-center gap-2 text-sm text-white/50">
                     <Clock className="w-4 h-4" />
-                    {format(new Date(order.createdAt), 'dd MMMM yyyy, HH:mm')}
+                    {format(new Date(order.createdAt || order.created_at), 'dd MMMM yyyy, HH:mm')}
                   </div>
                 </div>
                 <div className={cn("px-6 py-2 rounded-2xl text-xs font-bold border", STATUS_COLORS[order.status])}>

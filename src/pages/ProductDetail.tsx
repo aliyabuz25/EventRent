@@ -9,6 +9,7 @@ import { Product } from '../types';
 import ProductGallery from '../sections/product/ProductGallery';
 import ProductInfo from '../sections/product/ProductInfo';
 import ProductRelated from '../sections/product/ProductRelated';
+import { useCart } from '../hooks/useCart';
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -17,6 +18,7 @@ export default function ProductDetail() {
   const [product, setProduct] = useState<Product | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [dbRelatedProducts, setDbRelatedProducts] = useState<Product[]>([]);
+  const { addItem } = useCart();
   
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -72,16 +74,7 @@ export default function ProductDetail() {
   }
 
   const handleAddToCart = (answers: Record<string, string>) => {
-    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-    const existing = cart.find((item: any) => item.productId === product.id);
-    if (existing) {
-      existing.quantity += 1;
-      existing.technicalAnswers = { ...existing.technicalAnswers, ...answers };
-    } else {
-      cart.push({ productId: product.id, quantity: 1, technicalAnswers: answers });
-    }
-    localStorage.setItem('cart', JSON.stringify(cart));
-    window.dispatchEvent(new Event('storage'));
+    addItem({ productId: product.id, quantity: 1, technicalAnswers: answers });
     setIsModalOpen(false);
     navigate('/cart');
   };

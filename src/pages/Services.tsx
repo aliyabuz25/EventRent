@@ -6,7 +6,7 @@ import ServicesProcess from '../sections/services/ServicesProcess';
 export default function Services() {
   return (
     <div className="bg-black">
-      <div className="pt-24 pb-20">
+      <div className="pt-6 pb-20">
         <ServicesGrid />
       </div>
 

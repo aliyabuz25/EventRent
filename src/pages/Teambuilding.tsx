@@ -3,10 +3,10 @@ import { useSearchParams } from 'react-router-dom';
 import { signInWithPhoneNumber, ConfirmationResult, RecaptchaVerifier } from 'firebase/auth';
 import { auth } from '../firebase';
 import { cn } from '../lib/utils';
-import { GAMES, CONCEPTS } from '../data/teambuilding';
 import TeambuildingGrid from '../sections/teambuilding/TeambuildingGrid';
 import TeambuildingDetailView from '../sections/teambuilding/TeambuildingDetailView';
 import TeambuildingAuthModal from '../sections/teambuilding/TeambuildingAuthModal';
+import { useCart } from '../hooks/useCart';
 
 // Firebase Phone Auth recaptcha globals
 declare global {
@@ -19,7 +19,11 @@ declare global {
 export default function Teambuilding() {
   const [searchParams] = useSearchParams();
   const typeFilter = searchParams.get('type');
-  
+
+  const [games, setGames]       = useState<any[]>([]);
+  const [concepts, setConcepts] = useState<any[]>([]);
+  const [dataLoading, setDataLoading] = useState(true);
+
   const [activeTab, setActiveTab] = useState<'games' | 'concepts'>('games');
   const [selectedGame, setSelectedGame] = useState<any | null>(null);
   const [selectedConcept, setSelectedConcept] = useState<any | null>(null);
@@ -35,12 +39,23 @@ export default function Teambuilding() {
   const recaptchaRef = useRef<HTMLDivElement>(null);
   const recaptchaVerifier = useRef<any>(null);
   const [phone, setPhone] = useState('');
-  
+  const { addItem } = useCart();
+
   const [orderExtraData, setOrderExtraData] = useState({
     location: '',
     participants: '',
     date: ''
   });
+
+  useEffect(() => {
+    Promise.all([
+      fetch('/api/tb/games').then(r => r.json()),
+      fetch('/api/tb/concepts').then(r => r.json()),
+    ]).then(([g, c]) => {
+      setGames(Array.isArray(g) ? g.filter((x: any) => x.active) : []);
+      setConcepts(Array.isArray(c) ? c.filter((x: any) => x.active) : []);
+    }).catch(() => {}).finally(() => setDataLoading(false));
+  }, []);
 
   useEffect(() => {
     if (typeFilter) {
@@ -74,9 +89,9 @@ export default function Teambuilding() {
     return () => clearInterval(interval);
   }, [otpTimer]);
 
-  const filteredGames = typeFilter 
-    ? GAMES.filter(g => g.category.toLowerCase() === typeFilter.toLowerCase())
-    : GAMES;
+  const filteredGames = typeFilter
+    ? games.filter(g => g.category.toLowerCase() === typeFilter.toLowerCase())
+    : games;
 
   const handleGameClick = (game: any) => {
     setSelectedGame(game);
@@ -135,23 +150,17 @@ export default function Teambuilding() {
     if (!selectedGame || !selectedConcept) return;
 
     try {
-      const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-      cart.push({
-        id: `tb-${Date.now()}`,
-        name: `${selectedGame.name} (${selectedConcept.name})`,
-        price: 0,
+      addItem({
+        productId: `tb-${Date.now()}`,
         quantity: 1,
-        image: selectedGame.image,
-        type: 'teambuilding',
         technicalAnswers: {
+          'Oyun': selectedGame.name,
           'Konsepsiya': selectedConcept.name,
           'Məkan': orderExtraData.location,
           'İştirakçı sayı': orderExtraData.participants,
-          'Tarix': orderExtraData.date
-        }
-      });
-      localStorage.setItem('cart', JSON.stringify(cart));
-      window.dispatchEvent(new Event('storage'));
+          'Tarix': orderExtraData.date,
+        },
+      } as any);
 
       alert('Sifarişiniz səbətə əlavə olundu!');
       setStep('list');
@@ -175,11 +184,11 @@ export default function Teambuilding() {
           setOrderExtraData={setOrderExtraData}
           handleOrder={handleOrder}
           setStep={setStep}
-          concepts={CONCEPTS}
+          concepts={concepts}
         />
       ) : (
         <>
-          <div className="relative pt-32 pb-12 md:pt-40 md:pb-16 bg-gradient-to-b from-brand-bg via-brand-bg to-brand-card overflow-hidden">
+          <div className="relative -mt-[72px] pt-32 pb-12 md:pt-40 md:pb-16 bg-gradient-to-b from-brand-bg via-brand-bg to-brand-card overflow-hidden">
             {/* Nazik ambient glow */}
             <div className="absolute inset-0 pointer-events-none opacity-[0.04]">
               <div
@@ -229,9 +238,9 @@ export default function Teambuilding() {
           <TeambuildingGrid
             activeTab={activeTab}
             filteredGames={filteredGames}
-            concepts={CONCEPTS}
-            verifiedGames={verifiedGames}
-            onGameClick={handleGameClick}
+concepts={concepts}
+          verifiedGames={verifiedGames}
+          onGameClick={handleGameClick}
           />
         </>
       )}

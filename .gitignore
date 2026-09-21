@@ -12,3 +12,11 @@ out/
 
 # Foreign / misplaced files quarantine
 _foreign_files/
+
+# SQLite database files
+data/eventrent.db
+data/eventrent.db-shm
+data/eventrent.db-wal
+
+# Uploads
+uploads/

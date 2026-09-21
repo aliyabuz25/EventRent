@@ -1,10 +1,8 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChefHat, CheckCircle2, ShoppingCart, MapPin, Calendar, Clock, FileText, UtensilsCrossed } from 'lucide-react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-gsap.registerPlugin(ScrollTrigger);
+import { useGsap, gsap } from '../../motion/useGsap';
+import { useCart } from '../../hooks/useCart';
 
 const MENU_ITEMS = [
   { title: 'Soyuq Qəlyanaltılar', desc: 'Müxtəlif pendir, ət və tərəvəz çeşidləri.' },
@@ -17,6 +15,7 @@ export default function CateringContent() {
   const containerRef = useRef<HTMLElement>(null);
   const formRef = useRef<HTMLElement>(null);
   const navigate = useNavigate();
+  const { addItem } = useCart();
 
   const [formData, setFormData] = useState({
     location: '',
@@ -28,77 +27,69 @@ export default function CateringContent() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({
+  useGsap(() => {
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: containerRef.current,
+        start: 'top 75%',
+        toggleActions: 'play none none none',
+      },
+    });
+
+    tl.fromTo('.cat-badge',
+      { x: -40, opacity: 0 },
+      { x: 0, opacity: 1, duration: 0.5, ease: 'power3.out' }
+    )
+    .fromTo('.cat-desc',
+      { x: -40, opacity: 0 },
+      { x: 0, opacity: 1, duration: 0.5, ease: 'power3.out' },
+      '-=0.4'
+    )
+    .fromTo('.cat-card',
+      { y: 40, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.4, ease: 'power3.out', stagger: 0.07 },
+      '-=0.48'
+    );
+
+    gsap.fromTo('.cat-heading',
+      { x: 50, opacity: 0 },
+      {
+        x: 0, opacity: 1, duration: 0.7, ease: 'power3.out',
         scrollTrigger: {
           trigger: containerRef.current,
           start: 'top 75%',
           toggleActions: 'play none none none',
         },
-      });
+      }
+    );
 
-      // Sol sütun: badge → açıqlama → kartlar
-      tl.fromTo('.cat-badge',
-        { x: -40, opacity: 0 },
-        { x: 0, opacity: 1, duration: 0.5, ease: 'power3.out' }
-      )
-      .fromTo('.cat-desc',
-        { x: -40, opacity: 0 },
-        { x: 0, opacity: 1, duration: 0.5, ease: 'power3.out' },
-        '-=0.4'
-      )
-      .fromTo('.cat-card',
-        { y: 40, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.4, ease: 'power3.out', stagger: 0.07 },
-        '-=0.48'
-      );
+    gsap.fromTo('.cat-img',
+      { y: 60, opacity: 0, scale: 0.95 },
+      {
+        y: 0, opacity: 1, scale: 1,
+        duration: 0.7, ease: 'power3.out', stagger: 0.12,
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: 'top 65%',
+          toggleActions: 'play none none none',
+        },
+      }
+    );
 
-      // Sağ sütun: başlıq → şəkillər
-      gsap.fromTo('.cat-heading',
-        { x: 50, opacity: 0 },
-        {
-          x: 0, opacity: 1, duration: 0.7, ease: 'power3.out',
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: 'top 75%',
-            toggleActions: 'play none none none',
-          },
-        }
-      );
-
-      gsap.fromTo('.cat-img',
-        { y: 60, opacity: 0, scale: 0.95 },
-        {
-          y: 0, opacity: 1, scale: 1,
-          duration: 0.7, ease: 'power3.out', stagger: 0.12,
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: 'top 65%',
-            toggleActions: 'play none none none',
-          },
-        }
-      );
-
-      // Form animasyonu
-      gsap.fromTo('.cat-form-card',
-        { y: 60, opacity: 0 },
-        {
-          y: 0, opacity: 1, duration: 0.8, ease: 'power3.out',
-          scrollTrigger: {
-            trigger: formRef.current,
-            start: 'top 80%',
-            toggleActions: 'play none none none',
-          },
-        }
-      );
-    }, containerRef);
-
-    return () => ctx.revert();
-  }, []);
+    gsap.fromTo('.cat-form-card',
+      { y: 60, opacity: 0 },
+      {
+        y: 0, opacity: 1, duration: 0.8, ease: 'power3.out',
+        scrollTrigger: {
+          trigger: formRef.current,
+          start: 'top 80%',
+          toggleActions: 'play none none none',
+        },
+      }
+    );
+  }, { dependencies: [], scope: containerRef });
 
   const handleOrder = () => {
-    // Validasyon
     if (!formData.location || !formData.date || !formData.timeRange || !formData.eventFormat) {
       setError('Məcburi sahələri doldurun (* ile işarələnib)');
       return;
@@ -106,15 +97,9 @@ export default function CateringContent() {
 
     setError(null);
 
-    // Sepete ekle (teambuilding akışına benzer)
-    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-    cart.push({
-      id: `catering-${Date.now()}`,
-      name: 'Ketrinq Sifarişi',
-      price: 0,
+    addItem({
+      productId: `catering-${Date.now()}`,
       quantity: 1,
-      type: 'catering',
-      image: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=600&auto=format&fit=crop',
       technicalAnswers: {
         'Məkan': formData.location,
         'Tarix': formData.date,
@@ -122,14 +107,10 @@ export default function CateringContent() {
         'Tədbirin formatı': formData.eventFormat,
         'Menyu tərkibi': formData.menuRequest || '—',
       },
-    });
-    localStorage.setItem('cart', JSON.stringify(cart));
-    window.dispatchEvent(new Event('storage'));
+    } as any);
 
     setSuccess(true);
-    setTimeout(() => {
-      navigate('/cart');
-    }, 1200);
+    setTimeout(() => { navigate('/cart'); }, 1200);
   };
 
   const inputClassName =
@@ -169,48 +150,26 @@ export default function CateringContent() {
           <div className="grid grid-cols-2 gap-6">
             <div className="space-y-6">
               <div className="cat-img opacity-0 aspect-square rounded-[60px] overflow-hidden shadow-2xl border-4 border-white/10">
-                <img
-                  src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=600&auto=format&fit=crop"
-                  className="w-full h-full object-cover"
-                  alt="Catering 1"
-                  referrerPolicy="no-referrer"
-                />
+                <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?q=80&w=600&auto=format&fit=crop" className="w-full h-full object-cover" alt="Catering 1" referrerPolicy="no-referrer" />
               </div>
               <div className="cat-img opacity-0 aspect-square rounded-[60px] overflow-hidden shadow-2xl border-4 border-white/10">
-                <img
-                  src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=600&auto=format&fit=crop"
-                  className="w-full h-full object-cover"
-                  alt="Catering 2"
-                  referrerPolicy="no-referrer"
-                />
+                <img src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=600&auto=format&fit=crop" className="w-full h-full object-cover" alt="Catering 2" referrerPolicy="no-referrer" />
               </div>
             </div>
             <div className="space-y-6 pt-12">
               <div className="cat-img opacity-0 aspect-square rounded-[60px] overflow-hidden shadow-2xl border-4 border-white/10">
-                <img
-                  src="https://images.unsplash.com/photo-1530103043960-ef38714abb15?q=80&w=600&auto=format&fit=crop"
-                  className="w-full h-full object-cover"
-                  alt="Catering 3"
-                  referrerPolicy="no-referrer"
-                />
+                <img src="https://images.unsplash.com/photo-1530103043960-ef38714abb15?q=80&w=600&auto=format&fit=crop" className="w-full h-full object-cover" alt="Catering 3" referrerPolicy="no-referrer" />
               </div>
               <div className="cat-img opacity-0 aspect-square rounded-[60px] overflow-hidden shadow-2xl border-4 border-white/10">
-                <img
-                  src="https://images.unsplash.com/photo-1551183053-bf91a1d81141?q=80&w=600&auto=format&fit=crop"
-                  className="w-full h-full object-cover"
-                  alt="Catering 4"
-                  referrerPolicy="no-referrer"
-                />
+                <img src="https://images.unsplash.com/photo-1551183053-bf91a1d81141?q=80&w=600&auto=format&fit=crop" className="w-full h-full object-cover" alt="Catering 4" referrerPolicy="no-referrer" />
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── Sifariş Formu ── */}
       <section ref={formRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-24">
         <div className="cat-form-card opacity-0 bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[40px] p-8 md:p-12 shadow-2xl shadow-black relative overflow-hidden">
-          {/* Glow behind the form */}
           <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-premium-orange/10 rounded-full blur-[120px] pointer-events-none -z-10" />
 
           {success ? (
@@ -225,7 +184,6 @@ export default function CateringContent() {
             </div>
           ) : (
             <>
-              {/* Header */}
               <div className="space-y-4 mb-10">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-premium-orange/10 border border-premium-orange/20 rounded-2xl flex items-center justify-center">
@@ -238,83 +196,43 @@ export default function CateringContent() {
                 </div>
               </div>
 
-              {/* Form */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Məkan * */}
                 <div className="space-y-2">
                   <label className="text-[10px] font-bold text-white/60 uppercase tracking-[0.2em] ml-1 flex items-center gap-2">
                     <MapPin className="w-3.5 h-3.5" /> Məkan *
                   </label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.location}
-                    onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                    placeholder="Tədbir keçiriləcək məkan"
-                    className={inputClassName}
-                  />
+                  <input type="text" required value={formData.location} onChange={(e) => setFormData({ ...formData, location: e.target.value })} placeholder="Tədbir keçiriləcək məkan" className={inputClassName} />
                 </div>
 
-                {/* Tarix * */}
                 <div className="space-y-2">
                   <label className="text-[10px] font-bold text-white/60 uppercase tracking-[0.2em] ml-1 flex items-center gap-2">
                     <Calendar className="w-3.5 h-3.5" /> Tarix *
                   </label>
-                  <input
-                    type="date"
-                    required
-                    value={formData.date}
-                    onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                    className={inputClassName}
-                  />
+                  <input type="date" required value={formData.date} onChange={(e) => setFormData({ ...formData, date: e.target.value })} className={inputClassName} />
                 </div>
 
-                {/* Saat aralığı * */}
                 <div className="space-y-2">
                   <label className="text-[10px] font-bold text-white/60 uppercase tracking-[0.2em] ml-1 flex items-center gap-2">
                     <Clock className="w-3.5 h-3.5" /> Saat aralığı *
                   </label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.timeRange}
-                    onChange={(e) => setFormData({ ...formData, timeRange: e.target.value })}
-                    placeholder="məs: 18:00 - 23:00"
-                    className={inputClassName}
-                  />
+                  <input type="text" required value={formData.timeRange} onChange={(e) => setFormData({ ...formData, timeRange: e.target.value })} placeholder="məs: 18:00 - 23:00" className={inputClassName} />
                 </div>
 
-                {/* Tədbirin formatı * */}
                 <div className="space-y-2">
                   <label className="text-[10px] font-bold text-white/60 uppercase tracking-[0.2em] ml-1 flex items-center gap-2">
                     <FileText className="w-3.5 h-3.5" /> Tədbirin formatı *
                   </label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.eventFormat}
-                    onChange={(e) => setFormData({ ...formData, eventFormat: e.target.value })}
-                    placeholder="məs: Korporativ, Düğün, Ad günü"
-                    className={inputClassName}
-                  />
+                  <input type="text" required value={formData.eventFormat} onChange={(e) => setFormData({ ...formData, eventFormat: e.target.value })} placeholder="məs: Korporativ, Düğün, Ad günü" className={inputClassName} />
                 </div>
 
-                {/* Menyu tərkibi (ixtiyari) */}
                 <div className="space-y-2 md:col-span-2">
                   <label className="text-[10px] font-bold text-white/60 uppercase tracking-[0.2em] ml-1 flex items-center gap-2">
                     <ChefHat className="w-3.5 h-3.5" /> Menyu tərkibi haqqında xüsusi istək
                   </label>
-                  <textarea
-                    rows={3}
-                    value={formData.menuRequest}
-                    onChange={(e) => setFormData({ ...formData, menuRequest: e.target.value })}
-                    placeholder="Menyu haqqında xüsusi istəkləriniz..."
-                    className={`${inputClassName} resize-none`}
-                  />
+                  <textarea rows={3} value={formData.menuRequest} onChange={(e) => setFormData({ ...formData, menuRequest: e.target.value })} placeholder="Menyu haqqında xüsusi istəkləriniz..." className={`${inputClassName} resize-none`} />
                 </div>
               </div>
 
-              {/* Error */}
               {error && (
                 <div className="flex items-center gap-3 p-4 bg-red-500/10 border border-red-500/20 rounded-2xl text-red-400 text-sm font-medium backdrop-blur-md mt-6">
                   <span className="w-5 h-5 rounded-full bg-red-500/20 flex items-center justify-center text-xs">!</span>
@@ -322,7 +240,6 @@ export default function CateringContent() {
                 </div>
               )}
 
-              {/* Button */}
               <button
                 onClick={handleOrder}
                 className="group relative overflow-hidden bg-white text-black px-12 py-5 rounded-full font-black text-lg hover:text-white transition-colors duration-500 flex items-center justify-center gap-4 shadow-[0_0_40px_rgba(255,255,255,0.1)] hover:shadow-[0_0_40px_rgba(227,6,19,0.3)] w-full md:w-auto mt-8 cursor-pointer"

@@ -148,7 +148,7 @@ export default function ServicesProcess() {
                 </p>
 
                 <div className="flex items-center gap-6 md:gap-8 text-[10px] font-black uppercase tracking-[0.24em] text-white/55">
-                  <span>{t(locale, content.home.process.phase)} {i + 1} of {steps.length}</span>
+                  <span>{t(locale, content.home.process.phase)} {i + 1} {locale === 'en' ? 'of' : locale === 'ru' ? 'из' : '/'} {steps.length}</span>
                   <div className="h-px flex-1 bg-white/10" />
                   <span>{t(locale, content.home.process.footer)}</span>
                 </div>

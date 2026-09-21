@@ -1,27 +1,20 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Plus, ArrowRight, Zap } from 'lucide-react';
+import { Plus, ArrowRight } from 'lucide-react';
 import { Product } from '../types';
 import { cn } from '../lib/utils';
 import { motion } from 'motion/react';
 import TechnicalQuestionsModal from './TechnicalQuestionsModal';
 import TiltCard from './TiltCard';
+import { useCart } from '../hooks/useCart';
 
 export default function ProductCard({ product }: { product: Product }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
+  const { addItem } = useCart();
 
   const handleAddToCart = (answers: Record<string, string>) => {
-    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-    const existing = cart.find((item: any) => item.productId === product.id);
-    if (existing) {
-      existing.quantity += 1;
-      existing.technicalAnswers = { ...existing.technicalAnswers, ...answers };
-    } else {
-      cart.push({ productId: product.id, quantity: 1, technicalAnswers: answers });
-    }
-    localStorage.setItem('cart', JSON.stringify(cart));
-    window.dispatchEvent(new Event('storage'));
+    addItem({ productId: product.id, quantity: 1, technicalAnswers: answers });
     setIsModalOpen(false);
   };
 
