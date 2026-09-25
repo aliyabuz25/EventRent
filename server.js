@@ -6,18 +6,6 @@ import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
 import crypto from 'node:crypto';
 
-// dotenv modülünü güvenli import et ve sadece bir kere çalıştır
-let dotenv;
-try {
-    dotenv = await import('dotenv');
-    if (dotenv && dotenv.default) {
-        dotenv.default.config();
-    } else if (dotenv && dotenv.config) {
-        dotenv.config();
-    }
-} catch (e) {
-    console.log("dotenv error (ignored)");
-}
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const require   = createRequire(import.meta.url);
