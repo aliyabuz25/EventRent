@@ -395,8 +395,10 @@ app.get('/api/orders', authMiddleware, (req, res) => {
 
 app.post('/api/orders', (req, res) => {
   const { name, phone, email, event_date, location, note, items, source } = req.body;
-  if (!String(name || '').trim()) return res.status(400).json({ error: 'Ad tələb olunur.' });
-  if (!String(phone || '').trim()) return res.status(400).json({ error: 'Telefon tələb olunur.' });
+  const nameTrimmed  = String(name || '').trim();
+  const phoneTrimmed = String(phone || '').trim();
+  if (!nameTrimmed)  return res.status(400).json({ error: 'Ad tələb olunur.' });
+  if (!phoneTrimmed) return res.status(400).json({ error: 'Telefon tələb olunur.' });
   // optionally attach user_id from JWT if present
   let userId = '';
   try {
@@ -405,7 +407,7 @@ app.post('/api/orders', (req, res) => {
     if (token) { const payload = verifyToken(token); if (payload?.id) userId = String(payload.id); }
   } catch {}
   const result = db.prepare(`INSERT INTO orders (name,phone,email,event_date,location,note,items,user_id,source) VALUES (?,?,?,?,?,?,?,?,?)`)
-    .run(name, phone, email || '', event_date || '', location || '', note || '', JSON.stringify(items || []), userId, source || 'website');
+    .run(nameTrimmed, phoneTrimmed, email || '', event_date || '', location || '', note || '', JSON.stringify(items || []), userId, source || 'website');
   const order = db.prepare('SELECT * FROM orders WHERE id=?').get(result.lastInsertRowid);
   sendMail({ subject: `Yeni Sifariş — ${name} | Eventrent`, html: orderEmailHtml(order) }).catch(() => {});
   res.status(201).json({ ...order, items: JSON.parse(order.items || '[]') });
@@ -423,9 +425,11 @@ app.put('/api/orders/:id', authMiddleware, (req, res) => {
 
 app.patch('/api/orders/:id/status', authMiddleware, async (req, res) => {
   const { status, send_email } = req.body;
-  db.prepare('UPDATE orders SET status=?, updated_at=datetime(\'now\') WHERE id=?').run(status, req.params.id);
+  const validOrderStatuses = ['new','processing','contacted','won','lost','cancelled','confirmed'];
+  if (!status || !validOrderStatuses.includes(status)) return res.status(400).json({ error: 'Yanlış status.' });
   const order = db.prepare('SELECT * FROM orders WHERE id=?').get(req.params.id);
   if (!order) return res.status(404).json({ error: 'Tapılmadı.' });
+  db.prepare('UPDATE orders SET status=?, updated_at=datetime(\'now\') WHERE id=?').run(status, req.params.id);
   // Send status email to customer if requested and email exists
   if (send_email && order.email) {
     const statusLabels = { new:'Yeni', processing:'İcrada', won:'Tamamlandı', lost:'Ləğv edildi', contacted:'Əlaqə saxlanıldı' };
@@ -537,14 +541,16 @@ app.get('/api/leads', authMiddleware, (req, res) => {
 
 app.post('/api/leads', (req, res) => {
   const { name, phone, email, eventDate, event_date, location, note, message, items, userId, user_id } = req.body;
-  if (!String(name || '').trim()) return res.status(400).json({ error: 'Ad tələb olunur.' });
-  if (!String(phone || '').trim()) return res.status(400).json({ error: 'Telefon tələb olunur.' });
+  const leadName  = String(name || '').trim();
+  const leadPhone = String(phone || '').trim();
+  if (!leadName)  return res.status(400).json({ error: 'Ad tələb olunur.' });
+  if (!leadPhone) return res.status(400).json({ error: 'Telefon tələb olunur.' });
   const edate   = eventDate || event_date || '';
   const uid     = userId || user_id || '';
   const noteVal = note || message || '';
   const result = db.prepare(
     `INSERT INTO leads (name,phone,email,event_date,location,note,items,user_id) VALUES (?,?,?,?,?,?,?,?)`
-  ).run(name, phone||'', email||'', edate, location||'', noteVal, JSON.stringify(items||[]), uid);
+  ).run(leadName, leadPhone, email||'', edate, location||'', noteVal, JSON.stringify(items||[]), uid);
   const row = db.prepare('SELECT * FROM leads WHERE id=?').get(result.lastInsertRowid);
   const parsed = { ...row, items: JSON.parse(row.items || '[]') };
 
@@ -618,11 +624,12 @@ app.put('/api/leads/:id/reply', authMiddleware, async (req, res) => {
 app.patch('/api/leads/:id/status', authMiddleware, (req, res) => {
   const { status } = req.body;
   const valid = ['new','contacted','quoted','won','lost'];
-  if (!valid.includes(status)) return res.status(400).json({ error: 'Yanlış status.' });
-  db.prepare(`UPDATE leads SET status=?,updated_at=datetime('now') WHERE id=?`).run(status, req.params.id);
+  if (!status || !valid.includes(status)) return res.status(400).json({ error: 'Yanlış status.' });
   const row = db.prepare('SELECT * FROM leads WHERE id=?').get(req.params.id);
   if (!row) return res.status(404).json({ error: 'Tapılmadı.' });
-  res.json({ ...row, items: JSON.parse(row.items || '[]') });
+  db.prepare(`UPDATE leads SET status=?,updated_at=datetime('now') WHERE id=?`).run(status, req.params.id);
+  const updated = db.prepare('SELECT * FROM leads WHERE id=?').get(req.params.id);
+  res.json({ ...updated, items: JSON.parse(updated.items || '[]') });
 });
 
 app.delete('/api/leads/:id', authMiddleware, adminOnly, (req, res) => {
@@ -645,7 +652,7 @@ app.get('/api/support/my', authMiddleware, (req, res) => {
 
 app.post('/api/support', authMiddleware, (req, res) => {
   const { subject, message, priority } = req.body;
-  if (!subject || !message) return res.status(400).json({ error: 'Mövzu və mesaj tələb olunur.' });
+  if (!String(subject || '').trim() || !String(message || '').trim()) return res.status(400).json({ error: 'Mövzu və mesaj tələb olunur.' });
   const result = db.prepare('INSERT INTO support_tickets (user_id,user_name,user_email,subject,message,priority) VALUES (?,?,?,?,?,?)')
     .run(req.user.id, req.user.name, req.user.email, subject, message, priority||'normal');
   const ticket = db.prepare('SELECT * FROM support_tickets WHERE id=?').get(result.lastInsertRowid);
@@ -654,7 +661,7 @@ app.post('/api/support', authMiddleware, (req, res) => {
 
 app.post('/api/support/guest', (req, res) => {
   const { subject, message, user_name, user_email, priority } = req.body;
-  if (!subject || !message) return res.status(400).json({ error: 'Mövzu və mesaj tələb olunur.' });
+  if (!String(subject || '').trim() || !String(message || '').trim()) return res.status(400).json({ error: 'Mövzu və mesaj tələb olunur.' });
   const result = db.prepare('INSERT INTO support_tickets (user_id,user_name,user_email,subject,message,priority) VALUES (?,?,?,?,?,?)')
     .run(0, user_name||'', user_email||'', subject, message, priority||'normal');
   res.status(201).json(db.prepare('SELECT * FROM support_tickets WHERE id=?').get(result.lastInsertRowid));
@@ -662,7 +669,7 @@ app.post('/api/support/guest', (req, res) => {
 
 app.put('/api/support/:id/reply', authMiddleware, adminOnly, (req, res) => {
   const { reply, status } = req.body;
-  if (!reply) return res.status(400).json({ error: 'Cavab tələb olunur.' });
+  if (!reply || !String(reply).trim()) return res.status(400).json({ error: 'Cavab tələb olunur.' });
   db.prepare(`UPDATE support_tickets SET reply=?,status=?,replied_at=datetime('now'),updated_at=datetime('now') WHERE id=?`)
     .run(reply, status||'answered', req.params.id);
   const ticket = db.prepare('SELECT * FROM support_tickets WHERE id=?').get(req.params.id);
@@ -704,8 +711,11 @@ app.post('/api/tb/games', authMiddleware, adminOnly, (req, res) => {
 });
 app.put('/api/tb/games/:id', authMiddleware, adminOnly, (req, res) => {
   const { name, category, image, description, details, sort_order, active } = req.body;
+  const existing = db.prepare('SELECT * FROM tb_games WHERE id=?').get(req.params.id);
+  if (!existing) return res.status(404).json({ error: 'Tapılmadı.' });
+  if (name !== undefined && !String(name || '').trim()) return res.status(400).json({ error: 'Ad boş ola bilməz.' });
   db.prepare('UPDATE tb_games SET name=?,category=?,image=?,description=?,details=?,sort_order=?,active=? WHERE id=?')
-    .run(name, category, image || '', description || '', details || '', sort_order ?? 0, active ?? 1, req.params.id);
+    .run(name ?? existing.name, category ?? existing.category, image ?? existing.image, description ?? existing.description, details ?? existing.details, sort_order ?? existing.sort_order, active ?? existing.active, req.params.id);
   res.json(db.prepare('SELECT * FROM tb_games WHERE id=?').get(req.params.id));
 });
 app.delete('/api/tb/games/:id', authMiddleware, adminOnly, (req, res) => {
@@ -727,8 +737,11 @@ app.post('/api/tb/concepts', authMiddleware, adminOnly, (req, res) => {
 });
 app.put('/api/tb/concepts/:id', authMiddleware, adminOnly, (req, res) => {
   const { name, image, sort_order, active } = req.body;
+  const existing = db.prepare('SELECT * FROM tb_concepts WHERE id=?').get(req.params.id);
+  if (!existing) return res.status(404).json({ error: 'Tapılmadı.' });
+  if (name !== undefined && !String(name || '').trim()) return res.status(400).json({ error: 'Ad boş ola bilməz.' });
   db.prepare('UPDATE tb_concepts SET name=?,image=?,sort_order=?,active=? WHERE id=?')
-    .run(name, image || '', sort_order ?? 0, active ?? 1, req.params.id);
+    .run(name ?? existing.name, image ?? existing.image, sort_order ?? existing.sort_order, active ?? existing.active, req.params.id);
   res.json(db.prepare('SELECT * FROM tb_concepts WHERE id=?').get(req.params.id));
 });
 app.delete('/api/tb/concepts/:id', authMiddleware, adminOnly, (req, res) => {
@@ -814,7 +827,7 @@ app.get('/api/content', async (_req, res) => {
   } catch { res.status(500).json({ error: 'Content could not be loaded.' }); }
 });
 
-app.put('/api/content', async (req, res) => {
+app.put('/api/content', authMiddleware, adminOnly, async (req, res) => {
   try {
     await ensureContentFile();
     await fs.writeFile(CONTENT_FILE_PATH, JSON.stringify(req.body ?? {}, null, 2), 'utf8');
@@ -822,7 +835,7 @@ app.put('/api/content', async (req, res) => {
   } catch { res.status(500).json({ error: 'Content could not be saved.' }); }
 });
 
-app.post('/api/content', async (req, res) => {
+app.post('/api/content', authMiddleware, adminOnly, async (req, res) => {
   try {
     await ensureContentFile();
     await fs.writeFile(CONTENT_FILE_PATH, JSON.stringify(req.body ?? {}, null, 2), 'utf8');
