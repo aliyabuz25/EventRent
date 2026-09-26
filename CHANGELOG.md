@@ -1,5 +1,25 @@
 # CHANGELOG — Eventrent.az
 
+---
+
+## [26.09.2026] — Production Hardening v2 (2-ci Sessiya)
+
+### 🔒 Güvenlik
+- `PUT /api/content` və `POST /api/content`: `authMiddleware + adminOnly` əlavə edildi. Əvvəllər hər kəs site məzmununu dəyişə bilirdi.
+
+### 🐛 Bug Fixes
+- **`PATCH /api/orders/:id/status`**: Status validasiyası və 404 yoxlaması UPDATE-dən əvvələ köçürüldü. Yalnız `['new','processing','contacted','won','lost','cancelled','confirmed']` qəbul edilir.
+- **`PATCH /api/leads/:id/status`**: 404 yoxlaması UPDATE-dən əvvələ köçürüldü — mövcud olmayan lead-ə yazılma qarşısı alındı.
+- **`PUT /api/tb/games/:id`**: 404 yoxlaması, boş `name` rədd, null-safe `?? existing.x` yeniləmə əlavə edildi.
+- **`PUT /api/tb/concepts/:id`**: Eyni düzəltmələr tətbiq edildi.
+- **`POST /api/support`** və **`POST /api/support/guest`**: Boşluqdan ibarət `subject`/`message` artıq keçmir.
+- **`PUT /api/support/:id/reply`**: Boşluqdan ibarət `reply` rədd edilir.
+- **`POST /api/orders`**: `name`/`phone` trim edilərək DB-yə yazılır.
+- **`POST /api/leads`**: `name`/`phone` trim edilərək DB-yə yazılır.
+
+### ⚙️ CI/CD
+- `docker-publish.yml`: `redeploy` job-undakı `if: ${{ secrets.X != '' }}` sintaksisi düzəldildi. Secrets `env` vasitəsilə ötürülür, bash `if` ilə yoxlanılır — workflow artıq failure vermir.
+
 Bütün əhəmiyyətli dəyişikliklər bu faylda qeyd edilir.
 Format: [Tarix] · Fayl · Dəyişiklik · Səbəb
 
