@@ -49,12 +49,25 @@ jobs:
   redeploy:
     needs: image
     runs-on: ubuntu-latest
-    if: ${{ secrets.PORTAINER_WEBHOOK_BACKEND != '' || secrets.PORTAINER_WEBHOOK_FRONTEND != '' }}
     steps:
       - name: Trigger Portainer redeploy (backend)
-        if: ${{ secrets.PORTAINER_WEBHOOK_BACKEND != '' }}
-        run: curl -s -X POST "${{ secrets.PORTAINER_WEBHOOK_BACKEND }}"
+        env:
+          WEBHOOK_URL: ${{ secrets.PORTAINER_WEBHOOK_BACKEND }}
+        run: |
+          if [ -n "$WEBHOOK_URL" ]; then
+            curl -s -X POST "$WEBHOOK_URL"
+            echo "Backend redeploy triggered"
+          else
+            echo "PORTAINER_WEBHOOK_BACKEND not set, skipping"
+          fi
 
       - name: Trigger Portainer redeploy (frontend)
-        if: ${{ secrets.PORTAINER_WEBHOOK_FRONTEND != '' }}
-        run: curl -s -X POST "${{ secrets.PORTAINER_WEBHOOK_FRONTEND }}"
+        env:
+          WEBHOOK_URL: ${{ secrets.PORTAINER_WEBHOOK_FRONTEND }}
+        run: |
+          if [ -n "$WEBHOOK_URL" ]; then
+            curl -s -X POST "$WEBHOOK_URL"
+            echo "Frontend redeploy triggered"
+          else
+            echo "PORTAINER_WEBHOOK_FRONTEND not set, skipping"
+          fi
