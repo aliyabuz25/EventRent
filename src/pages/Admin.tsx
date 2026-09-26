@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {
-  LayoutDashboard, MessageSquare, Package, Users,
-  TrendingUp, Clock, FileText, ExternalLink, Home, Info, Settings, Phone, AlignJustify,
+  LayoutDashboard, MessageSquare, Package, Users, Home, Info,
+  Settings, Phone, AlignJustify, RefreshCw,
+  TrendingUp, Clock, FileText, ExternalLink,
   ChevronRight, LogOut, Menu, ShoppingCart, Mail, UserCog, Eye, EyeOff, ImageIcon,
-  Search, X as XIcon,
 } from 'lucide-react';
 import { Lead } from '../types';
 import AdminLeads from '../sections/admin/LeadsTab';
@@ -16,7 +16,6 @@ import AdminUsers from '../sections/admin/UsersTab';
 import AdminMedia from '../sections/admin/MediaTab';
 import AdminSupport from '../sections/admin/SupportTab';
 import AdminContent from '../components/ContentStudio';
-import DashboardTab from '../sections/admin/DashboardTab';
 import { ToastProvider } from '../components/Toast';
 
 type Tab = 'dashboard' | 'orders' | 'leads' | 'products' | 'teambuilding' | 'support'
@@ -86,7 +85,9 @@ function LoginScreen({ onLogin }: { onLogin: (token: string, user: AuthUser) => 
       <div style={{ width: '100%', maxWidth: 400, padding: '0 16px' }}>
         {/* Logo */}
         <div className="text-center mb-4">
-          
+          <div style={{ width: 52, height: 52, background: '#e30613', borderRadius: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px' }}>
+            <span style={{ color: '#fff', fontWeight: 900, fontSize: 22 }}>E</span>
+          </div>
           <h5 className="fw-bold mb-0" style={{ letterSpacing: '-0.04em' }}>
             <span style={{ color: '#212529' }}>event</span><span style={{ color: '#e30613' }}>rent</span>
           </h5>
@@ -150,30 +151,17 @@ export default function Admin() {
   const [sideOpen, setSide]     = useState(true);
 
   const [leads, setLeads] = useState<Lead[]>([]);
-  const [searchQ, setSearchQ] = useState('');
-  const [searchOpen, setSearchOpen] = useState(false);
-  const searchRef = useRef<HTMLDivElement>(null);
-  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  const fetchLeads = React.useCallback((tok: string) => {
+    fetch('/api/leads', { headers: { Authorization: `Bearer ${tok}` } })
+      .then(r => r.ok ? r.json() : [])
+      .then(data => setLeads(Array.isArray(data) ? data : []))
+      .catch(() => setLeads([]));
+  }, []);
 
   useEffect(() => {
     document.body.style.setProperty('cursor', 'auto', 'important');
     return () => { document.body.style.cursor = ''; };
-  }, []);
-
-  useEffect(() => {
-    if (!searchOpen) return;
-    const handler = (e: MouseEvent) => { if (searchRef.current && !searchRef.current.contains(e.target as Node)) { setSearchOpen(false); setSearchQ(''); } };
-    document.addEventListener('mousedown', handler);
-    return () => document.removeEventListener('mousedown', handler);
-  }, [searchOpen]);
-
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.key === 'k') { e.preventDefault(); setSearchOpen(true); setTimeout(() => searchInputRef.current?.focus(), 50); }
-      if (e.key === 'Escape') { setSearchOpen(false); setSearchQ(''); }
-    };
-    document.addEventListener('keydown', handler);
-    return () => document.removeEventListener('keydown', handler);
   }, []);
 
   /* Auto-login from stored token */
@@ -182,23 +170,17 @@ export default function Admin() {
     if (!stored) { setLoading(false); return; }
     fetch('/api/auth/me', { headers: { Authorization: `Bearer ${stored}` } })
       .then(r => r.ok ? r.json() : null)
-      .then(u => { if (u) { setUser(u); setTokenState(stored); } else clearToken(); })
+      .then(u => {
+        if (u) { setUser(u); setTokenState(stored); fetchLeads(stored); }
+        else clearToken();
+      })
       .catch(() => clearToken())
       .finally(() => setLoading(false));
-  }, []);
-
-  /* Load leads */
-  useEffect(() => {
-    const stored = getToken();
-    if (!stored) return;
-    fetch('/api/leads', { headers: { Authorization: `Bearer ${stored}` } })
-      .then(r => r.ok ? r.json() : [])
-      .then(setLeads)
-      .catch(() => {});
-  }, [token]);
+  }, [fetchLeads]);
 
   const handleLogin = (t: string, u: AuthUser) => {
     setToken(t); setTokenState(t); setUser(u);
+    fetchLeads(t);
   };
 
   const handleLogout = () => {
@@ -240,34 +222,11 @@ export default function Admin() {
     ] : []),
   ];
 
-const dataNavCount  = 5;
-          const contentNavCount = isAdmin ? 5 : 0;
-          const systemNavCount  = isAdmin ? 3 : 0;
+  const dataNavCount  = 6;
+  const contentNavCount = isAdmin ? 5 : 0;
+  const systemNavCount  = isAdmin ? 3 : 0;
 
   const activeItem = NAV_ITEMS.find(n => n.id === tab);
-
-  const ALL_SEARCHABLE = [
-    { label: 'Dashboard', tab: 'dashboard' as Tab, icon: LayoutDashboard, desc: 'Statistika, son sorğular' },
-    { label: 'Sifarişlər', tab: 'orders' as Tab, icon: ShoppingCart, desc: 'Müştəri sifarişlərini idarə et' },
-    { label: 'Sorğular', tab: 'leads' as Tab, icon: MessageSquare, desc: 'Gələn sorğular, leads' },
-    { label: 'Məhsullar', tab: 'products' as Tab, icon: Package, desc: 'Kataloq məhsulları, CRUD' },
-    { label: 'Teambuilding', tab: 'teambuilding' as Tab, icon: Users, desc: 'Oyunlar, konsepsiyalar' },
-    { label: 'Dəstək', tab: 'support' as Tab, icon: MessageSquare, desc: 'Support ticketlər, cavab ver' },
-    { label: 'Ana Səhifə Məzmunu', tab: 'content-home' as Tab, icon: Home, desc: 'Hero, metrics, CTA, clients, team, navbar' },
-    { label: 'Haqqımızda Məzmunu', tab: 'content-about' as Tab, icon: Info, desc: 'Vision, mission, team, values, approach' },
-    { label: 'Xidmətlər Məzmunu', tab: 'content-services' as Tab, icon: Settings, desc: 'Showcase, grid, kateqoriyalar' },
-    { label: 'Əlaqə Məzmunu', tab: 'content-contact' as Tab, icon: Phone, desc: 'Hero, form, CTA, map' },
-    { label: 'Footer Məzmunu', tab: 'content-footer' as Tab, icon: AlignJustify, desc: 'Nav linklər, copyright, WhatsApp' },
-    { label: 'Media', tab: 'media' as Tab, icon: ImageIcon, desc: 'Fayl yükləmə, şəkil kitabxanası' },
-    { label: 'SMTP', tab: 'smtp' as Tab, icon: Mail, desc: 'Email konfiqurasiyası, test göndər' },
-    { label: 'İstifadəçilər', tab: 'users' as Tab, icon: UserCog, desc: 'Hesab idarəetmə, rol, aktiv/deaktiv' },
-  ];
-
-  const searchResults = searchQ.trim().length > 0
-    ? ALL_SEARCHABLE.filter(item =>
-        [item.label, item.desc].join(' ').toLowerCase().includes(searchQ.toLowerCase())
-      )
-    : [];
 
   return (
     <ToastProvider>
@@ -287,11 +246,11 @@ const dataNavCount  = 5;
       }}>
         {/* Logo */}
         <div style={{ padding: '16px 14px', borderBottom: '1px solid #f1f3f5', display: 'flex', alignItems: 'center', gap: 10, minHeight: 60 }}>
+          <div style={{ width: 32, height: 32, background: '#e30613', borderRadius: 9, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <span style={{ color: '#fff', fontWeight: 900, fontSize: 15 }}>E</span>
+          </div>
           {sideOpen && <div style={{ fontWeight: 900, fontSize: 18, letterSpacing: '-0.04em', whiteSpace: 'nowrap', overflow: 'hidden', lineHeight: 1 }}>
               <span style={{ color: '#212529' }}>event</span><span style={{ color: '#e30613' }}>rent</span>
-            </div>}
-          {!sideOpen && <div style={{ fontWeight: 900, fontSize: 18, letterSpacing: '-0.04em', lineHeight: 1 }}>
-              <span style={{ color: '#e30613' }}>e</span>
             </div>}
         </div>
 
@@ -345,80 +304,6 @@ const dataNavCount  = 5;
             <span style={{ fontWeight: 600, fontSize: 14, color: '#212529' }}>{activeItem?.label}</span>
           </div>
           <div style={{ flex: 1 }} />
-
-          {/* Global Search */}
-          <div ref={searchRef} style={{ position: 'relative' }}>
-            <button
-              onClick={() => { setSearchOpen(true); setTimeout(() => searchInputRef.current?.focus(), 50); }}
-              style={{ display: 'flex', alignItems: 'center', gap: 8, background: '#f4f5f7', border: '1px solid #e9ecef', borderRadius: 10, padding: '6px 12px', cursor: 'pointer', fontSize: 12, color: '#6c757d', fontWeight: 500, minWidth: 180 }}
-            >
-              <Search size={13} />
-              <span>Axtar...</span>
-              <span style={{ marginLeft: 'auto', background: '#e9ecef', borderRadius: 5, padding: '1px 6px', fontSize: 10, fontWeight: 700 }}>⌘K</span>
-            </button>
-
-            {searchOpen && (
-              <div style={{ position: 'absolute', top: '100%', right: 0, marginTop: 6, width: 340, background: '#fff', borderRadius: 14, boxShadow: '0 8px 32px rgba(0,0,0,0.12)', border: '1px solid #e9ecef', zIndex: 999, overflow: 'hidden' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 14px', borderBottom: '1px solid #f1f3f5' }}>
-                  <Search size={14} color="#adb5bd" />
-                  <input
-                    ref={searchInputRef}
-                    value={searchQ}
-                    onChange={e => setSearchQ(e.target.value)}
-                    placeholder="Tab, bölmə, funksiya axtar..."
-                    style={{ flex: 1, border: 'none', outline: 'none', fontSize: 13, color: '#212529', background: 'transparent' }}
-                    autoFocus
-                  />
-                  {searchQ && <button onClick={() => setSearchQ('')} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: '#adb5bd', display: 'flex' }}><XIcon size={14} /></button>}
-                </div>
-                <div style={{ maxHeight: 320, overflowY: 'auto' }}>
-                  {searchQ.trim() === '' ? (
-                    <div>
-                      <div style={{ fontSize: 9, fontWeight: 700, color: '#adb5bd', textTransform: 'uppercase', letterSpacing: '0.2em', padding: '10px 14px 6px' }}>Bütün bölmələr</div>
-                      {ALL_SEARCHABLE.filter(i => isAdmin || !['content-home','content-about','content-services','content-contact','content-footer','media','smtp','users'].includes(i.tab)).map(item => (
-                        <button key={item.tab} onClick={() => { setTab(item.tab); setSearchOpen(false); setSearchQ(''); }}
-                          style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 10, padding: '9px 14px', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left', transition: 'background 0.1s' }}
-                          onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = '#f8f9fa'}
-                          onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = 'none'}>
-                          <div style={{ width: 30, height: 30, borderRadius: 8, background: '#f1f3f5', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                            <item.icon size={14} color="#6c757d" />
-                          </div>
-                          <div>
-                            <div style={{ fontSize: 13, fontWeight: 600, color: '#212529' }}>{item.label}</div>
-                            <div style={{ fontSize: 11, color: '#adb5bd' }}>{item.desc}</div>
-                          </div>
-                        </button>
-                      ))}
-                    </div>
-                  ) : searchResults.length === 0 ? (
-                    <div style={{ padding: '24px 14px', textAlign: 'center', color: '#adb5bd', fontSize: 13 }}>
-                      <Search size={28} style={{ marginBottom: 8, opacity: 0.3 }} /><br/>Nəticə tapılmadı
-                    </div>
-                  ) : (
-                    <div>
-                      <div style={{ fontSize: 9, fontWeight: 700, color: '#adb5bd', textTransform: 'uppercase', letterSpacing: '0.2em', padding: '10px 14px 6px' }}>{searchResults.length} nəticə</div>
-                      {searchResults.map(item => (
-                        <button key={item.tab} onClick={() => { setTab(item.tab); setSearchOpen(false); setSearchQ(''); }}
-                          style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 10, padding: '9px 14px', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left' }}
-                          onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = '#f8f9fa'}
-                          onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = 'none'}>
-                          <div style={{ width: 30, height: 30, borderRadius: 8, background: '#fff0f0', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                            <item.icon size={14} color="#e30613" />
-                          </div>
-                          <div>
-                            <div style={{ fontSize: 13, fontWeight: 600, color: '#212529' }}>{item.label}</div>
-                            <div style={{ fontSize: 11, color: '#adb5bd' }}>{item.desc}</div>
-                          </div>
-                          <ChevronRight size={12} color="#dee2e6" style={{ marginLeft: 'auto', flexShrink: 0 }} />
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
-          </div>
-
           <a href="/" target="_blank" rel="noopener noreferrer" className="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1" style={{ fontSize: 11, borderRadius: 8, fontWeight: 600 }}>
             <ExternalLink size={12} /> Sayt
           </a>
@@ -426,9 +311,9 @@ const dataNavCount  = 5;
 
         {/* Content */}
         <main style={{ flex: 1, overflowY: 'auto', padding: 24 }}>
-          {tab === 'dashboard'        && <DashboardTab token={token} onNavigate={(t) => setTab(t as Tab)} isAdmin={isAdmin} />}
+          {tab === 'dashboard'        && <DashboardTab leads={leads} newLeads={newLeads} onNavigate={setTab} isAdmin={isAdmin} />}
           {tab === 'orders'           && <AdminOrders token={token} />}
-          {tab === 'leads'            && <AdminLeads leads={leads} products={[]} token={token} onReload={() => fetch('/api/leads', { headers: authHeaders }).then(r => r.json()).then(setLeads).catch(() => {})} />}
+          {tab === 'leads'            && <AdminLeads leads={leads} products={[]} token={token} onRefresh={() => fetchLeads(token)} />}
           {tab === 'products'         && <AdminProducts token={token} />}
           {tab === 'teambuilding'     && <AdminTeambuilding token={token} />}
           {tab === 'support'          && <AdminSupport token={token} />}
@@ -474,7 +359,75 @@ function NavBtn({ item, active, open, onClick }: { item: NavItemDef; active: boo
   );
 }
 
-/* ── placeholder to maintain closing brace balance ── */
-function _unused() {
-  return null;
+/* ── Dashboard ── */
+function DashboardTab({ leads, newLeads, onNavigate, isAdmin }: {
+  leads: Lead[]; newLeads: number;
+  onNavigate: (t: Tab) => void; isAdmin: boolean;
+}) {
+  const won  = leads.filter(l => l.status === 'won').length;
+  const conv = leads.length ? Math.round((won / leads.length) * 100) : 0;
+
+  const stats: { label: string; value: number | string; color: string; Icon: React.FC<{ size?: number; color?: string }>; tab: Tab }[] = [
+    { label: 'Ümumi Sorğu', value: leads.length,   color: '#e30613', Icon: FileText,   tab: 'leads' },
+    { label: 'Yeni Sorğu',  value: newLeads,        color: '#0d6efd', Icon: Clock,      tab: 'leads' },
+    { label: 'Konversiya',  value: `${conv}%`,      color: '#6f42c1', Icon: TrendingUp, tab: 'leads' },
+  ];
+
+  const contentSections: { label: string; desc: string; tab: Tab; Icon: React.FC<{ size?: number; color?: string }> }[] = [
+    { label: 'Ana Səhifə',  desc: 'Hero, Metrics, CTA',      tab: 'content-home',     Icon: Home },
+    { label: 'Haqqımızda', desc: 'Vision, Team, Values',     tab: 'content-about',    Icon: Info },
+    { label: 'Xidmətlər',  desc: 'Showcase, Kateqoriyalar', tab: 'content-services', Icon: Settings },
+    { label: 'Əlaqə',      desc: 'Form, CTA, Map',           tab: 'content-contact',  Icon: Phone },
+    { label: 'Footer',     desc: 'Nav, Copyright, Links',    tab: 'content-footer',   Icon: AlignJustify },
+  ];
+
+  return (
+    <div>
+      <div className="row g-3 mb-4">
+        {stats.map((s, i) => (
+          <div key={i} className="col-6 col-lg-3">
+            <div className="card border-0 shadow-sm h-100" style={{ borderRadius: 14, cursor: 'pointer', transition: 'transform 0.15s, box-shadow 0.15s' }}
+              onClick={() => onNavigate(s.tab)}
+              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.transform = 'translateY(-2px)'; el.style.boxShadow = '0 8px 24px rgba(0,0,0,0.1)'; }}
+              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.transform = ''; el.style.boxShadow = ''; }}>
+              <div className="card-body p-3">
+                <div className="d-flex align-items-center justify-content-between mb-3">
+                  <div style={{ width: 38, height: 38, borderRadius: 10, background: s.color + '15', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <s.Icon size={18} color={s.color} />
+                  </div>
+                  <ChevronRight size={14} color="#adb5bd" />
+                </div>
+                <div style={{ fontSize: 26, fontWeight: 900, color: '#212529', lineHeight: 1 }}>{s.value}</div>
+                <div style={{ fontSize: 11, color: '#6c757d', marginTop: 4, fontWeight: 500 }}>{s.label}</div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {isAdmin && (
+        <div className="mb-4">
+          <div style={{ fontSize: 11, fontWeight: 700, color: '#adb5bd', textTransform: 'uppercase', letterSpacing: '0.3em', marginBottom: 12 }}>Məzmun Bölmələri</div>
+          <div className="row g-3">
+            {contentSections.map((s, i) => (
+              <div key={i} className="col-6 col-md-4 col-lg">
+                <div className="card border-0 shadow-sm h-100" style={{ borderRadius: 14, cursor: 'pointer', transition: 'all 0.15s' }}
+                  onClick={() => onNavigate(s.tab)}
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = '#fff0f0'; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = ''; }}>
+                  <div className="card-body p-3 text-center">
+                    <div style={{ width: 40, height: 40, borderRadius: 10, background: '#f8f9fa', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 10px' }}>
+                      <s.Icon size={18} color="#6c757d" />
+                    </div>
+                    <div style={{ fontWeight: 700, fontSize: 13, color: '#212529', marginBottom: 3 }}>{s.label}</div>
+                    <div style={{ fontSize: 11, color: '#adb5bd' }}>{s.desc}</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }

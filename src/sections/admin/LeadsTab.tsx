@@ -20,24 +20,31 @@ function Badge({ status }: { status: LeadStatus }) {
   );
 }
 
-interface Props { leads: Lead[]; products: Product[]; token?: string; onReload?: () => void; }
+interface Props { leads: Lead[]; products: Product[]; token: string; onRefresh: () => void; }
 
-export default function LeadsTab({ leads, products, token = '', onReload }: Props) {
+export default function LeadsTab({ leads, products, token, onRefresh }: Props) {
   const [filter, setFilter] = useState<LeadStatus | 'all'>('all');
   const [search, setSearch] = useState('');
   const [selected, setSelected] = useState<Lead | null>(null);
-  const h = { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` };
 
   const updateStatus = async (id: string, status: LeadStatus) => {
-    await fetch(`/api/leads/${id}/status`, { method: 'PATCH', headers: h, body: JSON.stringify({ status }) });
+    await fetch(`/api/leads/${id}/status`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ status }),
+    });
     if (selected?.id === id) setSelected(s => s ? { ...s, status } : s);
-    onReload?.();
+    onRefresh();
   };
+
   const deleteLead = async (id: string) => {
     if (!window.confirm('Silmək istədiyinizə əminsiniz?')) return;
-    await fetch(`/api/leads/${id}`, { method: 'DELETE', headers: h });
+    await fetch(`/api/leads/${id}`, {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${token}` },
+    });
     if (selected?.id === id) setSelected(null);
-    onReload?.();
+    onRefresh();
   };
 
   const filtered = leads.filter(l => {
