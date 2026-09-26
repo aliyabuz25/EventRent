@@ -55,7 +55,7 @@ let db;
 function initDb() {
   const Database = require('better-sqlite3');
   const dataDir  = path.dirname(DB_PATH);
-  if (!existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
+  if (!existsSync(dataDir)) mkdirSync(dataDir, { recursive: true });
   db = new Database(DB_PATH);
   db.pragma('journal_mode = WAL');
   db.exec(`
@@ -395,7 +395,8 @@ app.get('/api/orders', authMiddleware, (req, res) => {
 
 app.post('/api/orders', (req, res) => {
   const { name, phone, email, event_date, location, note, items, source } = req.body;
-  if (!name || !phone) return res.status(400).json({ error: 'Ad və telefon tələb olunur.' });
+  if (!String(name || '').trim()) return res.status(400).json({ error: 'Ad tələb olunur.' });
+  if (!String(phone || '').trim()) return res.status(400).json({ error: 'Telefon tələb olunur.' });
   // optionally attach user_id from JWT if present
   let userId = '';
   try {
@@ -535,15 +536,83 @@ app.get('/api/leads', authMiddleware, (req, res) => {
 });
 
 app.post('/api/leads', (req, res) => {
-  const { name, phone, email, eventDate, event_date, location, note, items, userId, user_id } = req.body;
-  if (!name) return res.status(400).json({ error: 'Ad tələb olunur.' });
-  const edate = eventDate || event_date || '';
-  const uid   = userId || user_id || '';
+  const { name, phone, email, eventDate, event_date, location, note, message, items, userId, user_id } = req.body;
+  if (!String(name || '').trim()) return res.status(400).json({ error: 'Ad tələb olunur.' });
+  if (!String(phone || '').trim()) return res.status(400).json({ error: 'Telefon tələb olunur.' });
+  const edate   = eventDate || event_date || '';
+  const uid     = userId || user_id || '';
+  const noteVal = note || message || '';
   const result = db.prepare(
     `INSERT INTO leads (name,phone,email,event_date,location,note,items,user_id) VALUES (?,?,?,?,?,?,?,?)`
-  ).run(name, phone||'', email||'', edate, location||'', note||'', JSON.stringify(items||[]), uid);
+  ).run(name, phone||'', email||'', edate, location||'', noteVal, JSON.stringify(items||[]), uid);
   const row = db.prepare('SELECT * FROM leads WHERE id=?').get(result.lastInsertRowid);
-  res.status(201).json({ ...row, items: JSON.parse(row.items || '[]') });
+  const parsed = { ...row, items: JSON.parse(row.items || '[]') };
+
+  // Admin-ə bildiriş emaili göndər
+  try {
+    const smtpCfg = db.prepare('SELECT * FROM smtp_config WHERE id=1').get();
+    if (smtpCfg && smtpCfg.notify_to) {
+      const itemsHtml = parsed.items.length
+        ? `<tr><td style="padding:8px 0;font-weight:700;color:#555;vertical-align:top">Məhsullar</td><td style="padding:8px 0 8px 16px">${parsed.items.map(it => `${it.name || it.title || ''}${it.qty ? ` ×${it.qty}` : ''}`).join(', ')}</td></tr>`
+        : '';
+      const html = `
+<div style="font-family:Inter,Arial,sans-serif;max-width:580px;margin:0 auto;border:1px solid #e9ecef;border-radius:12px;overflow:hidden">
+  <div style="background:#e30613;padding:20px 28px">
+    <h2 style="color:#fff;margin:0;font-size:18px;font-weight:700">📩 Yeni Müştəri Müraciəti</h2>
+    <div style="color:rgba(255,255,255,0.8);font-size:12px;margin-top:4px">Eventrent — Lead #${String(row.id).padStart(4,'0')}</div>
+  </div>
+  <div style="padding:24px 28px;background:#fff">
+    <table style="width:100%;border-collapse:collapse;font-size:14px">
+      <tr><td style="padding:8px 0;font-weight:700;color:#555;width:120px">Ad Soyad</td><td style="padding:8px 0 8px 16px">${name}</td></tr>
+      <tr><td style="padding:8px 0;font-weight:700;color:#555">Telefon</td><td style="padding:8px 0 8px 16px">${phone||'—'}</td></tr>
+      <tr><td style="padding:8px 0;font-weight:700;color:#555">Email</td><td style="padding:8px 0 8px 16px">${email||'—'}</td></tr>
+      ${edate ? `<tr><td style="padding:8px 0;font-weight:700;color:#555">Tarix</td><td style="padding:8px 0 8px 16px">${edate}</td></tr>` : ''}
+      ${location ? `<tr><td style="padding:8px 0;font-weight:700;color:#555">Məkan</td><td style="padding:8px 0 8px 16px">${location}</td></tr>` : ''}
+      ${noteVal ? `<tr><td style="padding:8px 0;font-weight:700;color:#555;vertical-align:top">Mesaj</td><td style="padding:8px 0 8px 16px;background:#f8f9fa;border-radius:8px;border-left:4px solid #e30613"><div style="padding:8px 12px">${noteVal}</div></td></tr>` : ''}
+      ${itemsHtml}
+    </table>
+  </div>
+  <div style="padding:12px 28px;background:#f8f9fa;font-size:11px;color:#adb5bd">
+    Bu email avtomatik göndərilib · ${new Date().toLocaleString('az-AZ')}
+  </div>
+</div>`;
+      sendMail({ to: smtpCfg.notify_to, subject: `Yeni Müraciət — ${name} | Eventrent`, html }).catch(() => {});
+    }
+  } catch (_) {}
+
+  res.status(201).json(parsed);
+});
+
+// Admin lead-ə cavab göndərir (müştərinin emailinə)
+app.put('/api/leads/:id/reply', authMiddleware, async (req, res) => {
+  const { reply } = req.body;
+  if (!reply?.trim()) return res.status(400).json({ error: 'Cavab tələb olunur.' });
+  const lead = db.prepare('SELECT * FROM leads WHERE id=?').get(req.params.id);
+  if (!lead) return res.status(404).json({ error: 'Lead tapılmadı.' });
+  if (!lead.email) return res.status(400).json({ error: 'Müştərinin email ünvanı yoxdur.' });
+
+  const noteVal = lead.note || '';
+  const html = `
+<div style="font-family:Inter,Arial,sans-serif;max-width:580px;margin:0 auto;border:1px solid #e9ecef;border-radius:12px;overflow:hidden">
+  <div style="background:#e30613;padding:20px 28px">
+    <h2 style="color:#fff;margin:0;font-size:18px;font-weight:700">Müraciətinizə Cavab</h2>
+    <div style="color:rgba(255,255,255,0.8);font-size:12px;margin-top:4px">Eventrent</div>
+  </div>
+  <div style="padding:24px 28px;background:#fff">
+    <p style="font-size:14px;color:#333;margin:0 0 16px">Salam, <b>${lead.name}</b>!</p>
+    ${noteVal ? `<div style="background:#f8f9fa;border-radius:8px;border-left:4px solid #dee2e6;padding:12px 16px;margin-bottom:20px;font-size:13px;color:#666"><b>Müraciətiniz:</b><br>${noteVal}</div>` : ''}
+    <div style="background:#e8f5e9;border-radius:8px;border-left:4px solid #198754;padding:12px 16px;font-size:14px;color:#1a1a1a;line-height:1.6">
+      <b>Cavabımız:</b><br>${reply.replace(/\n/g,'<br>')}
+    </div>
+  </div>
+  <div style="padding:12px 28px;background:#f8f9fa;font-size:11px;color:#adb5bd">
+    Eventrent — ${new Date().toLocaleString('az-AZ')}
+  </div>
+</div>`;
+
+  const sent = await sendMail({ to: lead.email, subject: `Müraciətinizə Cavab — Eventrent`, html });
+  if (!sent) return res.status(500).json({ error: 'Email göndərilmədi. SMTP konfiqurasiyanı yoxlayın.' });
+  res.json({ ok: true });
 });
 
 app.patch('/api/leads/:id/status', authMiddleware, (req, res) => {
@@ -686,9 +755,9 @@ app.post('/api/media/upload', authMiddleware, async (req, res) => {
     });
     const upload = multer({
       storage,
-      limits: { fileSize: 8 * 1024 * 1024 },
+      limits: { fileSize: 200 * 1024 * 1024 },
       fileFilter: (_req, file, cb) => {
-        const allowed = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.ico'];
+        const allowed = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.ico', '.mp4', '.webm', '.mov', '.avi'];
         const ext = path.extname(file.originalname).toLowerCase();
         cb(null, allowed.includes(ext));
       },
@@ -707,7 +776,7 @@ app.get('/api/media', authMiddleware, async (_req, res) => {
   try {
     const files = await fs.readdir(UPLOAD_DIR);
     const items = await Promise.all(
-      files.filter(f => /\.(jpg|jpeg|png|gif|webp|svg|ico)$/i.test(f)).map(async f => {
+      files.filter(f => /\.(jpg|jpeg|png|gif|webp|svg|ico|mp4|webm|mov|avi)$/i.test(f)).map(async f => {
         const stat = await fs.stat(path.join(UPLOAD_DIR, f));
         return { filename: f, url: `/uploads/${f}`, size: stat.size, created_at: stat.birthtime };
       })

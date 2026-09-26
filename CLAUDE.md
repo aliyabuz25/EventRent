@@ -146,3 +146,72 @@ Qaydalar:
 - Qeydləri qısa saxla: fact / why / next.
 - Aktiv mövzu sayını `MEMORY_INDEX` daxilində maksimum 5 saxla.
 - Passiv qeydləri periodik `Knowledge/99-Archive` altına köçür.
+---
+
+## Sistem Arxitekturası & Kod Qaydaları
+
+### Backend — `server.js`
+
+Tək fayl Express.js server. ES Modules (`import/export`) formatındadır.
+
+**Kritik qaydalar:**
+- `fs` → `node:fs/promises` (async). Sync əməliyyatlar üçün `{ existsSync, mkdirSync }` ayrıca `node:fs`-dən import edilir.
+- DB əməliyyatları `better-sqlite3` ilə **sinxron** işləyir — `await` yoxdur.
+- JWT `7d` müddətlidir. `authMiddleware` → `adminOnly` zənciri istifadə et.
+- `transporter` qlobal dəyişəndir — SMTP konfiqurasiya dəyişdikdə `transporter = null` edilir, növbəti `sendMail` çağırışı yenidən qurur.
+- Bütün route-lar aşağıdakı sırada olmalıdır (Express-də daha spesifik route-lar əvvəl gəlməlidir):
+  1. `/api/leads/:id/reply` (PUT)
+  2. `/api/leads/:id/status` (PATCH)
+  3. `/api/leads/:id` (DELETE)
+
+### Validation Qaydaları
+
+**Hər endpoint-də:**
+- `name` → `!name || !String(name).trim()` ilə yoxla
+- `phone` → `!phone || !String(phone).trim()` ilə yoxla
+- Email → boş ola bilər, amma göndərilmişsə format yoxlanmalıdır
+- `items` → `JSON.stringify(items || [])` ilə saxla
+
+**Frontend-də (ContactForm, Cart):**
+- `.trim()` ilə boşluq yoxla
+- Email üçün `/^[^\s@]+@[^\s@]+\.[^\s@]+$/` regex istifadə et
+
+### Tip Sistemi — `src/types.ts`
+
+`Lead` interfeysi həm `event_date` (backend snake_case) həm `eventDate` (camelCase) saxlayır — ikisi də optional-dır. Backend həmişə `event_date` göndərir.
+
+Frontend-də tarixin göstərilməsi:
+```tsx
+const dateStr = lead.event_date || lead.eventDate;
+const display = dateStr
+  ? (() => { try { return format(new Date(dateStr), 'dd MMM yyyy'); } catch { return dateStr; } })()
+  : '—';
+```
+
+### Email Sistemi
+
+`sendMail({ to, subject, html })` — `to` boşdursa `notify_to` istifadə edir.
+
+**Admin bildiriş emaili** → `POST /api/leads` içindəki try/catch bloku (catch edilir, server cavabını bloklamaz).
+
+**Müştəri cavab emaili** → `PUT /api/leads/:id/reply` — `sent === false` olduqda `500` qaytarır.
+
+### Frontend Komponentlər
+
+| Komponent | Fayl | Məqsəd |
+|-----------|------|--------|
+| `ContactForm` | `src/sections/contact/ContactForm.tsx` | Public müraciət formu → `POST /api/leads` |
+| `LeadsTab` | `src/sections/admin/LeadsTab.tsx` | Admin leads idarəsi + reply UI |
+| `OrdersTab` | `src/sections/admin/OrdersTab.tsx` | Admin sifarişlər idarəsi |
+| `SmtpTab` | `src/sections/admin/SmtpTab.tsx` | SMTP konfiqurasiya + test |
+| `Cart` | `src/pages/Cart.tsx` | Müştəri səbəti → `POST /api/orders` |
+
+---
+
+## Tez-tez Edilən Səhvlər (Pitfalls)
+
+1. **`fs.mkdirSync` YANLIŞDIR** — `fs` burada `promises`-dir. Sync üçün `mkdirSync` (node:fs-dən import edilmiş) istifadə et.
+2. **`lead.message` sütunu yoxdur** — DB-də yalnız `note` var. `lead.note || ''` istifadə et.
+3. **`lead.eventDate` həmişə undefined-dır** — backend `event_date` göndərir. Həmişə `lead.event_date || lead.eventDate` yoxla.
+4. **Route sırası** — Express-də `/api/leads/:id/reply` route-u `/api/leads/:id` -dən əvvəl gəlməlidir.
+5. **SMTP transporter** — konfiqurasiya dəyişdikdə `transporter = null` et, əks halda köhnə connection istifadə olunur.

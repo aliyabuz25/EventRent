@@ -33,14 +33,17 @@ export interface Lead {
   name: string;
   phone: string;
   email: string;
-  eventDate: string;
+  eventDate?: string;
+  event_date?: string;
   location: string;
   note: string;
+  message?: string;
   status: LeadStatus;
   items: CartItem[];
   createdAt?: string;
   created_at?: string;
   userId?: string;
+  user_id?: string;
 }
 
 export interface SharedFile {
@@ -441,6 +444,21 @@ export interface HomeServicesTeaser {
   subtitle: LocalizedText;
 }
 
+export interface PortfolioProject {
+  title: LocalizedText;
+  client: string;
+  date: LocalizedText;
+  location: LocalizedText;
+  category: LocalizedText;
+  videoUrl: string;
+  poster: string;
+  image: string;
+}
+
+export interface PortfolioSection {
+  projects: PortfolioProject[];
+}
+
 export interface SiteContent {
   home: {
     hero: HomeHeroSection;
@@ -464,6 +482,7 @@ export interface SiteContent {
     showcase: ServicesSection['showcase'];
     grid: ServicesSection['grid'];
   };
+  portfolio: PortfolioSection;
   about: AboutSection;
   contact: ContactSection;
   footer: FooterSection;

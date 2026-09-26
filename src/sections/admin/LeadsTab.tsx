@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Lead, LeadStatus, Product } from '../../types';
 import { format } from 'date-fns';
-import { Eye, Trash2, Filter, Search, FileText, Clock, CheckCircle2, TrendingUp, Mail, Phone, Calendar, MapPin, Package, Users, X, Info } from 'lucide-react';
+import { Eye, Trash2, Filter, Search, FileText, Clock, CheckCircle2, TrendingUp, Mail, Phone, Calendar, MapPin, Package, Users, X, Info, Send } from 'lucide-react';
+import { useToast } from '../../components/Toast';
 
 const STATUS_MAP: Record<LeadStatus, { bg: string; color: string; label: string }> = {
   new:       { bg: '#cfe2ff', color: '#084298', label: 'Yeni' },
@@ -26,6 +27,29 @@ export default function LeadsTab({ leads, products, token, onRefresh }: Props) {
   const [filter, setFilter] = useState<LeadStatus | 'all'>('all');
   const [search, setSearch] = useState('');
   const [selected, setSelected] = useState<Lead | null>(null);
+  const [replyText, setReplyText] = useState('');
+  const openLead = (lead: Lead) => { setSelected(lead); setReplyText(''); };
+  const [replySending, setReplySending] = useState(false);
+  const toast = useToast();
+
+  const sendReply = async () => {
+    if (!selected || !replyText.trim()) return;
+    if (!selected.email) { toast.error('Müştərinin email ünvanı yoxdur.'); return; }
+    setReplySending(true);
+    try {
+      const res = await fetch(`/api/leads/${selected.id}/reply`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ reply: replyText }),
+      });
+      const data = await res.json();
+      if (!res.ok) { toast.error(data.error || 'Email göndərilmədi.'); return; }
+      toast.success(`Cavab ${selected.email} ünvanına göndərildi.`);
+      setReplyText('');
+    } finally {
+      setReplySending(false);
+    }
+  };
 
   const updateStatus = async (id: string, status: LeadStatus) => {
     await fetch(`/api/leads/${id}/status`, {
@@ -137,16 +161,16 @@ export default function LeadsTab({ leads, products, token, onRefresh }: Props) {
                   </td>
                   <td className="align-middle">
                     <div style={{ fontSize: 12, color: '#495057' }}>
-                      {lead.eventDate ? format(new Date(lead.eventDate), 'dd MMM yyyy') : '—'}
+                      {(lead.event_date || lead.eventDate) ? (() => { try { return format(new Date((lead.event_date || lead.eventDate)!), 'dd MMM yyyy'); } catch { return lead.event_date || lead.eventDate || '—'; } })() : '—'}
                     </div>
-                    <div style={{ fontSize: 11, color: '#adb5bd' }}>{lead.location || '—'}</div>
+                    <div style={{ fontSize: 11, color: '#6c757d' }}>{lead.location || '—'}</div>
                   </td>
                   <td className="align-middle">
                     <div className="d-flex gap-1">
                       {lead.items.slice(0, 3).map((item, idx) => {
                         const p = products.find(x => x.id === item.productId);
                         return (
-                          <div key={idx} style={{ width: 32, height: 32, borderRadius: 8, background: '#f8f9fa', border: '1px solid #e9ecef', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, color: '#adb5bd' }}>
+                          <div key={idx} style={{ width: 32, height: 32, borderRadius: 8, background: '#f8f9fa', border: '1px solid #e9ecef', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, color: '#6c757d' }}>
                             {p?.images?.[0] ? <img src={p.images[0]} style={{ width: '100%', height: '100%', objectFit: 'cover' }} referrerPolicy="no-referrer" /> : idx + 1}
                           </div>
                         );
@@ -170,7 +194,7 @@ export default function LeadsTab({ leads, products, token, onRefresh }: Props) {
                   </td>
                   <td className="align-middle text-end pe-3">
                     <div className="d-flex gap-1 justify-content-end">
-                      <button onClick={() => setSelected(lead)} className="btn btn-sm btn-outline-secondary d-flex align-items-center" style={{ borderRadius: 8, padding: '4px 8px' }}><Eye size={13} /></button>
+                      <button onClick={() => openLead(lead)} className="btn btn-sm btn-outline-secondary d-flex align-items-center" style={{ borderRadius: 8, padding: '4px 8px' }}><Eye size={13} /></button>
                       <button onClick={() => deleteLead(lead.id)} className="btn btn-sm btn-outline-danger d-flex align-items-center" style={{ borderRadius: 8, padding: '4px 8px' }}><Trash2 size={13} /></button>
                     </div>
                   </td>
@@ -194,7 +218,7 @@ export default function LeadsTab({ leads, products, token, onRefresh }: Props) {
                   <Badge status={selected.status} />
                   <div>
                     <h6 className="mb-0 fw-bold">{selected.name}</h6>
-                    <div style={{ fontSize: 10, color: '#adb5bd' }}>ID: {selected.id}</div>
+                    <div style={{ fontSize: 10, color: '#6c757d' }}>ID: {selected.id}</div>
                   </div>
                 </div>
                 <button onClick={() => setSelected(null)} className="btn-close" />
@@ -203,7 +227,7 @@ export default function LeadsTab({ leads, products, token, onRefresh }: Props) {
                 <div className="row g-3 mb-3">
                   <div className="col-md-6">
                     <div className="p-3 rounded-3" style={{ background: '#f8f9fa' }}>
-                      <div style={{ fontSize: 10, fontWeight: 700, color: '#adb5bd', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 5 }}><Users size={11} /> Müştəri</div>
+                      <div style={{ fontSize: 10, fontWeight: 700, color: '#6c757d', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 5 }}><Users size={11} /> Müştəri</div>
                       <div className="fw-semibold mb-1">{selected.name}</div>
                       <div style={{ fontSize: 12, color: '#6c757d', display: 'flex', alignItems: 'center', gap: 5 }}><Mail size={11} /> {selected.email}</div>
                       <div style={{ fontSize: 12, color: '#6c757d', display: 'flex', alignItems: 'center', gap: 5 }}><Phone size={11} /> {selected.phone}</div>
@@ -211,15 +235,15 @@ export default function LeadsTab({ leads, products, token, onRefresh }: Props) {
                   </div>
                   <div className="col-md-6">
                     <div className="p-3 rounded-3" style={{ background: '#f8f9fa' }}>
-                      <div style={{ fontSize: 10, fontWeight: 700, color: '#adb5bd', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 5 }}><Calendar size={11} /> Tədbir</div>
-                      <div style={{ fontSize: 13 }}>{selected.eventDate ? format(new Date(selected.eventDate), 'dd MMMM yyyy') : 'Tarix qeyd edilməyib'}</div>
+                      <div style={{ fontSize: 10, fontWeight: 700, color: '#6c757d', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 5 }}><Calendar size={11} /> Tədbir</div>
+                      <div style={{ fontSize: 13 }}>{(selected.event_date || selected.eventDate) ? (() => { try { return format(new Date((selected.event_date || selected.eventDate)!), 'dd MMMM yyyy'); } catch { return selected.event_date || selected.eventDate || 'Tarix qeyd edilməyib'; } })() : 'Tarix qeyd edilməyib'}</div>
                       <div style={{ fontSize: 12, color: '#6c757d', display: 'flex', alignItems: 'center', gap: 5 }}><MapPin size={11} /> {selected.location || 'Məkan qeyd edilməyib'}</div>
                     </div>
                   </div>
                 </div>
                 {selected.items.length > 0 && (
                   <div className="mb-3">
-                    <div style={{ fontSize: 10, fontWeight: 700, color: '#adb5bd', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 5 }}><Package size={11} /> Məhsullar</div>
+                    <div style={{ fontSize: 10, fontWeight: 700, color: '#6c757d', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 5 }}><Package size={11} /> Məhsullar</div>
                     <div className="d-flex flex-column gap-2">
                       {selected.items.map((item, idx) => {
                         const p = products.find(x => x.id === item.productId);
@@ -239,15 +263,46 @@ export default function LeadsTab({ leads, products, token, onRefresh }: Props) {
                     </div>
                   </div>
                 )}
-                {selected.note && (
+                {(selected.note || selected.message) && (
                   <div className="p-3 rounded-3" style={{ background: '#fff8e1', border: '1px solid #ffe082' }}>
-                    <div style={{ fontSize: 10, fontWeight: 700, color: '#adb5bd', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 5 }}><Info size={11} /> Qeyd</div>
-                    <div style={{ fontSize: 13, color: '#495057' }}>{selected.note}</div>
+                    <div style={{ fontSize: 10, fontWeight: 700, color: '#6c757d', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 5 }}><Info size={11} /> Qeyd</div>
+                    <div style={{ fontSize: 13, color: '#495057' }}>{selected.note || selected.message}</div>
                   </div>
                 )}
+
+                {/* Cavab bölməsi */}
+                <div className="mt-3 p-3 rounded-3" style={{ background: '#f0f7ff', border: '1px solid #b6d4fe' }}>
+                  <div style={{ fontSize: 10, fontWeight: 700, color: '#0d6efd', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 5 }}>
+                    <Send size={11} /> Email ilə Cavab Yaz
+                    {selected.email
+                      ? <span style={{ color: '#6c757d', textTransform: 'none', letterSpacing: 0, fontWeight: 400, marginLeft: 4 }}>→ {selected.email}</span>
+                      : <span style={{ color: '#dc3545', textTransform: 'none', letterSpacing: 0, fontWeight: 400, marginLeft: 4 }}>Email ünvanı yoxdur</span>
+                    }
+                  </div>
+                  <textarea
+                    className="form-control form-control-sm mb-2"
+                    style={{ borderRadius: 10, resize: 'none', fontSize: 13 }}
+                    rows={4}
+                    value={replyText}
+                    onChange={e => setReplyText(e.target.value)}
+                    placeholder={selected.email ? 'Müştəriyə göndəriləcək cavabı yazın...' : 'Email ünvanı olmadığı üçün cavab göndərmək mümkün deyil.'}
+                    disabled={!selected.email}
+                  />
+                  <div className="d-flex justify-content-end">
+                    <button
+                      onClick={sendReply}
+                      disabled={replySending || !replyText.trim() || !selected.email}
+                      className="btn btn-sm btn-primary fw-semibold d-flex align-items-center gap-2"
+                      style={{ borderRadius: 9 }}
+                    >
+                      <Send size={13} />
+                      {replySending ? 'Göndərilir...' : 'Cavabı Göndər'}
+                    </button>
+                  </div>
+                </div>
               </div>
               <div className="modal-footer border-top py-3 px-4 d-flex flex-wrap gap-2">
-                <div style={{ fontSize: 10, fontWeight: 700, color: '#adb5bd', textTransform: 'uppercase', letterSpacing: '0.1em', width: '100%', marginBottom: 4 }}>Status Dəyiş</div>
+                <div style={{ fontSize: 10, fontWeight: 700, color: '#6c757d', textTransform: 'uppercase', letterSpacing: '0.1em', width: '100%', marginBottom: 4 }}>Status Dəyiş</div>
                 {(Object.entries(STATUS_MAP) as [LeadStatus, typeof STATUS_MAP[LeadStatus]][]).map(([k, v]) => (
                   <button
                     key={k}

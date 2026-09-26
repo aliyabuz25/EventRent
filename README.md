@@ -1,15 +1,23 @@
 # Eventrent.az
 
-Vite + React + TypeScript + Tailwind CSS ile inşa edilmiş çok sayfalı premium etkinlik çözümleri sitesi.
+Vite + React + TypeScript + Tailwind CSS ilə inşa edilmiş çoxsəhifəli premium tədbir həlləri saytı.
 
-## Teknoloji Yığını
+## Texnologiya Yığını
 
-- **Frontend:** Vite, React 18, TypeScript, Tailwind CSS
-- **Animasyon:** GSAP + ScrollTrigger
-- **Backend/DB:** Express.js, SQLite (better-sqlite3)
+- **Frontend:** Vite 5, React 18, TypeScript, Tailwind CSS
+- **Animasiya:** GSAP + ScrollTrigger
+- **Backend/DB:** Express.js, SQLite (better-sqlite3), JWT auth
+- **Email:** Nodemailer (SMTP)
 - **Deployment:** Docker, Nginx, Portainer, Traefik
 
-## Geliştirme Ortamı
+## Portlar
+
+| Servis | Port |
+|--------|------|
+| Frontend (Vite dev) | 5050 |
+| Backend API | 4320 |
+
+## İnkişaf Mühiti
 
 ```bash
 npm install
@@ -19,30 +27,67 @@ npm run dev        # http://localhost:5050
 ## Build
 
 ```bash
-npm run build
+npm run build      # dist/ qovluğuna yazılır
 ```
 
-## Port
+## API Endpointləri
 
-Bu proje Frontend tarafında **5050** portunda, Backend API tarafında ise **4320** portunda çalışır.
+### Auth
+| Method | URL | Auth | Açıqlama |
+|--------|-----|------|----------|
+| POST | `/api/auth/login` | — | Email + password ilə giriş |
+| GET | `/api/auth/me` | Bearer | Cari istifadəçi |
+
+### Leads
+| Method | URL | Auth | Açıqlama |
+|--------|-----|------|----------|
+| GET | `/api/leads` | Bearer | Siyahı |
+| POST | `/api/leads` | — | Yeni müraciət (Contact Form) |
+| PUT | `/api/leads/:id/reply` | Bearer | Müştəriyə email cavab |
+| PATCH | `/api/leads/:id/status` | Bearer | Status dəyiş |
+| DELETE | `/api/leads/:id` | Bearer+Admin | Sil |
+
+### Orders
+| Method | URL | Auth | Açıqlama |
+|--------|-----|------|----------|
+| GET | `/api/orders` | Bearer | Siyahı |
+| POST | `/api/orders` | — | Yeni sifariş (Cart) |
+| PUT | `/api/orders/:id` | Bearer | Yenilə |
+| PATCH | `/api/orders/:id/status` | Bearer | Status + email |
+| DELETE | `/api/orders/:id` | Bearer | Sil |
+| POST | `/api/orders/:id/send-email` | Bearer | Email yenidən göndər |
+
+### SMTP
+| Method | URL | Auth | Açıqlama |
+|--------|-----|------|----------|
+| GET | `/api/smtp` | Bearer+Admin | Konfiqurasiya |
+| PUT | `/api/smtp` | Bearer+Admin | Saxla və test et |
+| POST | `/api/smtp/test` | Bearer+Admin | Test email |
+
+### Products, Users, Teambuilding, Media
+Tam siyahı üçün `CHANGELOG.md` → "API Referansı" bölməsinə baxın.
+
+## Verilənlər Bazası Cədvəlləri
+
+```
+users · leads · orders · products · smtp_config · support_tickets · tb_games · tb_concepts
+```
+
+## Email Axını
+
+```
+Müştəri → Contact Form → POST /api/leads → Admin-ə bildiriş (notify_to)
+Admin   → Leads Tab    → PUT /api/leads/:id/reply → Müştəriyə cavab (lead.email)
+Müştəri → Cart         → POST /api/orders → Admin-ə bildiriş (notify_to)
+```
+
+## Deployment
+
+```bash
+docker-compose up -d
+# və ya Portainer üzərindən stack.portainer.yml
+```
 
 ---
 
-### 🔥 `fixed-branch` - Neler Düzeltildi?
-
-Bu dal (branch) üzerinde uygulamanın sunucu tarafında (Docker ve Backend) çökmesine neden olan kritik hatalar ve uyumsuzluklar çözülmüştür:
-
-1. **JSON Parse Hatasının Giderilmesi (Backend Çökme Sorunu)**
-   - Express uygulamasında `app.use(express.json())` metoduna gönderilen hatalı veya boş payload'lar `SyntaxError: Expected property name or '}' in JSON` hatasına neden olup container'ın 139 koduyla kapanmasına ve sürekli restart atmasına (Crash loop) neden oluyordu.
-   - Bu durum `try-catch` benzeri bir error middleware ile sarmalanarak yakalandı. Artık hatalı bir payload geldiğinde sistem çökmek yerine `400 Bad Request` yanıtı dönüyor.
-
-2. **Node.js Sürüm Uyumsuzluğu ve `better-sqlite3` Build Hatası**
-   - Eski Docker imajında kullanılan `node:20-alpine` (veya slim) sürümü, güncel `better-sqlite3` 13.x modülünün yüklenmesi sırasında Python ve node-gyp aracılığıyla native derleme hatalarına neden oluyordu.
-   - Her iki `Dockerfile` (frontend ve backend) içerisindeki `node:20` tanımı `node:22-alpine` ile değiştirildi.
-   - Gerekli olan `python3 make g++ sqlite-dev` bağımlılıkları build aşamasına eklenerek SQLite veritabanı sürücüsünün hatasız derlenmesi sağlandı.
-
-3. **`dotenv` Çift Import (Warning) Hatası**
-   - Express backend dosyasında (`server.js`) ES Modules formatında olan `dotenv` çağırma mantığı güncellenerek güvenli hale getirildi. 
-
-4. **Traefik Network Bağlantıları (Docker Compose)**
-   - Yeni Traefik altyapısına (Octoport / Portainer) uygun olacak şekilde `octobot-net` adındaki Edge Network bağlantı tanımları (Traefik labels) `docker-compose.yml` (ve ilgili runbook'lar) içerisine düzenlendi.
+Bütün dəyişikliklərin tam tarixçəsi üçün → `CHANGELOG.md`

@@ -93,6 +93,8 @@ export default function Cart() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (cart.length === 0) return;
+    if (!formData.name.trim()) { setError(t(locale, content.cart.errorRequired ?? { az: 'Ad tələb olunur.', en: 'Name is required.', ru: 'Имя обязательно.', tr: 'İsim zorunludur.' })); return; }
+    if (!formData.phone.trim()) { setError(t(locale, content.cart.errorRequired ?? { az: 'Telefon tələb olunur.', en: 'Phone is required.', ru: 'Телефон обязателен.', tr: 'Telefon zorunludur.' })); return; }
     setIsSubmitting(true);
     setError(null);
 
