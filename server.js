@@ -820,6 +820,123 @@ app.get('/api/health', (_req, res) => {
   res.json({ ok: true, smtp: !!transporter });
 });
 
+/* ══════════════════════════════════════════
+   STATS API — Dashboard üçün
+══════════════════════════════════════════ */
+app.get('/api/stats', authMiddleware, (req, res) => {
+  try {
+    // Counts
+    const ordersTotal   = db.prepare('SELECT COUNT(*) as c FROM orders').get().c;
+    const ordersNew     = db.prepare("SELECT COUNT(*) as c FROM orders WHERE status='new'").get().c;
+    const leadsTotal    = db.prepare('SELECT COUNT(*) as c FROM leads').get().c;
+    const leadsNew      = db.prepare("SELECT COUNT(*) as c FROM leads WHERE status='new'").get().c;
+    const leadsWon      = db.prepare("SELECT COUNT(*) as c FROM leads WHERE status='won'").get().c;
+    const supportTotal  = db.prepare('SELECT COUNT(*) as c FROM support_tickets').get().c;
+    const supportOpen   = db.prepare("SELECT COUNT(*) as c FROM support_tickets WHERE status='open'").get().c;
+    const productsTotal = db.prepare('SELECT COUNT(*) as c FROM products').get().c;
+
+    // Orders by status
+    const ordersByStatus = db.prepare(
+      "SELECT status, COUNT(*) as value FROM orders GROUP BY status"
+    ).all();
+
+    // Leads by status
+    const leadsByStatus = db.prepare(
+      "SELECT status, COUNT(*) as value FROM leads GROUP BY status"
+    ).all();
+
+    // Support tickets by status
+    const supportByStatus = db.prepare(
+      "SELECT status, COUNT(*) as value FROM support_tickets GROUP BY status"
+    ).all();
+
+    // Orders by source
+    const ordersBySource = db.prepare(
+      "SELECT source, COUNT(*) as value FROM orders GROUP BY source"
+    ).all();
+
+    // Orders over time — last 30 days by day
+    const ordersOverTime = db.prepare(`
+      SELECT date(created_at) as date, COUNT(*) as orders
+      FROM orders
+      WHERE created_at >= date('now', '-30 days')
+      GROUP BY date(created_at)
+      ORDER BY date ASC
+    `).all();
+
+    // Leads over time — last 30 days
+    const leadsOverTime = db.prepare(`
+      SELECT date(created_at) as date, COUNT(*) as leads
+      FROM leads
+      WHERE created_at >= date('now', '-30 days')
+      GROUP BY date(created_at)
+      ORDER BY date ASC
+    `).all();
+
+    // Merge orders+leads over time into single timeline
+    const dateMap = {};
+    ordersOverTime.forEach((r) => {
+      if (!dateMap[r.date]) dateMap[r.date] = { date: r.date, orders: 0, leads: 0 };
+      dateMap[r.date].orders = r.orders;
+    });
+    leadsOverTime.forEach((r) => {
+      if (!dateMap[r.date]) dateMap[r.date] = { date: r.date, orders: 0, leads: 0 };
+      dateMap[r.date].leads = r.leads;
+    });
+    const timeline = Object.values(dateMap).sort((a, b) => a.date.localeCompare(b.date));
+
+    // Top products ordered
+    const allOrders = db.prepare('SELECT items FROM orders').all();
+    const prodCount = {};
+    allOrders.forEach((o) => {
+      try {
+        const items = JSON.parse(o.items || '[]');
+        items.forEach((it) => {
+          const key = it.productId || it.name || 'Bilinmir';
+          prodCount[key] = (prodCount[key] || 0) + (it.quantity || 1);
+        });
+      } catch (_) {}
+    });
+    const topProducts = Object.entries(prodCount)
+      .map(([name, count]) => ({ name, count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 8);
+
+    // Products by category
+    const catData = db.prepare(
+      "SELECT category, COUNT(*) as count FROM products GROUP BY category"
+    ).all();
+
+    // Recent activity — last 10 orders + leads combined
+    const recentOrders = db.prepare(
+      "SELECT id, name, phone, status, created_at, 'order' as type FROM orders ORDER BY created_at DESC LIMIT 5"
+    ).all();
+    const recentLeads = db.prepare(
+      "SELECT id, name, phone, status, created_at, 'lead' as type FROM leads ORDER BY created_at DESC LIMIT 5"
+    ).all();
+    const recentActivity = [...recentOrders, ...recentLeads]
+      .sort((a, b) => b.created_at.localeCompare(a.created_at))
+      .slice(0, 10);
+
+    // Conversion rate
+    const convRate = leadsTotal > 0 ? Math.round((leadsWon / leadsTotal) * 100) : 0;
+
+    res.json({
+      counts: { ordersTotal, ordersNew, leadsTotal, leadsNew, leadsWon, supportTotal, supportOpen, productsTotal, convRate },
+      ordersByStatus,
+      leadsByStatus,
+      supportByStatus,
+      ordersBySource,
+      timeline,
+      topProducts,
+      catData,
+      recentActivity,
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.get('/api/content', async (_req, res) => {
   try {
     await ensureContentFile();

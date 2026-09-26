@@ -4,7 +4,7 @@ import {
   LayoutDashboard, MessageSquare, Package, Users, Home, Info,
   Settings, Phone, AlignJustify, RefreshCw,
   TrendingUp, Clock, FileText, ExternalLink,
-  ChevronRight, LogOut, Menu, ShoppingCart, Mail, UserCog, Eye, EyeOff, ImageIcon,
+  ChevronRight, LogOut, Menu, ShoppingCart, Mail, UserCog, Eye, EyeOff, ImageIcon, Headphones, Bell,
 } from 'lucide-react';
 import { Lead } from '../types';
 import AdminLeads from '../sections/admin/LeadsTab';
@@ -16,13 +16,14 @@ import AdminUsers from '../sections/admin/UsersTab';
 import AdminMedia from '../sections/admin/MediaTab';
 import AdminSupport from '../sections/admin/SupportTab';
 import AdminContent from '../components/ContentStudio';
+import DashboardTab from '../sections/admin/DashboardTab';
 import { ToastProvider } from '../components/Toast';
 
 type Tab = 'dashboard' | 'orders' | 'leads' | 'products' | 'teambuilding' | 'support'
   | 'content-home' | 'content-about' | 'content-services'
-  | 'content-contact' | 'content-footer' | 'smtp' | 'users' | 'media';
+  | 'content-contact' | 'content-footer' | 'content-portfolio' | 'smtp' | 'users' | 'media';
 
-type ContentSection = 'home' | 'about' | 'services' | 'contact' | 'footer';
+type ContentSection = 'home' | 'about' | 'services' | 'contact' | 'footer' | 'portfolio';
 
 interface NavItemDef {
   id: Tab;
@@ -40,11 +41,12 @@ interface AuthUser {
 }
 
 const CONTENT_TABS: { id: Tab; section: ContentSection; label: string }[] = [
-  { id: 'content-home',     section: 'home',     label: 'Ana Səhifə' },
-  { id: 'content-about',    section: 'about',    label: 'Haqqımızda' },
-  { id: 'content-services', section: 'services', label: 'Xidmətlər' },
-  { id: 'content-contact',  section: 'contact',  label: 'Əlaqə' },
-  { id: 'content-footer',   section: 'footer',   label: 'Footer' },
+  { id: 'content-home',      section: 'home',      label: 'Ana Səhifə' },
+  { id: 'content-about',     section: 'about',     label: 'Haqqımızda' },
+  { id: 'content-services',  section: 'services',  label: 'Xidmətlər' },
+  { id: 'content-contact',   section: 'contact',   label: 'Əlaqə' },
+  { id: 'content-footer',    section: 'footer',    label: 'Footer' },
+  { id: 'content-portfolio', section: 'portfolio', label: 'Portfolio' },
 ];
 
 const TOKEN_KEY = 'er_admin_token';
@@ -151,12 +153,77 @@ export default function Admin() {
   const [sideOpen, setSide]     = useState(true);
 
   const [leads, setLeads] = useState<Lead[]>([]);
+  const [products, setProducts] = useState<any[]>([]);
+  const [newOrdersCount, setNewOrdersCount]   = useState(0);
+  const [newSupportCount, setNewSupportCount] = useState(0);
+  const prevOrdersRef  = React.useRef(0);
+  const prevSupportRef = React.useRef(0);
+  const notifPermRef   = React.useRef<NotificationPermission>('default');
+
+  // Request browser notification permission once
+  React.useEffect(() => {
+    if ('Notification' in window && Notification.permission === 'default') {
+      Notification.requestPermission().then(p => { notifPermRef.current = p; });
+    } else if ('Notification' in window) {
+      notifPermRef.current = Notification.permission;
+    }
+  }, []);
+
+  const sendBrowserNotif = React.useCallback((title: string, body: string) => {
+    if ('Notification' in window && Notification.permission === 'granted') {
+      new Notification(title, { body, icon: '/favicon.ico' });
+    }
+  }, []);
 
   const fetchLeads = React.useCallback((tok: string) => {
     fetch('/api/leads', { headers: { Authorization: `Bearer ${tok}` } })
       .then(r => r.ok ? r.json() : [])
-      .then(data => setLeads(Array.isArray(data) ? data : []))
+      .then(data => {
+        const arr = Array.isArray(data) ? data : [];
+        setLeads(arr);
+        const newCount = arr.filter((l: any) => l.status === 'new').length;
+        if (prevOrdersRef.current > 0 && newCount > prevOrdersRef.current) {
+          sendBrowserNotif('Yeni Sorğu!', `${newCount - prevOrdersRef.current} yeni sorğu daxil oldu`);
+        }
+        prevOrdersRef.current = newCount;
+      })
       .catch(() => setLeads([]));
+  }, [sendBrowserNotif]);
+
+  const fetchBadgeCounts = React.useCallback((tok: string) => {
+    // Orders
+    fetch('/api/orders', { headers: { Authorization: `Bearer ${tok}` } })
+      .then(r => r.ok ? r.json() : [])
+      .then(data => {
+        const arr = Array.isArray(data) ? data : [];
+        const cnt = arr.filter((o: any) => o.status === 'new').length;
+        if (prevOrdersRef.current > 0 && cnt > prevOrdersRef.current) {
+          sendBrowserNotif('Yeni Sifariş!', `${cnt - prevOrdersRef.current} yeni sifariş daxil oldu`);
+        }
+        prevOrdersRef.current = cnt;
+        setNewOrdersCount(cnt);
+      })
+      .catch(() => {});
+    // Support
+    fetch('/api/support', { headers: { Authorization: `Bearer ${tok}` } })
+      .then(r => r.ok ? r.json() : [])
+      .then(data => {
+        const arr = Array.isArray(data) ? data : [];
+        const cnt = arr.filter((s: any) => s.status === 'open').length;
+        if (prevSupportRef.current > 0 && cnt > prevSupportRef.current) {
+          sendBrowserNotif('Yeni Dəstək Bileti!', `${cnt - prevSupportRef.current} yeni dəstək bileti açıldı`);
+        }
+        prevSupportRef.current = cnt;
+        setNewSupportCount(cnt);
+      })
+      .catch(() => {});
+  }, [sendBrowserNotif]);
+
+  const fetchProducts = React.useCallback(() => {
+    fetch('/api/products')
+      .then(r => r.ok ? r.json() : [])
+      .then(data => setProducts(Array.isArray(data) ? data : []))
+      .catch(() => setProducts([]));
   }, []);
 
   useEffect(() => {
@@ -171,16 +238,28 @@ export default function Admin() {
     fetch('/api/auth/me', { headers: { Authorization: `Bearer ${stored}` } })
       .then(r => r.ok ? r.json() : null)
       .then(u => {
-        if (u) { setUser(u); setTokenState(stored); fetchLeads(stored); }
-        else clearToken();
+        if (u) {
+          setUser(u); setTokenState(stored);
+          fetchLeads(stored); fetchProducts(); fetchBadgeCounts(stored);
+        } else clearToken();
       })
       .catch(() => clearToken())
       .finally(() => setLoading(false));
-  }, [fetchLeads]);
+  }, [fetchLeads, fetchProducts, fetchBadgeCounts]);
+
+  /* Polling — hər 60 saniyə badge-ləri yenilə + browser notification */
+  useEffect(() => {
+    if (!token) return;
+    const id = setInterval(() => {
+      fetchLeads(token);
+      fetchBadgeCounts(token);
+    }, 60_000);
+    return () => clearInterval(id);
+  }, [token, fetchLeads, fetchBadgeCounts]);
 
   const handleLogin = (t: string, u: AuthUser) => {
     setToken(t); setTokenState(t); setUser(u);
-    fetchLeads(t);
+    fetchLeads(t); fetchProducts(); fetchBadgeCounts(t);
   };
 
   const handleLogout = () => {
@@ -205,17 +284,18 @@ export default function Admin() {
 
   const NAV_ITEMS: NavItemDef[] = [
     { id: 'dashboard',        label: 'Dashboard',    Icon: LayoutDashboard },
-    { id: 'orders',           label: 'Sifarişlər',   Icon: ShoppingCart },
-    { id: 'leads',            label: 'Sorğular',     Icon: MessageSquare, badge: newLeads || undefined },
+    { id: 'orders',           label: 'Sifarişlər',   Icon: ShoppingCart,   badge: newOrdersCount  || undefined },
+    { id: 'leads',            label: 'Sorğular',     Icon: MessageSquare,  badge: newLeads        || undefined },
     { id: 'products',         label: 'Məhsullar',    Icon: Package },
     { id: 'teambuilding',     label: 'Teambuilding', Icon: Users },
-    { id: 'support',          label: 'Dəstək',       Icon: MessageSquare },
+    { id: 'support',          label: 'Dəstək',       Icon: Headphones,     badge: newSupportCount || undefined },
     ...(isAdmin ? [
-      { id: 'content-home'     as Tab, label: 'Ana Səhifə',  Icon: Home },
-      { id: 'content-about'    as Tab, label: 'Haqqımızda',  Icon: Info },
-      { id: 'content-services' as Tab, label: 'Xidmətlər',   Icon: Settings },
-      { id: 'content-contact'  as Tab, label: 'Əlaqə',       Icon: Phone },
-      { id: 'content-footer'   as Tab, label: 'Footer',      Icon: AlignJustify },
+      { id: 'content-home'      as Tab, label: 'Ana Səhifə',  Icon: Home },
+      { id: 'content-about'     as Tab, label: 'Haqqımızda',  Icon: Info },
+      { id: 'content-services'  as Tab, label: 'Xidmətlər',   Icon: Settings },
+      { id: 'content-contact'   as Tab, label: 'Əlaqə',       Icon: Phone },
+      { id: 'content-footer'    as Tab, label: 'Footer',      Icon: AlignJustify },
+      { id: 'content-portfolio' as Tab, label: 'Portfolio',   Icon: ImageIcon },
       { id: 'media'            as Tab, label: 'Media',       Icon: ImageIcon },
       { id: 'smtp'             as Tab, label: 'SMTP',         Icon: Mail },
       { id: 'users'            as Tab, label: 'İstifadəçilər', Icon: UserCog },
@@ -223,7 +303,7 @@ export default function Admin() {
   ];
 
   const dataNavCount  = 6;
-  const contentNavCount = isAdmin ? 5 : 0;
+  const contentNavCount = isAdmin ? 6 : 0;
   const systemNavCount  = isAdmin ? 3 : 0;
 
   const activeItem = NAV_ITEMS.find(n => n.id === tab);
@@ -304,6 +384,36 @@ export default function Admin() {
             <span style={{ fontWeight: 600, fontSize: 14, color: '#212529' }}>{activeItem?.label}</span>
           </div>
           <div style={{ flex: 1 }} />
+          {/* Notification bell */}
+          {(() => {
+            const totalNew = (newOrdersCount || 0) + (newLeads || 0) + (newSupportCount || 0);
+            return (
+              <div style={{ position: 'relative' }}>
+                <button
+                  onClick={() => {
+                    if ('Notification' in window && Notification.permission === 'default') {
+                      Notification.requestPermission();
+                    }
+                  }}
+                  title={totalNew > 0 ? `${totalNew} yeni bildiriş` : 'Bildirişlər'}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '6px 8px', borderRadius: 8, color: totalNew > 0 ? '#e30613' : '#6c757d', display: 'flex', position: 'relative' }}
+                >
+                  <Bell size={18} />
+                  {totalNew > 0 && (
+                    <span style={{
+                      position: 'absolute', top: 2, right: 2,
+                      width: 16, height: 16, background: '#e30613', color: '#fff',
+                      borderRadius: '50%', fontSize: 9, fontWeight: 900,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      border: '2px solid #fff',
+                    }}>
+                      {totalNew > 9 ? '9+' : totalNew}
+                    </span>
+                  )}
+                </button>
+              </div>
+            );
+          })()}
           <a href="/" target="_blank" rel="noopener noreferrer" className="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1" style={{ fontSize: 11, borderRadius: 8, fontWeight: 600 }}>
             <ExternalLink size={12} /> Sayt
           </a>
@@ -311,9 +421,9 @@ export default function Admin() {
 
         {/* Content */}
         <main style={{ flex: 1, overflowY: 'auto', padding: 24 }}>
-          {tab === 'dashboard'        && <DashboardTab leads={leads} newLeads={newLeads} onNavigate={setTab} isAdmin={isAdmin} />}
+          {tab === 'dashboard'        && <DashboardTab token={token} onNavigate={(t) => setTab(t as Tab)} isAdmin={isAdmin} />}
           {tab === 'orders'           && <AdminOrders token={token} />}
-          {tab === 'leads'            && <AdminLeads leads={leads} products={[]} token={token} onRefresh={() => fetchLeads(token)} />}
+          {tab === 'leads'            && <AdminLeads leads={leads} products={products} token={token} onRefresh={() => fetchLeads(token)} />}
           {tab === 'products'         && <AdminProducts token={token} />}
           {tab === 'teambuilding'     && <AdminTeambuilding token={token} />}
           {tab === 'support'          && <AdminSupport token={token} />}
@@ -359,75 +469,3 @@ function NavBtn({ item, active, open, onClick }: { item: NavItemDef; active: boo
   );
 }
 
-/* ── Dashboard ── */
-function DashboardTab({ leads, newLeads, onNavigate, isAdmin }: {
-  leads: Lead[]; newLeads: number;
-  onNavigate: (t: Tab) => void; isAdmin: boolean;
-}) {
-  const won  = leads.filter(l => l.status === 'won').length;
-  const conv = leads.length ? Math.round((won / leads.length) * 100) : 0;
-
-  const stats: { label: string; value: number | string; color: string; Icon: React.FC<{ size?: number; color?: string }>; tab: Tab }[] = [
-    { label: 'Ümumi Sorğu', value: leads.length,   color: '#e30613', Icon: FileText,   tab: 'leads' },
-    { label: 'Yeni Sorğu',  value: newLeads,        color: '#0d6efd', Icon: Clock,      tab: 'leads' },
-    { label: 'Konversiya',  value: `${conv}%`,      color: '#6f42c1', Icon: TrendingUp, tab: 'leads' },
-  ];
-
-  const contentSections: { label: string; desc: string; tab: Tab; Icon: React.FC<{ size?: number; color?: string }> }[] = [
-    { label: 'Ana Səhifə',  desc: 'Hero, Metrics, CTA',      tab: 'content-home',     Icon: Home },
-    { label: 'Haqqımızda', desc: 'Vision, Team, Values',     tab: 'content-about',    Icon: Info },
-    { label: 'Xidmətlər',  desc: 'Showcase, Kateqoriyalar', tab: 'content-services', Icon: Settings },
-    { label: 'Əlaqə',      desc: 'Form, CTA, Map',           tab: 'content-contact',  Icon: Phone },
-    { label: 'Footer',     desc: 'Nav, Copyright, Links',    tab: 'content-footer',   Icon: AlignJustify },
-  ];
-
-  return (
-    <div>
-      <div className="row g-3 mb-4">
-        {stats.map((s, i) => (
-          <div key={i} className="col-6 col-lg-3">
-            <div className="card border-0 shadow-sm h-100" style={{ borderRadius: 14, cursor: 'pointer', transition: 'transform 0.15s, box-shadow 0.15s' }}
-              onClick={() => onNavigate(s.tab)}
-              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.transform = 'translateY(-2px)'; el.style.boxShadow = '0 8px 24px rgba(0,0,0,0.1)'; }}
-              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.transform = ''; el.style.boxShadow = ''; }}>
-              <div className="card-body p-3">
-                <div className="d-flex align-items-center justify-content-between mb-3">
-                  <div style={{ width: 38, height: 38, borderRadius: 10, background: s.color + '15', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <s.Icon size={18} color={s.color} />
-                  </div>
-                  <ChevronRight size={14} color="#adb5bd" />
-                </div>
-                <div style={{ fontSize: 26, fontWeight: 900, color: '#212529', lineHeight: 1 }}>{s.value}</div>
-                <div style={{ fontSize: 11, color: '#6c757d', marginTop: 4, fontWeight: 500 }}>{s.label}</div>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {isAdmin && (
-        <div className="mb-4">
-          <div style={{ fontSize: 11, fontWeight: 700, color: '#adb5bd', textTransform: 'uppercase', letterSpacing: '0.3em', marginBottom: 12 }}>Məzmun Bölmələri</div>
-          <div className="row g-3">
-            {contentSections.map((s, i) => (
-              <div key={i} className="col-6 col-md-4 col-lg">
-                <div className="card border-0 shadow-sm h-100" style={{ borderRadius: 14, cursor: 'pointer', transition: 'all 0.15s' }}
-                  onClick={() => onNavigate(s.tab)}
-                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = '#fff0f0'; }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = ''; }}>
-                  <div className="card-body p-3 text-center">
-                    <div style={{ width: 40, height: 40, borderRadius: 10, background: '#f8f9fa', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 10px' }}>
-                      <s.Icon size={18} color="#6c757d" />
-                    </div>
-                    <div style={{ fontWeight: 700, fontSize: 13, color: '#212529', marginBottom: 3 }}>{s.label}</div>
-                    <div style={{ fontSize: 11, color: '#adb5bd' }}>{s.desc}</div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
