@@ -210,7 +210,7 @@ export default function TeambuildingTab({ token }: { token: string }) {
       {/* Search + filter */}
       <div className="d-flex gap-2 mb-4">
         <div className="position-relative flex-grow-1">
-          <Search size={13} style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', color: '#adb5bd' }} />
+          <Search size={13} style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', color: '#6c757d' }} />
           <input className="form-control form-control-sm" style={{ borderRadius: 10, paddingLeft: 30 }} placeholder="Axtar..." value={search} onChange={e => setSearch(e.target.value)} />
         </div>
         {activeTab === 'games' && (
@@ -294,7 +294,7 @@ export default function TeambuildingTab({ token }: { token: string }) {
                   </div>
                   <div>
                     <h6 className="mb-0 fw-bold">{editGame ? 'Oyunu Düzəlt' : 'Yeni Oyun'}</h6>
-                    <div style={{ fontSize: 11, color: '#adb5bd' }}>{editGame?.id}</div>
+                    <div style={{ fontSize: 11, color: '#6c757d' }}>{editGame?.id}</div>
                   </div>
                 </div>
                 <button className="btn-close" onClick={closeGameModal} />
@@ -359,7 +359,7 @@ export default function TeambuildingTab({ token }: { token: string }) {
                   </div>
                   <div>
                     <h6 className="mb-0 fw-bold">{editConcept ? 'Konsepsiya Düzəlt' : 'Yeni Konsepsiya'}</h6>
-                    <div style={{ fontSize: 11, color: '#adb5bd' }}>{editConcept?.id}</div>
+                    <div style={{ fontSize: 11, color: '#6c757d' }}>{editConcept?.id}</div>
                   </div>
                 </div>
                 <button className="btn-close" onClick={closeConceptModal} />

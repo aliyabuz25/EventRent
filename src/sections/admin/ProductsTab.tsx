@@ -143,7 +143,7 @@ export default function ProductsTab({ token }: { token: string }) {
       </div>
 
       <div className="position-relative mb-4">
-        <Search size={13} style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', color: '#adb5bd' }} />
+        <Search size={13} style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', color: '#6c757d' }} />
         <input className={inputCls} style={{ borderRadius: 10, paddingLeft: 30 }} placeholder="Ad, kateqoriya, teq..." value={search} onChange={e => setSearch(e.target.value)} />
       </div>
 
@@ -193,7 +193,7 @@ export default function ProductsTab({ token }: { token: string }) {
                   </div>
                   <div>
                     <h6 className="mb-0 fw-bold">{editId ? 'Məhsulu Düzəlt' : 'Yeni Məhsul'}</h6>
-                    <div style={{ fontSize: 11, color: '#adb5bd' }}>{editId || 'Yeni məhsul əlavə et'}</div>
+                    <div style={{ fontSize: 11, color: '#6c757d' }}>{editId || 'Yeni məhsul əlavə et'}</div>
                   </div>
                 </div>
                 <button className="btn-close" onClick={closeModal} />

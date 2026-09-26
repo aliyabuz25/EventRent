@@ -132,14 +132,14 @@ export default function ServiceDetail() {
                 <div className="inline-block px-6 py-2 bg-black text-white rounded-full text-[10px] font-bold uppercase tracking-widest">
                   {categoryTitle}
                 </div>
-                <h2 className="text-4xl md:text-6xl font-bold tracking-tighter">{t(locale, currentItem!.name)}</h2>
-                <p className="text-xl text-gray-500 font-light leading-relaxed">
+                <h2 className="text-4xl md:text-6xl font-bold tracking-tighter text-white">{t(locale, currentItem!.name)}</h2>
+                <p className="text-xl text-white/60 font-light leading-relaxed">
                   {t(locale, currentItem!.desc)} üçün biz ən müasir texnologiyalar və peşəkar komandamızla xidmətinizdəyik.
                   Hər bir layihəyə fərdi yanaşaraq, sizin tələblərinizə uyğun ən optimal həlli təklif edirik.
                 </p>
                 <div className="space-y-4">
                   {['Yüksək keyfiyyət', 'Peşəkar yanaşma', 'Sürətli icra', 'Sərfəli qiymət'].map(feature => (
-                    <div key={feature} className="flex items-center gap-3 text-gray-900 font-bold">
+                    <div key={feature} className="flex items-center gap-3 text-white/90 font-bold">
                       <CheckCircle2 className="w-5 h-5 text-red-500" />
                       {feature}
                     </div>

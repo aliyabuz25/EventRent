@@ -186,7 +186,7 @@ export default function OrdersTab({ token }: { token: string }) {
         <div className="card-header bg-white border-bottom py-3 px-3" style={{ borderRadius: '14px 14px 0 0' }}>
           <div className="d-flex flex-wrap gap-2 align-items-center">
             <div className="position-relative" style={{ minWidth: 220 }}>
-              <Search size={13} style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', color: '#adb5bd', pointerEvents: 'none' }} />
+              <Search size={13} style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', color: '#6c757d', pointerEvents: 'none' }} />
               <input type="text" className={inputCls} placeholder="Ad, email, telefon..." value={search} onChange={e => setSearch(e.target.value)} style={{ paddingLeft: 30, borderRadius: 8 }} />
             </div>
             <div className="d-flex flex-wrap gap-1">
@@ -258,7 +258,7 @@ export default function OrdersTab({ token }: { token: string }) {
                   </div>
                   <div>
                     <h6 className="mb-0 fw-bold">{selected.name}</h6>
-                    <div style={{ fontSize: 11, color: '#adb5bd' }}>Sifariş #{selected.id} · {new Date(selected.created_at).toLocaleDateString('az-AZ')}</div>
+                    <div style={{ fontSize: 11, color: '#6c757d' }}>Sifariş #{selected.id} · {new Date(selected.created_at).toLocaleDateString('az-AZ')}</div>
                   </div>
                   <Badge status={selected.status} />
                 </div>
@@ -268,7 +268,7 @@ export default function OrdersTab({ token }: { token: string }) {
                 <div className="row g-3 mb-3">
                   <div className="col-md-6">
                     <div className="p-3 rounded-3" style={{ background: '#f8f9fa' }}>
-                      <div style={{ fontSize: 10, fontWeight: 700, color: '#adb5bd', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 10 }}>Müştəri</div>
+                      <div style={{ fontSize: 10, fontWeight: 700, color: '#6c757d', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 10 }}>Müştəri</div>
                       <div className="fw-semibold mb-1">{selected.name}</div>
                       <div style={{ fontSize: 12, color: '#6c757d', display: 'flex', alignItems: 'center', gap: 6 }}><Mail size={11} /> {selected.email || '—'}</div>
                       <div style={{ fontSize: 12, color: '#6c757d', display: 'flex', alignItems: 'center', gap: 6, marginTop: 4 }}><Phone size={11} /> {selected.phone}</div>
@@ -276,7 +276,7 @@ export default function OrdersTab({ token }: { token: string }) {
                   </div>
                   <div className="col-md-6">
                     <div className="p-3 rounded-3" style={{ background: '#f8f9fa' }}>
-                      <div style={{ fontSize: 10, fontWeight: 700, color: '#adb5bd', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 10 }}>Tədbir</div>
+                      <div style={{ fontSize: 10, fontWeight: 700, color: '#6c757d', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 10 }}>Tədbir</div>
                       <div style={{ fontSize: 13, display: 'flex', alignItems: 'center', gap: 6 }}><Calendar size={11} color="#6c757d" /> {selected.event_date || 'Tarix yoxdur'}</div>
                       <div style={{ fontSize: 12, color: '#6c757d', display: 'flex', alignItems: 'center', gap: 6, marginTop: 4 }}><MapPin size={11} /> {selected.location || '—'}</div>
                     </div>
@@ -284,13 +284,13 @@ export default function OrdersTab({ token }: { token: string }) {
                 </div>
                 {selected.note && (
                   <div className="p-3 rounded-3 mb-3" style={{ background: '#fff8e1', border: '1px solid #ffe082' }}>
-                    <div style={{ fontSize: 10, fontWeight: 700, color: '#adb5bd', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6 }}>Qeyd</div>
+                    <div style={{ fontSize: 10, fontWeight: 700, color: '#6c757d', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6 }}>Qeyd</div>
                     <div style={{ fontSize: 13 }}>{selected.note}</div>
                   </div>
                 )}
                 {selected.items?.length > 0 && (
                   <div>
-                    <div style={{ fontSize: 10, fontWeight: 700, color: '#adb5bd', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8 }}>Məhsullar ({selected.items.length})</div>
+                    <div style={{ fontSize: 10, fontWeight: 700, color: '#6c757d', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8 }}>Məhsullar ({selected.items.length})</div>
                     {selected.items.map((item: any, i) => {
                       const prod = getProduct(item.productId);
                       const img  = prod?.images?.[0] || item.image || '';
@@ -303,7 +303,7 @@ export default function OrdersTab({ token }: { token: string }) {
                           </div>
                           <div className="flex-grow-1 min-w-0">
                             <div className="fw-semibold" style={{ fontSize: 13, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{name}</div>
-                            {cat && <div style={{ fontSize: 10, color: '#adb5bd' }}>{cat}</div>}
+                            {cat && <div style={{ fontSize: 10, color: '#6c757d' }}>{cat}</div>}
                             {item.technicalAnswers && Object.keys(item.technicalAnswers).length > 0 && (
                               <div style={{ fontSize: 10, color: '#6c757d', marginTop: 2 }}>
                                 {Object.entries(item.technicalAnswers).map(([k,v]) => `${k}: ${v}`).join(' · ')}
@@ -364,7 +364,7 @@ export default function OrdersTab({ token }: { token: string }) {
                   </div>
                   <div>
                     <h6 className="mb-0 fw-bold">{editId ? 'Sifarişi Düzəlt' : 'Yeni Sifariş'}</h6>
-                    <div style={{ fontSize: 11, color: '#adb5bd' }}>{editId ? `#${editId}` : 'Yeni sifariş əlavə et'}</div>
+                    <div style={{ fontSize: 11, color: '#6c757d' }}>{editId ? `#${editId}` : 'Yeni sifariş əlavə et'}</div>
                   </div>
                 </div>
                 <button onClick={closeModal} className="btn-close" />

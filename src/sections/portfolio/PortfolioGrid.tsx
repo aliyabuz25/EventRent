@@ -1,6 +1,9 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Calendar, MapPin, ArrowUpRight, X, ChevronLeft, ChevronRight, Play } from 'lucide-react';
+import { useSiteContent } from '../../content.context';
+import { t } from '../../content';
+import { PortfolioProject } from '../../types';
 
 type Project = {
   title: string;
@@ -12,61 +15,6 @@ type Project = {
   poster?: string;
   image?: string;
 };
-
-const PROJECTS: Project[] = [
-  {
-    title: 'Beynəlxalq Enerji Forumu',
-    client: 'Energetika Nazirliyi',
-    date: 'İyun 2023',
-    location: 'Bakı Konqres Mərkəzi',
-    videoUrl: '/videos/service1.mp4',
-    poster: 'https://images.unsplash.com/photo-1505373877841-8d2547d4e3e4?q=80&w=800&auto=format&fit=crop',
-    category: 'Konfrans',
-  },
-  {
-    title: 'Yeni İl Korporativ Gecəsi',
-    client: 'PASHA Bank',
-    date: 'Dekabr 2023',
-    location: 'Four Seasons Hotel',
-    videoUrl: '/videos/service2.mp4',
-    poster: 'https://images.unsplash.com/photo-1547828407-657878541226?q=80&w=800&auto=format&fit=crop',
-    category: 'Korporativ',
-  },
-  {
-    title: 'Məhsul Təqdimatı',
-    client: 'Samsung Azerbaijan',
-    date: 'Mart 2024',
-    location: 'JW Marriott Absheron',
-    videoUrl: '/videos/service3.mp4',
-    poster: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=800&auto=format&fit=crop',
-    category: 'Təqdimat',
-  },
-  {
-    title: 'Yay Festivalı',
-    client: 'Mədəniyyət Nazirliyi',
-    date: 'Avqust 2023',
-    location: 'Dənizkənarı Bulvar',
-    videoUrl: '/videos/services-bg.mp4',
-    poster: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=800&auto=format&fit=crop',
-    category: 'Festival',
-  },
-  {
-    title: 'Teambuilding Günü',
-    client: 'SOCAR',
-    date: 'Sentyabr 2023',
-    location: 'Quba Palace',
-    image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=800&auto=format&fit=crop',
-    category: 'Teambuilding',
-  },
-  {
-    title: 'Musiqi Mükafatları',
-    client: 'İTV',
-    date: 'Yanvar 2024',
-    location: 'Heydər Əliyev Sarayı',
-    image: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=800&auto=format&fit=crop',
-    category: 'Konsert',
-  },
-];
 
 function ReelsCard({ project, index, onOpen }: { project: Project; index: number; onOpen: (i: number) => void }) {
   const [isHovered, setIsHovered] = useState(false);
@@ -104,20 +52,31 @@ function ReelsCard({ project, index, onOpen }: { project: Project; index: number
             <video
               ref={videoRef}
               src={project.videoUrl}
-              poster={project.poster}
+              poster={project.poster || undefined}
               muted
               loop
               playsInline
               preload="metadata"
               className="w-full h-full object-cover"
             />
-          ) : (
+          ) : project.image ? (
             <img
               src={project.image}
               alt={project.title}
               className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-1000"
               referrerPolicy="no-referrer"
             />
+          ) : (
+            <div className="w-full h-full flex flex-col items-center justify-center"
+              style={{ background: 'linear-gradient(160deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)' }}>
+              <div className="w-16 h-16 rounded-full flex items-center justify-center mb-4"
+                style={{ background: 'rgba(227,6,19,0.15)', border: '1px solid rgba(227,6,19,0.3)' }}>
+                <Play className="w-7 h-7 text-white/40 ml-1" />
+              </div>
+              <span className="text-white/20 text-[10px] font-bold uppercase tracking-widest text-center px-4">
+                {project.category}
+              </span>
+            </div>
           )}
 
           {/* Play indicator (hover'da gizlenir) */}
@@ -216,20 +175,32 @@ function ReelsViewer({ projects, activeIndex, onClose, onNavigate }: {
           {project.videoUrl ? (
             <video
               src={project.videoUrl}
-              poster={project.poster}
+              poster={project.poster || undefined}
               autoPlay
               controls
               loop
               playsInline
               className="w-full h-full object-cover"
             />
-          ) : (
+          ) : project.image ? (
             <img
               src={project.image}
               alt={project.title}
               className="w-full h-full object-cover"
               referrerPolicy="no-referrer"
             />
+          ) : (
+            <div className="w-full h-full flex flex-col items-center justify-center gap-4"
+              style={{ background: 'linear-gradient(160deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)' }}>
+              <div className="w-20 h-20 rounded-full flex items-center justify-center"
+                style={{ background: 'rgba(227,6,19,0.15)', border: '1px solid rgba(227,6,19,0.3)' }}>
+                <Play className="w-9 h-9 text-white/50 ml-1" />
+              </div>
+              <div className="text-center px-6">
+                <div className="text-white/60 text-sm font-bold uppercase tracking-widest mb-1">{project.category}</div>
+                <div className="text-white/30 text-xs">Video tezliklə əlavə olunacaq</div>
+              </div>
+            </div>
           )}
 
           {/* Info overlay */}
@@ -254,6 +225,18 @@ function ReelsViewer({ projects, activeIndex, onClose, onNavigate }: {
 
 export default function PortfolioGrid() {
   const [activeReel, setActiveReel] = useState<number | null>(null);
+  const { content, locale } = useSiteContent();
+
+  const PROJECTS: Project[] = (content?.portfolio?.projects || []).map((p: PortfolioProject) => ({
+    title:    t(locale, p.title),
+    client:   p.client,
+    date:     t(locale, p.date),
+    location: t(locale, p.location),
+    category: t(locale, p.category),
+    videoUrl: p.videoUrl || undefined,
+    poster:   p.poster   || undefined,
+    image:    p.image    || undefined,
+  }));
 
   return (
     <>

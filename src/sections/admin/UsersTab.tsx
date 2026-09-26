@@ -139,7 +139,7 @@ export default function UsersTab({ token, currentUserId }: { token: string; curr
                         {user.active ? 'Aktiv' : 'Deaktiv'}
                       </span>
                     </td>
-                    <td className="align-middle" style={{ fontSize: 11, color: '#adb5bd' }}>
+                    <td className="align-middle" style={{ fontSize: 11, color: '#6c757d' }}>
                       {new Date(user.created_at).toLocaleDateString('az-AZ')}
                     </td>
                     <td className="align-middle text-end pe-3">
@@ -177,7 +177,7 @@ export default function UsersTab({ token, currentUserId }: { token: string; curr
                   </div>
                   <div>
                     <h6 className="mb-0 fw-bold">{editId ? 'İstifadəçini Düzəlt' : 'Yeni İstifadəçi'}</h6>
-                    <div style={{ fontSize: 11, color: '#adb5bd' }}>{editId ? `ID: ${editId}` : 'Yeni hesab yarat'}</div>
+                    <div style={{ fontSize: 11, color: '#6c757d' }}>{editId ? `ID: ${editId}` : 'Yeni hesab yarat'}</div>
                   </div>
                 </div>
                 <button onClick={closeModal} className="btn-close" />
@@ -219,7 +219,7 @@ export default function UsersTab({ token, currentUserId }: { token: string; curr
                           <div key={key} onClick={() => setForm({ ...form, role: key })}
                             style={{ flex: 1, padding: '10px 12px', borderRadius: 10, cursor: 'pointer', border: `2px solid ${form.role === key ? val.color : '#dee2e6'}`, background: form.role === key ? val.bg : '#fff', transition: 'all 0.15s', textAlign: 'center' }}>
                             <div style={{ fontWeight: 700, fontSize: 12, color: form.role === key ? val.color : '#495057' }}>{val.label}</div>
-                            <div style={{ fontSize: 10, color: '#adb5bd', marginTop: 2 }}>
+                            <div style={{ fontSize: 10, color: '#6c757d', marginTop: 2 }}>
                               {key === 'admin' ? 'Tam giriş' : key === 'sales' ? 'Sifarişlər' : 'Yalnız baxış'}
                             </div>
                           </div>

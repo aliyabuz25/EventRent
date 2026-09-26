@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Plus, ArrowRight } from 'lucide-react';
+import { Plus, ArrowRight, Package } from 'lucide-react';
 import { Product } from '../types';
 import { cn } from '../lib/utils';
 import { motion } from 'motion/react';
@@ -12,6 +12,7 @@ import { t } from '../content';
 
 export default function ProductCard({ product }: { product: Product }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [imgError, setImgError] = useState(false);
   const navigate = useNavigate();
   const { addItem } = useCart();
   const { content, locale } = useSiteContent();
@@ -33,12 +34,18 @@ export default function ProductCard({ product }: { product: Product }) {
         <TiltCard>
           <div className="relative bg-white rounded-[3rem] overflow-hidden border border-gray-100 transition-all duration-500 shadow-xl group-hover:shadow-2xl">
             <div className="block relative aspect-square overflow-hidden border-8 border-gray-50 rounded-[3rem] m-4 shadow-sm group-hover:border-white transition-all duration-500">
-              <img
-                src={product.images[0]}
-                alt={product.name}
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                referrerPolicy="no-referrer"
-              />
+              {product.images?.[0] && !imgError ? (
+                <img
+                  src={product.images[0]}
+                  alt={product.name}
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  onError={() => setImgError(true)}
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                  <Package className="w-16 h-16 text-gray-300" />
+                </div>
+              )}
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
               
               <div className="absolute top-6 left-6 flex flex-col gap-2">

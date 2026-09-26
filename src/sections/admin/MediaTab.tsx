@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Upload, Trash2, Copy, Image, RefreshCw, Check, X } from 'lucide-react';
+import { Upload, Trash2, Copy, Image, RefreshCw, Check, X, Video } from 'lucide-react';
+
+const VIDEO_EXTS = ['.mp4', '.webm', '.mov', '.avi'];
+const isVideo = (filename: string) => VIDEO_EXTS.some(e => filename.toLowerCase().endsWith(e));
 import { useToast } from '../../components/Toast';
 
 interface MediaFile {
@@ -24,7 +27,12 @@ function MediaCard({ file, copied, onPreview, onCopy, onDelete }: {
         onClick={onPreview}
       >
         <div style={{ height: 110, background: '#f8f9fa', position: 'relative', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          {file.filename.endsWith('.svg') ? (
+          {isVideo(file.filename) ? (
+            <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 4, background: '#1a1a2e' }}>
+              <Video size={28} color="#e30613" />
+              <span style={{ fontSize: 9, color: '#6c757d', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{file.filename.split('.').pop()}</span>
+            </div>
+          ) : file.filename.endsWith('.svg') ? (
             <img src={file.url} style={{ maxWidth: '70%', maxHeight: '70%', objectFit: 'contain' }} />
           ) : (
             <img src={file.url} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -42,7 +50,7 @@ function MediaCard({ file, copied, onPreview, onCopy, onDelete }: {
         </div>
         <div className="p-2">
           <div style={{ fontSize: 11, fontWeight: 600, color: '#212529', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{file.filename}</div>
-          <div style={{ fontSize: 10, color: '#adb5bd' }}>{formatSize(file.size)}</div>
+          <div style={{ fontSize: 10, color: '#6c757d' }}>{formatSize(file.size)}</div>
         </div>
       </div>
     </div>
@@ -118,14 +126,14 @@ export default function MediaTab({ token }: { token: string }) {
       <div className="d-flex align-items-center justify-content-between mb-4">
         <div>
           <h5 className="mb-0 fw-bold">Media & Görsellər</h5>
-          <div style={{ fontSize: 12, color: '#6c757d' }}>{files.length} fayl · Logo, ikon, şəkil</div>
+          <div style={{ fontSize: 12, color: '#6c757d' }}>{files.length} fayl · Şəkil və video faylları</div>
         </div>
         <div className="d-flex gap-2">
           <button onClick={load} className="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1" style={{ borderRadius: 10 }}><RefreshCw size={13} /></button>
           <button onClick={() => inputRef.current?.click()} disabled={uploading} className="btn btn-danger btn-sm fw-semibold d-flex align-items-center gap-2" style={{ borderRadius: 10, padding: '8px 16px' }}>
             <Upload size={14} /> {uploading ? 'Yüklənir...' : 'Fayl Yüklə'}
           </button>
-          <input ref={inputRef} type="file" accept="image/*" multiple hidden onChange={e => handleFiles(e.target.files)} />
+          <input ref={inputRef} type="file" accept="image/*,video/mp4,video/webm,video/quicktime,.mp4,.webm,.mov,.avi" multiple hidden onChange={e => handleFiles(e.target.files)} />
         </div>
       </div>
 
@@ -146,18 +154,18 @@ export default function MediaTab({ token }: { token: string }) {
           transition: 'all 0.15s',
         }}
       >
-        <Upload size={28} color={dragOver ? '#e30613' : '#adb5bd'} style={{ marginBottom: 10 }} />
+        <Upload size={28} color={dragOver ? '#e30613' : '#6c757d'} style={{ marginBottom: 10 }} />
         <div style={{ fontWeight: 600, fontSize: 14, color: dragOver ? '#e30613' : '#495057', marginBottom: 4 }}>
           {uploading ? 'Yüklənir...' : 'Faylları buraya sürüklə və ya klik et'}
         </div>
-        <div style={{ fontSize: 12, color: '#adb5bd' }}>JPG, PNG, SVG, WebP, GIF, ICO · Maks 8MB</div>
+        <div style={{ fontSize: 12, color: '#6c757d' }}>JPG, PNG, SVG, WebP, GIF, ICO · MP4, WebM, MOV · Maks 200MB</div>
       </div>
 
       {/* File grid */}
       {loading ? (
         <div className="text-center py-5"><div className="spinner-border text-danger" style={{ width: 28, height: 28 }} /></div>
       ) : files.length === 0 ? (
-        <div className="text-center py-5" style={{ color: '#adb5bd' }}>
+        <div className="text-center py-5" style={{ color: '#6c757d' }}>
           <Image size={40} style={{ marginBottom: 12, opacity: 0.4 }} />
           <div style={{ fontSize: 13 }}>Heç bir fayl yoxdur</div>
         </div>
@@ -184,13 +192,23 @@ export default function MediaTab({ token }: { token: string }) {
               <div className="modal-header border-0 px-4 pt-4 pb-2">
                 <div>
                   <h6 className="mb-0 fw-bold" style={{ fontSize: 14 }}>{preview.filename}</h6>
-                  <div style={{ fontSize: 11, color: '#adb5bd' }}>{formatSize(preview.size)}</div>
+                  <div style={{ fontSize: 11, color: '#6c757d' }}>{formatSize(preview.size)}</div>
                 </div>
                 <button onClick={() => setPreview(null)} className="btn-close" />
               </div>
               <div className="modal-body px-4 pb-2">
-                <div style={{ background: '#f8f9fa', borderRadius: 12, padding: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 200 }}>
-                  <img src={preview.url} style={{ maxWidth: '100%', maxHeight: 360, objectFit: 'contain', borderRadius: 8 }} onClick={e => e.stopPropagation()} />
+                <div style={{ background: isVideo(preview.filename) ? '#0d0d1a' : '#f8f9fa', borderRadius: 12, padding: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 200 }}>
+                  {isVideo(preview.filename) ? (
+                    <video
+                      src={preview.url}
+                      controls
+                      autoPlay={false}
+                      style={{ maxWidth: '100%', maxHeight: 360, borderRadius: 8, display: 'block' }}
+                      onClick={e => e.stopPropagation()}
+                    />
+                  ) : (
+                    <img src={preview.url} style={{ maxWidth: '100%', maxHeight: 360, objectFit: 'contain', borderRadius: 8 }} onClick={e => e.stopPropagation()} />
+                  )}
                 </div>
               </div>
               <div className="modal-footer border-0 px-4 pb-4 gap-2">

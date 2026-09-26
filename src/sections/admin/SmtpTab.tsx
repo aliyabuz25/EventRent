@@ -104,7 +104,7 @@ export default function SmtpTab({ token }: { token: string }) {
       <form onSubmit={handleSave}>
         <div className="card border-0 shadow-sm mb-3" style={{ borderRadius: 14 }}>
           <div className="card-body p-4">
-            <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.15em', color: '#adb5bd', marginBottom: 16 }}>
+            <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.15em', color: '#6c757d', marginBottom: 16 }}>
               <Server size={12} style={{ marginRight: 6 }} />Server
             </div>
             <div className="row g-3">
@@ -128,7 +128,7 @@ export default function SmtpTab({ token }: { token: string }) {
 
         <div className="card border-0 shadow-sm mb-3" style={{ borderRadius: 14 }}>
           <div className="card-body p-4">
-            <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.15em', color: '#adb5bd', marginBottom: 16 }}>
+            <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.15em', color: '#6c757d', marginBottom: 16 }}>
               <Lock size={12} style={{ marginRight: 6 }} />Giriş Məlumatları
             </div>
             <div className="row g-3">
@@ -151,7 +151,7 @@ export default function SmtpTab({ token }: { token: string }) {
 
         <div className="card border-0 shadow-sm mb-3" style={{ borderRadius: 14 }}>
           <div className="card-body p-4">
-            <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.15em', color: '#adb5bd', marginBottom: 16 }}>
+            <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.15em', color: '#6c757d', marginBottom: 16 }}>
               <Mail size={12} style={{ marginRight: 6 }} />Göndərici / Alıcı
             </div>
             <div className="row g-3">
@@ -182,7 +182,7 @@ export default function SmtpTab({ token }: { token: string }) {
 
       <div className="card border-0 shadow-sm" style={{ borderRadius: 14 }}>
         <div className="card-body p-4">
-          <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.15em', color: '#adb5bd', marginBottom: 16 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.15em', color: '#6c757d', marginBottom: 16 }}>
             <Send size={12} style={{ marginRight: 6 }} />Test Email
           </div>
           <div className="d-flex gap-2">

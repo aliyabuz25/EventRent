@@ -15,6 +15,9 @@ function deepMerge<T>(base: T, override: unknown): T {
     const overrideVal = override[key];
     if (isPlainObject(baseVal) && isPlainObject(overrideVal)) {
       result[key] = deepMerge(baseVal, overrideVal);
+    } else if (Array.isArray(baseVal) && Array.isArray(overrideVal) && overrideVal.length === 0) {
+      // Don't overwrite a non-empty default array with an empty override array
+      result[key] = baseVal;
     } else if (overrideVal !== undefined) {
       result[key] = overrideVal;
     }
@@ -44,20 +47,22 @@ export async function loadSiteContent(): Promise<SiteContent> {
   }
 }
 
-export function t(locale: string | undefined, value: { az: string; en: string; ru: string; tr: string }): string {
+export function t(locale: string | undefined, value: { az: string; en: string; ru: string; tr: string } | undefined | null): string {
+  if (!value || typeof value !== 'object') return '';
   const normalized = (locale || DEFAULT_LOCALE).toLowerCase();
-  if (normalized === 'en') return value.en;
-  if (normalized === 'ru') return value.ru;
-  if (normalized === 'tr') return value.tr;
-  return value.az;
+  if (normalized === 'en') return value.en ?? value.az ?? '';
+  if (normalized === 'ru') return value.ru ?? value.az ?? '';
+  if (normalized === 'tr') return value.tr ?? value.az ?? '';
+  return value.az ?? '';
 }
 
-export function ta(locale: string | undefined, value: { az: string[]; en: string[]; ru: string[]; tr: string[] }): string[] {
+export function ta(locale: string | undefined, value: { az: string[]; en: string[]; ru: string[]; tr: string[] } | undefined | null): string[] {
+  if (!value || typeof value !== 'object') return [];
   const normalized = (locale || DEFAULT_LOCALE).toLowerCase();
-  if (normalized === 'en') return value.en;
-  if (normalized === 'ru') return value.ru;
-  if (normalized === 'tr') return value.tr;
-  return value.az;
+  if (normalized === 'en') return value.en ?? value.az ?? [];
+  if (normalized === 'ru') return value.ru ?? value.az ?? [];
+  if (normalized === 'tr') return value.tr ?? value.az ?? [];
+  return value.az ?? [];
 }
 
 export function getServiceCategories(content: SiteContent) {

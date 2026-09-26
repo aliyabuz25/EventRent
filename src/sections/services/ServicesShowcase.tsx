@@ -117,7 +117,7 @@ export default function ServicesShowcase() {
             })}
           </div>
 
-          <div className="flex items-center gap-2.5 mt-8">
+          <div className="flex items-center gap-2.5 mt-8 pb-8">
             {items.map((_, i) => (
               <div key={i} className="rounded-full transition-all duration-500"
                 style={{
@@ -154,7 +154,8 @@ export default function ServicesShowcase() {
             style={{ background: 'linear-gradient(to right, #080808 0%, transparent 18%)' }} />
         </div>
 
-        <div className="absolute bottom-0 left-0 right-0 z-30 h-px" style={{ background: 'rgba(255,255,255,0.06)' }}>
+        {/* Progress bar — tam aşağıda, ayrı layer, heç bir elementlə overlap etmir */}
+        <div className="absolute bottom-0 left-0 right-0 z-40 h-[2px]" style={{ background: 'rgba(255,255,255,0.06)' }}>
           <div ref={progressRef} className="h-full origin-left"
             style={{ background: '#e30613', transform: 'scaleX(0)', willChange: 'transform' }} />
         </div>

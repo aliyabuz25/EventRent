@@ -124,7 +124,7 @@ export default function SupportTab({ token }: { token: string }) {
                   <div style={{ fontSize: 12, color: '#6c757d', marginTop: 2 }}>
                     {ticket.user_name || 'Anonim'} {ticket.user_email && `· ${ticket.user_email}`} · #{String(ticket.id).padStart(4,'0')}
                   </div>
-                  <div style={{ fontSize: 11, color: '#adb5bd', marginTop: 2 }}>{ticket.created_at}</div>
+                  <div style={{ fontSize: 11, color: '#6c757d', marginTop: 2 }}>{ticket.created_at}</div>
                 </div>
                 <div className="d-flex gap-1 align-items-center">
                   <button onClick={e => { e.stopPropagation(); handleDelete(ticket.id); }} className="btn btn-sm btn-outline-danger d-flex align-items-center" style={{ borderRadius: 8, padding: '4px 8px' }}><Trash2 size={12} /></button>
@@ -137,7 +137,7 @@ export default function SupportTab({ token }: { token: string }) {
                 <div style={{ borderTop: '1px solid #f1f3f5' }}>
                   {/* Message */}
                   <div className="p-4">
-                    <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#adb5bd', marginBottom: 8 }}>Müştəri mesajı</div>
+                    <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#6c757d', marginBottom: 8 }}>Müştəri mesajı</div>
                     <div style={{ background: '#f8f9fa', borderRadius: 12, padding: 16, fontSize: 13, lineHeight: 1.6, borderLeft: '4px solid #dee2e6' }}>{ticket.message}</div>
                   </div>
 
@@ -146,13 +146,13 @@ export default function SupportTab({ token }: { token: string }) {
                     <div className="px-4 pb-3">
                       <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#198754', marginBottom: 8 }}>Cavabınız</div>
                       <div style={{ background: '#e8f5e9', borderRadius: 12, padding: 16, fontSize: 13, lineHeight: 1.6, borderLeft: '4px solid #198754' }}>{ticket.reply}</div>
-                      {ticket.replied_at && <div style={{ fontSize: 11, color: '#adb5bd', marginTop: 6 }}>{ticket.replied_at}</div>}
+                      {ticket.replied_at && <div style={{ fontSize: 11, color: '#6c757d', marginTop: 6 }}>{ticket.replied_at}</div>}
                     </div>
                   )}
 
                   {/* Reply form */}
                   <div className="px-4 pb-4">
-                    <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#adb5bd', marginBottom: 8 }}>
+                    <div style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#6c757d', marginBottom: 8 }}>
                       {ticket.reply ? 'Cavabı Yenilə' : 'Cavab Yaz'}
                       {ticket.user_email && <span className="ms-2" style={{ color: '#0d6efd', textTransform: 'none', letterSpacing: 0 }}>· email: {ticket.user_email}</span>}
                     </div>

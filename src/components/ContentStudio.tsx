@@ -2,11 +2,11 @@ import React, { useMemo, useState, useEffect, useRef, useCallback } from 'react'
 import { useSiteContent } from '../content.context';
 import { t } from '../content';
 import { Locale, LocalizedText, LocalizedTextArray, SiteContent } from '../types';
-import { Save, RefreshCw, Pencil, X, Plus, Trash2, Eye, EyeOff, Check, ImageIcon, History, RotateCcw } from 'lucide-react';
+import { Save, RefreshCw, Pencil, X, Plus, Trash2, Eye, EyeOff, Check, ImageIcon, History, RotateCcw, Video, Upload, Link } from 'lucide-react';
 import { useToast } from './Toast';
 
 const LANGS: Locale[] = ['az', 'en', 'ru', 'tr'];
-type Section = 'home' | 'about' | 'services' | 'contact' | 'footer';
+type Section = 'home' | 'about' | 'services' | 'contact' | 'footer' | 'portfolio';
 
 interface ContentStudioProps { section?: Section; className?: string; }
 
@@ -123,6 +123,87 @@ function ImgField({ label, value, onChange, token }: { label: string; value: str
               </div>
             </div>
           </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function VideoField({ label, value, onChange, token }: { label: string; value: string; onChange: (v: string) => void; token?: string }) {
+  const [tab, setTab] = useState<'url' | 'upload'>('url');
+  const [uploading, setUploading] = useState(false);
+  const [uploadErr, setUploadErr] = useState('');
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  const isVideo = (v: string) => /\.(mp4|webm|mov|avi)/i.test(v);
+
+  const handleUpload = async (file: File) => {
+    setUploading(true);
+    setUploadErr('');
+    try {
+      const fd = new FormData();
+      fd.append('file', file);
+      const res = await fetch('/api/media/upload', {
+        method: 'POST',
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        body: fd,
+      });
+      const data = await res.json();
+      if (data.url) {
+        onChange(window.location.origin + data.url);
+      } else {
+        setUploadErr(data.error || 'Yükleme xətası');
+      }
+    } catch {
+      setUploadErr('Şəbəkə xətası');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  return (
+    <div>
+      <label style={labelStyle}>{label}</label>
+      <div className="d-flex gap-1 mb-2">
+        <button type="button" className={`btn btn-sm ${tab === 'url' ? 'btn-dark' : 'btn-outline-secondary'}`} style={{ borderRadius: 8, fontSize: 11 }} onClick={() => setTab('url')}>
+          <Link size={11} className="me-1" /> URL
+        </button>
+        <button type="button" className={`btn btn-sm ${tab === 'upload' ? 'btn-dark' : 'btn-outline-secondary'}`} style={{ borderRadius: 8, fontSize: 11 }} onClick={() => setTab('upload')}>
+          <Upload size={11} className="me-1" /> Yüklə
+        </button>
+      </div>
+      {tab === 'url' ? (
+        <input className={inputCls} style={{ borderRadius: 8 }} value={value} onChange={e => onChange(e.target.value)} placeholder="https://... və ya /uploads/video.mp4" />
+      ) : (
+        <div>
+          <input
+            ref={fileRef}
+            type="file"
+            accept="video/mp4,video/webm,video/mov,.mp4,.webm,.mov,.avi"
+            style={{ display: 'none' }}
+            onChange={e => { const f = e.target.files?.[0]; if (f) handleUpload(f); }}
+          />
+          <button
+            type="button"
+            className="btn btn-sm btn-outline-secondary w-100"
+            style={{ borderRadius: 8, fontSize: 12 }}
+            onClick={() => fileRef.current?.click()}
+            disabled={uploading}
+          >
+            {uploading ? 'Yüklənir...' : <><Upload size={12} className="me-1" /> Video seç (mp4, webm, mov)</>}
+          </button>
+          {uploadErr && <div style={{ color: '#e30613', fontSize: 11, marginTop: 4 }}>{uploadErr}</div>}
+        </div>
+      )}
+      {value && (
+        <div style={{ marginTop: 8, borderRadius: 8, overflow: 'hidden', border: '1px solid #dee2e6', background: '#000' }}>
+          {isVideo(value) ? (
+            <video src={value} controls style={{ width: '100%', maxHeight: 160, display: 'block' }} />
+          ) : (
+            <div style={{ padding: 8, fontSize: 11, color: '#6c757d', wordBreak: 'break-all' }}>
+              <Video size={12} className="me-1" />{value}
+            </div>
+          )}
         </div>
       )}
     </div>
@@ -468,25 +549,6 @@ export default function ContentStudio({ section = 'home', className }: ContentSt
           </div>
         </Card>
 
-        <Card title="Approach">
-          <G2>
-            <FL label="Badge" value={content.about.approach.badge} locale={editorLocale} onChange={v => upd(c => { c.about.approach.badge = setText(c.about.approach.badge, v); return c; })} />
-            <FL label="Başlıq 1" value={content.about.approach.titleLine1} locale={editorLocale} onChange={v => upd(c => { c.about.approach.titleLine1 = setText(c.about.approach.titleLine1, v); return c; })} />
-            <FL label="Başlıq 2" value={content.about.approach.titleLine2} locale={editorLocale} onChange={v => upd(c => { c.about.approach.titleLine2 = setText(c.about.approach.titleLine2, v); return c; })} />
-          </G2>
-          <div className="mt-3">
-            {content.about.approach.steps.map((step, i) => (
-              <div key={i} style={subCardStyle}>
-                <div style={{ fontSize: 10, fontWeight: 700, color: '#e30613', marginBottom: 8 }}>{step.n}</div>
-                <G2>
-                  <FL label="Başlıq" value={step.title} locale={editorLocale} onChange={v => upd(c => { c.about.approach.steps[i].title = setText(c.about.approach.steps[i].title, v); return c; })} />
-                  <FL label="Mətn" value={step.text} locale={editorLocale} multiline onChange={v => upd(c => { c.about.approach.steps[i].text = setText(c.about.approach.steps[i].text, v); return c; })} />
-                </G2>
-              </div>
-            ))}
-          </div>
-        </Card>
-
         <Card title="Vision / Mission">
           <G2>
             <FL label="Badge" value={content.about.visionMission.badge} locale={editorLocale} onChange={v => upd(c => { c.about.visionMission.badge = setText(c.about.visionMission.badge, v); return c; })} />
@@ -787,6 +849,72 @@ export default function ContentStudio({ section = 'home', className }: ContentSt
           </div>
         </Card>
 
+      </div>
+    </div>
+  );
+
+  /* ══ PORTFOLIO ══ */
+  if (section === 'portfolio') return (
+    <div className={className}>
+      {topBar}
+      <div className="d-flex flex-column gap-3">
+        <Card title="Portfolio Layihələri" defaultOpen>
+          <div className="d-flex align-items-center justify-content-between mb-2">
+            <label style={labelStyle}>Layihələr ({(content.portfolio?.projects || []).length})</label>
+            <button type="button" className="btn btn-sm btn-outline-secondary" style={{ borderRadius: 9, fontSize: 11 }}
+              onClick={() => upd(c => {
+                if (!c.portfolio) c.portfolio = { projects: [] };
+                if (!c.portfolio.projects) c.portfolio.projects = [];
+                c.portfolio.projects.push({
+                  title:    { az: '', en: '', ru: '', tr: '' },
+                  client:   '',
+                  date:     { az: '', en: '', ru: '', tr: '' },
+                  location: { az: '', en: '', ru: '', tr: '' },
+                  category: { az: '', en: '', ru: '', tr: '' },
+                  videoUrl: '',
+                  poster:   '',
+                  image:    '',
+                });
+                return c;
+              })}>
+              <Plus size={11} /> Layihə Əlavə Et
+            </button>
+          </div>
+          {(content.portfolio?.projects || []).map((proj: any, i: number) => (
+            <div key={i} style={subCardStyle}>
+              <div className="d-flex align-items-center justify-content-between mb-3">
+                <span style={{ fontSize: 10, fontWeight: 700, color: '#e30613' }}>#{i + 1} — {proj.title?.az || 'Yeni Layihə'}</span>
+                <button type="button" className="btn btn-sm btn-outline-danger d-flex align-items-center" style={{ borderRadius: 8, padding: '2px 8px' }}
+                  onClick={() => upd(c => { c.portfolio.projects = c.portfolio.projects.filter((_: any, j: number) => j !== i); return c; })}>
+                  <Trash2 size={11} />
+                </button>
+              </div>
+              <G2>
+                <FL label="Başlıq" value={proj.title} locale={editorLocale} onChange={v => upd(c => { c.portfolio.projects[i].title = setText(c.portfolio.projects[i].title, v); return c; })} />
+                <PlainField label="Müştəri / Şirkət" value={proj.client} onChange={v => upd(c => { c.portfolio.projects[i].client = v; return c; })} placeholder="SOCAR" />
+                <FL label="Tarix" value={proj.date} locale={editorLocale} onChange={v => upd(c => { c.portfolio.projects[i].date = setText(c.portfolio.projects[i].date, v); return c; })} />
+                <FL label="Məkan" value={proj.location} locale={editorLocale} onChange={v => upd(c => { c.portfolio.projects[i].location = setText(c.portfolio.projects[i].location, v); return c; })} />
+                <FL label="Kateqoriya" value={proj.category} locale={editorLocale} onChange={v => upd(c => { c.portfolio.projects[i].category = setText(c.portfolio.projects[i].category, v); return c; })} />
+              </G2>
+              <div className="row g-3 mt-1">
+                <div className="col-12">
+                  <VideoField
+                    label="Video URL / Yüklə (mp4, webm, mov)"
+                    value={proj.videoUrl || ''}
+                    token={token}
+                    onChange={v => upd(c => { c.portfolio.projects[i].videoUrl = v; return c; })}
+                  />
+                </div>
+                <div className="col-md-6">
+                  <ImgField label="Poster Şəkil (video üçün)" value={proj.poster || ''} token={token} onChange={v => upd(c => { c.portfolio.projects[i].poster = v; return c; })} />
+                </div>
+                <div className="col-md-6">
+                  <ImgField label="Şəkil (video yoxdursa)" value={proj.image || ''} token={token} onChange={v => upd(c => { c.portfolio.projects[i].image = v; return c; })} />
+                </div>
+              </div>
+            </div>
+          ))}
+        </Card>
       </div>
     </div>
   );

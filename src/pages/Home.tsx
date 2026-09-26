@@ -1,7 +1,7 @@
 import React from 'react';
 import HomeHero from '../sections/home/HomeHero';
 import HomeVisionMissionCompact from '../sections/home/HomeVisionMissionCompact';
-import HomeTeam from '../sections/home/HomeTeam';
+
 import HomeCapabilities from '../sections/home/HomeCapabilities';
 import ServicesShowcase from '../sections/services/ServicesShowcase';
 import HomeEventTypes from '../sections/home/HomeEventTypes';
@@ -19,10 +19,6 @@ export default function Home() {
 
       <section id="vision-mission-section" aria-label="Vizyon & Missiya">
         <HomeVisionMissionCompact />
-      </section>
-
-      <section id="team-section" aria-label="Komanda">
-        <HomeTeam />
       </section>
 
       <section id="capabilities-section" aria-label="Xidmətlər">
