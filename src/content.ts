@@ -1,7 +1,7 @@
 import { SiteContent } from './types';
 import { DEFAULT_SITE_CONTENT } from './content.default';
 
-export const DEFAULT_LOCALE = 'az';
+export const DEFAULT_LOCALE = 'en';
 
 function isPlainObject(val: unknown): val is Record<string, unknown> {
   return Boolean(val && typeof val === 'object' && !Array.isArray(val));

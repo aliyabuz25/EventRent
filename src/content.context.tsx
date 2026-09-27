@@ -51,50 +51,11 @@ export function SiteContentProvider({ children }: { children: React.ReactNode })
     reloadContent();
   }, [reloadContent]);
 
-  /* Geolocation-based locale — only if user hasn't chosen manually */
+  /* Geolocation-based locale — removed for manual toggle only */
   useEffect(() => {
-    const stored = localStorage.getItem('site_locale');
     const urlLocale = new URLSearchParams(window.location.search).get('lang');
-    if (stored || urlLocale) return;
-
-    function detectFromCountry(cc: string) {
-      const c = cc.toLowerCase();
-      if (c === 'az') return 'az' as Locale;
-      if (c === 'tr') return 'tr' as Locale;
-      if (['ru', 'kz', 'uz', 'kg', 'tj', 'tm', 'by', 'md', 'am', 'ge'].includes(c)) return 'ru' as Locale;
-      return 'en' as Locale;
-    }
-
-    if ('geolocation' in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        async (pos) => {
-          try {
-            const { latitude, longitude } = pos.coords;
-            const res = await fetch(
-              `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=jsonv2`,
-              { headers: { 'User-Agent': 'Eventrent.az/1.0 (info@eventrent.az)' } }
-            );
-            const data = await res.json();
-            const cc = data?.address?.country_code || '';
-            setLocaleState(detectFromCountry(cc));
-          } catch {
-            fallbackToIp();
-          }
-        },
-        () => fallbackToIp(),
-        { timeout: 5000 }
-      );
-    } else {
-      fallbackToIp();
-    }
-
-    function fallbackToIp() {
-      fetch('https://ipapi.co/json/')
-        .then(r => r.json())
-        .then((data: { country_code?: string }) => {
-          setLocaleState(detectFromCountry(data.country_code || ''));
-        })
-        .catch(() => {});
+    if (urlLocale) {
+      setLocale(urlLocale as Locale);
     }
   }, []);
 

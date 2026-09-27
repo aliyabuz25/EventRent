@@ -1254,6 +1254,9 @@ export const DEFAULT_SITE_CONTENT: SiteContent = {
     heroBadge:      { az: 'Avadanlıq Kataloqu',  en: 'Equipment Catalog',  ru: 'Каталог оборудования', tr: 'Ekipman Kataloğu' },
     heroSub:        { az: 'Premium audio-vizual avadanlıqlar — dünyanın aparıcı istehsalçılarından, ən yüksək sənaye standartlarında.', en: 'Premium audio-visual equipment — from the world\'s leading manufacturers, at the highest industry standards.', ru: 'Премиальное аудиовизуальное оборудование — от ведущих мировых производителей, по высочайшим отраслевым стандартам.', tr: 'Premium ses-görüntü ekipmanları — dünyanın önde gelen üreticilerinden, en yüksek sektör standartlarında.' },
   },
+  portfolio: {
+    projects: []
+  },
   notFound: {
     title:  { az: 'Tapılmadı',                  en: 'Not Found',          ru: 'Не найдено',         tr: 'Bulunamadı' },
     body:   { az: 'Axtardığınız səhifə mövcud deyil və ya köçürülüb.', en: 'The page you are looking for does not exist or has been moved.', ru: 'Страница не существует или была перемещена.', tr: 'Aradığınız sayfa mevcut değil veya taşınmış.' },

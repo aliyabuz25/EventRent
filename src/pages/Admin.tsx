@@ -4,7 +4,7 @@ import {
   LayoutDashboard, MessageSquare, Package, Users, Home, Info,
   Settings, Phone, AlignJustify, RefreshCw,
   TrendingUp, Clock, FileText, ExternalLink,
-  ChevronRight, LogOut, Menu, ShoppingCart, Mail, UserCog, Eye, EyeOff, ImageIcon, Headphones, Bell,
+  ChevronRight, LogOut, Menu, ShoppingCart, Mail, UserCog, Eye, EyeOff, ImageIcon, Headphones, Bell, Globe
 } from 'lucide-react';
 import { Lead } from '../types';
 import AdminLeads from '../sections/admin/LeadsTab';
@@ -18,6 +18,73 @@ import AdminSupport from '../sections/admin/SupportTab';
 import AdminContent from '../components/ContentStudio';
 import DashboardTab from '../sections/admin/DashboardTab';
 import { ToastProvider } from '../components/Toast';
+import { useSiteContent } from '../content.context';
+
+// Admin translations dictionary
+const adminTranslations = {
+  az: {
+    dashboard: 'Panel',
+    orders: 'Sifarişlər',
+    leads: 'Müraciətlər',
+    products: 'Məhsullar',
+    teambuilding: 'Teambuilding',
+    support: 'Dəstək',
+    main: 'Əsas',
+    content: 'Məzmun',
+    system: 'Sistem',
+    home: 'Ana Səhifə',
+    about: 'Haqqımızda',
+    services: 'Xidmətlər',
+    contact: 'Əlaqə',
+    footer: 'Footer',
+    portfolio: 'Portfolio',
+    media: 'Media (Şəkillər)',
+    smtp: 'SMTP Ayarları',
+    users: 'İstifadəçilər',
+    logout: 'Çıxış',
+    site: 'Sayt',
+    notifications: 'Bildirişlər',
+    newNotifications: 'yeni bildiriş',
+    adminPanel: 'Admin Paneli',
+    login: 'Daxil ol',
+    email: 'Email',
+    password: 'Parol',
+    connecting: 'Qoşulur...',
+    serverError: 'Serverə qoşulma alınmadı.',
+    backToSite: 'Sayta qayıt',
+  },
+  en: {
+    dashboard: 'Dashboard',
+    orders: 'Orders',
+    leads: 'Leads',
+    products: 'Products',
+    teambuilding: 'Teambuilding',
+    support: 'Support',
+    main: 'Main',
+    content: 'Content',
+    system: 'System',
+    home: 'Home',
+    about: 'About',
+    services: 'Services',
+    contact: 'Contact',
+    footer: 'Footer',
+    portfolio: 'Portfolio',
+    media: 'Media (Images)',
+    smtp: 'SMTP Settings',
+    users: 'Users',
+    logout: 'Logout',
+    site: 'Site',
+    notifications: 'Notifications',
+    newNotifications: 'new notifications',
+    adminPanel: 'Admin Panel',
+    login: 'Login',
+    email: 'Email',
+    password: 'Password',
+    connecting: 'Connecting...',
+    serverError: 'Failed to connect to server.',
+    backToSite: 'Back to site',
+  }
+};
 
 type Tab = 'dashboard' | 'orders' | 'leads' | 'products' | 'teambuilding' | 'support'
   | 'content-home' | 'content-about' | 'content-services'
@@ -40,14 +107,7 @@ interface AuthUser {
   active: number;
 }
 
-const CONTENT_TABS: { id: Tab; section: ContentSection; label: string }[] = [
-  { id: 'content-home',      section: 'home',      label: 'Ana Səhifə' },
-  { id: 'content-about',     section: 'about',     label: 'Haqqımızda' },
-  { id: 'content-services',  section: 'services',  label: 'Xidmətlər' },
-  { id: 'content-contact',   section: 'contact',   label: 'Əlaqə' },
-  { id: 'content-footer',    section: 'footer',    label: 'Footer' },
-  { id: 'content-portfolio', section: 'portfolio', label: 'Portfolio' },
-];
+
 
 const TOKEN_KEY = 'er_admin_token';
 
@@ -58,7 +118,7 @@ function clearToken() { localStorage.removeItem(TOKEN_KEY); }
 /* ══════════════════════════════════════════
    Login Screen
 ══════════════════════════════════════════ */
-function LoginScreen({ onLogin }: { onLogin: (token: string, user: AuthUser) => void }) {
+function LoginScreen({ onLogin, locale, t }: { onLogin: (token: string, user: AuthUser) => void, locale: 'az' | 'en', t: typeof adminTranslations['az'] }) {
   const [email, setEmail]       = useState('');
   const [password, setPassword] = useState('');
   const [showPass, setShowPass] = useState(false);
@@ -78,12 +138,12 @@ function LoginScreen({ onLogin }: { onLogin: (token: string, user: AuthUser) => 
       const data = await res.json();
       if (!res.ok) { setError(data.error || 'Giriş uğursuz oldu.'); return; }
       onLogin(data.token, data.user);
-    } catch { setError('Serverə qoşulma alınmadı.'); }
+    } catch { setError(t.serverError); }
     finally { setLoading(false); }
   };
 
   return (
-    <div className="d-flex align-items-center justify-content-center vh-100 bg-light">
+    <div className="d-flex align-items-center justify-content-center min-vh-100 bg-light">
       <div style={{ width: '100%', maxWidth: 400, padding: '0 16px' }}>
         {/* Logo */}
         <div className="text-center mb-4">
@@ -93,7 +153,7 @@ function LoginScreen({ onLogin }: { onLogin: (token: string, user: AuthUser) => 
           <h5 className="fw-bold mb-0" style={{ letterSpacing: '-0.04em' }}>
             <span style={{ color: '#212529' }}>event</span><span style={{ color: '#e30613' }}>rent</span>
           </h5>
-          <div style={{ fontSize: 12, color: '#6c757d' }}>Admin Paneli</div>
+          <div style={{ fontSize: 12, color: '#6c757d' }}>{t.adminPanel}</div>
         </div>
 
         <div className="card border-0 shadow-sm p-4" style={{ borderRadius: 18 }}>
@@ -104,7 +164,7 @@ function LoginScreen({ onLogin }: { onLogin: (token: string, user: AuthUser) => 
           )}
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
-              <label className="form-label fw-semibold" style={{ fontSize: 12 }}>Email</label>
+              <label className="form-label fw-semibold" style={{ fontSize: 12 }}>{t.email}</label>
               <input
                 type="email" required
                 className="form-control"
@@ -116,7 +176,7 @@ function LoginScreen({ onLogin }: { onLogin: (token: string, user: AuthUser) => 
               />
             </div>
             <div className="mb-4">
-              <label className="form-label fw-semibold" style={{ fontSize: 12 }}>Parol</label>
+              <label className="form-label fw-semibold" style={{ fontSize: 12 }}>{t.password}</label>
               <div className="d-flex gap-2">
                 <input
                   type={showPass ? 'text' : 'password'} required
@@ -133,9 +193,12 @@ function LoginScreen({ onLogin }: { onLogin: (token: string, user: AuthUser) => 
             </div>
             <button type="submit" disabled={loading} className="btn btn-danger fw-semibold w-100" style={{ borderRadius: 10 }}>
               {loading ? <span className="spinner-border spinner-border-sm me-2" /> : null}
-              {loading ? 'Giriş edilir...' : 'Daxil ol'}
+              {loading ? t.connecting : t.login}
             </button>
           </form>
+          <div className="mt-3 text-center">
+             <a href="/" className="text-muted text-decoration-none" style={{ fontSize: 13 }}>&larr; {t.backToSite}</a>
+          </div>
         </div>
       </div>
     </div>
@@ -146,11 +209,36 @@ function LoginScreen({ onLogin }: { onLogin: (token: string, user: AuthUser) => 
    Main Admin
 ══════════════════════════════════════════ */
 export default function Admin() {
+  const { locale } = useSiteContent();
+  const t = adminTranslations[locale === 'az' ? 'az' : 'en'] || adminTranslations['en'];
+  
+  const CONTENT_TABS: { id: Tab; section: ContentSection; label: string }[] = [
+    { id: 'content-home',      section: 'home',      label: t.home },
+    { id: 'content-about',     section: 'about',     label: t.about },
+    { id: 'content-services',  section: 'services',  label: t.services },
+    { id: 'content-contact',   section: 'contact',   label: t.contact },
+    { id: 'content-footer',    section: 'footer',    label: t.footer },
+    { id: 'content-portfolio', section: 'portfolio', label: t.portfolio },
+  ];
+
+  const NAV_ITEMS: NavItemDef[] = [
+    { id: 'dashboard',    label: t.dashboard,    Icon: LayoutDashboard },
+    { id: 'orders',       label: t.orders,       Icon: ShoppingCart },
+    { id: 'leads',        label: t.leads,        Icon: MessageSquare },
+    { id: 'products',     label: t.products,     Icon: Package },
+    { id: 'teambuilding', label: t.teambuilding, Icon: Users },
+    { id: 'support',      label: t.support,      Icon: Headphones },
+    ...CONTENT_TABS.map(ct => ({ id: ct.id, label: ct.label, Icon: FileText })),
+    { id: 'media',        label: t.media,        Icon: ImageIcon },
+    { id: 'smtp',         label: t.smtp,         Icon: Mail },
+    { id: 'users',        label: t.users,        Icon: UserCog },
+  ];
+  
   const [user, setUser]         = useState<AuthUser | null>(null);
   const [token, setTokenState]  = useState<string>('');
   const [loading, setLoading]   = useState(true);
   const [tab, setTab]           = useState<Tab>('dashboard');
-  const [sideOpen, setSide]     = useState(true);
+  const [sideOpen, setSideOpen] = useState(true);
 
   const [leads, setLeads] = useState<Lead[]>([]);
   const [products, setProducts] = useState<any[]>([]);
@@ -166,6 +254,22 @@ export default function Admin() {
       Notification.requestPermission().then(p => { notifPermRef.current = p; });
     } else if ('Notification' in window) {
       notifPermRef.current = Notification.permission;
+    }
+  }, []);
+
+  // Initialize gTranslate for Admin panel
+  React.useEffect(() => {
+    // Check if script already exists to avoid duplicates
+    if (!document.getElementById('gtranslate-script-admin')) {
+      const gTranslateSettings = document.createElement('script');
+      gTranslateSettings.innerHTML = `window.gtranslateSettings = {"default_language":"az","languages":["tr","en","az","fr","it","es","de","th","tl","ar","ru","pl","bn"],"wrapper_selector":".gtranslate_wrapper","switcher_horizontal_position":"inline"}`;
+      document.body.appendChild(gTranslateSettings);
+
+      const gTranslateScript = document.createElement('script');
+      gTranslateScript.id = 'gtranslate-script-admin';
+      gTranslateScript.src = "https://cdn.gtranslate.net/widgets/latest/dwf.js";
+      gTranslateScript.defer = true;
+      document.body.appendChild(gTranslateScript);
     }
   }, []);
 
@@ -270,35 +374,35 @@ export default function Admin() {
 
   if (loading) return (
     <ToastProvider>
-      <div className="d-flex align-items-center justify-content-center vh-100 bg-light">
+      <div className="d-flex align-items-center justify-content-center min-vh-100 bg-light">
         <div className="spinner-border text-danger" style={{ width: 36, height: 36 }} />
       </div>
     </ToastProvider>
   );
 
-  if (!user) return <ToastProvider><LoginScreen onLogin={handleLogin} /></ToastProvider>;
+  if (!user) return <ToastProvider><LoginScreen onLogin={handleLogin} locale={locale === 'az' ? 'az' : 'en'} t={t} /></ToastProvider>;
 
   const isAdmin = user.role === 'admin';
   const newLeads = leads.filter(l => l.status === 'new').length;
   const contentSection = CONTENT_TABS.find(c => c.id === tab)?.section;
 
-  const NAV_ITEMS: NavItemDef[] = [
-    { id: 'dashboard',        label: 'Dashboard',    Icon: LayoutDashboard },
-    { id: 'orders',           label: 'Sifarişlər',   Icon: ShoppingCart,   badge: newOrdersCount  || undefined },
-    { id: 'leads',            label: 'Sorğular',     Icon: MessageSquare,  badge: newLeads        || undefined },
-    { id: 'products',         label: 'Məhsullar',    Icon: Package },
-    { id: 'teambuilding',     label: 'Teambuilding', Icon: Users },
-    { id: 'support',          label: 'Dəstək',       Icon: Headphones,     badge: newSupportCount || undefined },
+  const ALL_NAV_ITEMS: NavItemDef[] = [
+    { id: 'dashboard',        label: t.dashboard,    Icon: LayoutDashboard },
+    { id: 'orders',           label: t.orders,       Icon: ShoppingCart,   badge: newOrdersCount  || undefined },
+    { id: 'leads',            label: t.leads,        Icon: MessageSquare,  badge: newLeads        || undefined },
+    { id: 'products',         label: t.products,     Icon: Package },
+    { id: 'teambuilding',     label: t.teambuilding, Icon: Users },
+    { id: 'support',          label: t.support,      Icon: Headphones,     badge: newSupportCount || undefined },
     ...(isAdmin ? [
-      { id: 'content-home'      as Tab, label: 'Ana Səhifə',  Icon: Home },
-      { id: 'content-about'     as Tab, label: 'Haqqımızda',  Icon: Info },
-      { id: 'content-services'  as Tab, label: 'Xidmətlər',   Icon: Settings },
-      { id: 'content-contact'   as Tab, label: 'Əlaqə',       Icon: Phone },
-      { id: 'content-footer'    as Tab, label: 'Footer',      Icon: AlignJustify },
-      { id: 'content-portfolio' as Tab, label: 'Portfolio',   Icon: ImageIcon },
-      { id: 'media'            as Tab, label: 'Media',       Icon: ImageIcon },
-      { id: 'smtp'             as Tab, label: 'SMTP',         Icon: Mail },
-      { id: 'users'            as Tab, label: 'İstifadəçilər', Icon: UserCog },
+      { id: 'content-home'      as Tab, label: t.home,  Icon: Home },
+      { id: 'content-about'     as Tab, label: t.about,  Icon: Info },
+      { id: 'content-services'  as Tab, label: t.services,   Icon: Settings },
+      { id: 'content-contact'   as Tab, label: t.contact,       Icon: Phone },
+      { id: 'content-footer'    as Tab, label: t.footer,      Icon: AlignJustify },
+      { id: 'content-portfolio' as Tab, label: t.portfolio,   Icon: ImageIcon },
+      { id: 'media'            as Tab, label: t.media,       Icon: ImageIcon },
+      { id: 'smtp'             as Tab, label: t.smtp,         Icon: Mail },
+      { id: 'users'            as Tab, label: t.users, Icon: UserCog },
     ] : []),
   ];
 
@@ -306,14 +410,25 @@ export default function Admin() {
   const contentNavCount = isAdmin ? 6 : 0;
   const systemNavCount  = isAdmin ? 3 : 0;
 
-  const activeItem = NAV_ITEMS.find(n => n.id === tab);
+  const activeItem = ALL_NAV_ITEMS.find(n => n.id === tab);
 
   return (
     <ToastProvider>
-    <div style={{ display: 'flex', height: '100vh', fontFamily: 'Inter, system-ui, sans-serif', background: '#f4f5f7', cursor: 'auto' }}>
+    <div style={{ display: 'flex', height: '100dvh', fontFamily: 'Inter, system-ui, sans-serif', background: '#f4f5f7', cursor: 'auto' }}>
+
+      {/* MOBILE SIDEBAR OVERLAY */}
+      {sideOpen && (
+        <div 
+          className="d-md-none"
+          onClick={() => setSideOpen(false)}
+          style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 90 }}
+        />
+      )}
 
       {/* SIDEBAR */}
-      <aside style={{
+      <aside 
+        className={sideOpen ? 'position-fixed position-md-relative h-100' : 'd-none d-md-flex position-relative h-100'}
+        style={{
         width: sideOpen ? 224 : 60,
         minWidth: sideOpen ? 224 : 60,
         background: '#fff',
@@ -323,31 +438,43 @@ export default function Admin() {
         transition: 'width 0.22s ease, min-width 0.22s ease',
         overflow: 'hidden',
         zIndex: 100,
+        left: 0,
+        top: 0
       }}>
         {/* Logo */}
-        <div style={{ padding: '16px 14px', borderBottom: '1px solid #f1f3f5', display: 'flex', alignItems: 'center', gap: 10, minHeight: 60 }}>
-          <div style={{ width: 32, height: 32, background: '#e30613', borderRadius: 9, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-            <span style={{ color: '#fff', fontWeight: 900, fontSize: 15 }}>E</span>
+        <div style={{ padding: '16px 14px', borderBottom: '1px solid #f1f3f5', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, minHeight: 60 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div style={{ width: 32, height: 32, background: '#e30613', borderRadius: 9, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <span style={{ color: '#fff', fontWeight: 900, fontSize: 15 }}>E</span>
+            </div>
+            {sideOpen && <div style={{ fontWeight: 900, fontSize: 18, letterSpacing: '-0.04em', whiteSpace: 'nowrap', overflow: 'hidden', lineHeight: 1 }}>
+                <span style={{ color: '#212529' }}>event</span><span style={{ color: '#e30613' }}>rent</span>
+              </div>}
           </div>
-          {sideOpen && <div style={{ fontWeight: 900, fontSize: 18, letterSpacing: '-0.04em', whiteSpace: 'nowrap', overflow: 'hidden', lineHeight: 1 }}>
-              <span style={{ color: '#212529' }}>event</span><span style={{ color: '#e30613' }}>rent</span>
-            </div>}
+          {/* Toggle button inside sidebar when open on desktop */}
+          {sideOpen && (
+            <button 
+              className="d-none d-md-flex"
+              onClick={() => setSideOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px', borderRadius: 6, color: '#adb5bd' }}>
+              <Menu size={16} />
+            </button>
+          )}
         </div>
 
         {/* Nav */}
         <nav style={{ flex: 1, overflowY: 'auto', padding: '8px 6px' }}>
-          {sideOpen && <SectionLabel>Əsas</SectionLabel>}
-          {NAV_ITEMS.slice(0, dataNavCount).map(item => <NavBtn key={item.id} item={item} active={tab === item.id} open={sideOpen} onClick={() => setTab(item.id)} />)}
+          {sideOpen && <SectionLabel>{t.main}</SectionLabel>}
+          {ALL_NAV_ITEMS.slice(0, dataNavCount).map(item => <NavBtn key={item.id} item={item} active={tab === item.id} open={sideOpen} onClick={() => setTab(item.id)} />)}
 
           {isAdmin && (
             <>
-              {sideOpen && <SectionLabel>Məzmun</SectionLabel>}
+              {sideOpen && <SectionLabel>{t.content}</SectionLabel>}
               {!sideOpen && <div style={{ height: 6 }} />}
-              {NAV_ITEMS.slice(dataNavCount, dataNavCount + contentNavCount).map(item => <NavBtn key={item.id} item={item} active={tab === item.id} open={sideOpen} onClick={() => setTab(item.id)} />)}
+              {ALL_NAV_ITEMS.slice(dataNavCount, dataNavCount + contentNavCount).map(item => <NavBtn key={item.id} item={item} active={tab === item.id} open={sideOpen} onClick={() => setTab(item.id)} />)}
 
-              {sideOpen && <SectionLabel>Sistem</SectionLabel>}
+              {sideOpen && <SectionLabel>{t.system}</SectionLabel>}
               {!sideOpen && <div style={{ height: 6 }} />}
-              {NAV_ITEMS.slice(dataNavCount + contentNavCount).map(item => <NavBtn key={item.id} item={item} active={tab === item.id} open={sideOpen} onClick={() => setTab(item.id)} />)}
+              {ALL_NAV_ITEMS.slice(dataNavCount + contentNavCount).map(item => <NavBtn key={item.id} item={item} active={tab === item.id} open={sideOpen} onClick={() => setTab(item.id)} />)}
             </>
           )}
         </nav>
@@ -363,7 +490,7 @@ export default function Admin() {
                 <div style={{ fontSize: 12, fontWeight: 700, color: '#212529', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{user.name}</div>
                 <div style={{ fontSize: 10, color: '#adb5bd', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{user.role}</div>
               </div>
-              <button onClick={handleLogout} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, color: '#adb5bd', display: 'flex' }} title="Çıxış">
+              <button onClick={handleLogout} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, color: '#adb5bd', display: 'flex' }} title={t.logout}>
                 <LogOut size={14} />
               </button>
             </>
@@ -374,16 +501,28 @@ export default function Admin() {
       {/* MAIN */}
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         {/* Topbar */}
-        <header style={{ height: 54, background: '#fff', borderBottom: '1px solid #e9ecef', display: 'flex', alignItems: 'center', padding: '0 20px', gap: 12, flexShrink: 0 }}>
-          <button onClick={() => setSide(v => !v)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '6px 8px', borderRadius: 8, color: '#6c757d', display: 'flex' }}>
+        <header style={{ height: 54, background: '#fff', borderBottom: '1px solid #e9ecef', display: 'flex', alignItems: 'center', padding: '0 16px', gap: 12, flexShrink: 0 }}>
+          <button 
+            className="d-md-none"
+            onClick={() => setSideOpen(true)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '6px 8px', borderRadius: 8, color: '#6c757d', display: 'flex' }}>
             <Menu size={18} />
           </button>
+          {/* Toggle button in topbar only when sidebar is closed on desktop */}
+          {!sideOpen && (
+            <button 
+              className="d-none d-md-flex"
+              onClick={() => setSideOpen(true)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '6px 8px', borderRadius: 8, color: '#6c757d' }}>
+              <Menu size={18} />
+            </button>
+          )}
           <div style={{ width: 1, height: 18, background: '#e9ecef' }} />
           <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
             {activeItem && <activeItem.Icon size={14} color="#6c757d" />}
             <span style={{ fontWeight: 600, fontSize: 14, color: '#212529' }}>{activeItem?.label}</span>
           </div>
           <div style={{ flex: 1 }} />
+          {/* Lang Selector for Admin Panel */}
+          <div className="gtranslate_wrapper d-flex align-items-center me-2"></div>
           {/* Notification bell */}
           {(() => {
             const totalNew = (newOrdersCount || 0) + (newLeads || 0) + (newSupportCount || 0);
@@ -395,7 +534,7 @@ export default function Admin() {
                       Notification.requestPermission();
                     }
                   }}
-                  title={totalNew > 0 ? `${totalNew} yeni bildiriş` : 'Bildirişlər'}
+                  title={totalNew > 0 ? `${totalNew} ${t.newNotifications}` : t.notifications}
                   style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '6px 8px', borderRadius: 8, color: totalNew > 0 ? '#e30613' : '#6c757d', display: 'flex', position: 'relative' }}
                 >
                   <Bell size={18} />
@@ -415,12 +554,12 @@ export default function Admin() {
             );
           })()}
           <a href="/" target="_blank" rel="noopener noreferrer" className="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1" style={{ fontSize: 11, borderRadius: 8, fontWeight: 600 }}>
-            <ExternalLink size={12} /> Sayt
+            <ExternalLink size={12} /> {t.site}
           </a>
         </header>
 
         {/* Content */}
-        <main style={{ flex: 1, overflowY: 'auto', padding: 24 }}>
+        <main style={{ flex: 1, overflowY: 'auto', padding: '24px 16px' }}>
           {tab === 'dashboard'        && <DashboardTab token={token} onNavigate={(t) => setTab(t as Tab)} isAdmin={isAdmin} />}
           {tab === 'orders'           && <AdminOrders token={token} />}
           {tab === 'leads'            && <AdminLeads leads={leads} products={products} token={token} onRefresh={() => fetchLeads(token)} />}

@@ -98,18 +98,20 @@ function initDb() {
     );
     INSERT OR IGNORE INTO smtp_config (id) VALUES (1);
     CREATE TABLE IF NOT EXISTS products (
-      id            TEXT PRIMARY KEY,
-      name          TEXT NOT NULL,
-      category      TEXT DEFAULT '',
-      description   TEXT DEFAULT '',
+      id TEXT PRIMARY KEY,
+      name TEXT NOT NULL,
+      category TEXT DEFAULT '',
+      description TEXT DEFAULT '',
       technical_specs TEXT DEFAULT '{}',
-      images        TEXT DEFAULT '[]',
-      tags          TEXT DEFAULT '[]',
+      images TEXT DEFAULT '[]',
+      tags TEXT DEFAULT '[]',
       related_products TEXT DEFAULT '[]',
-      active        INTEGER DEFAULT 1,
-      sort_order    INTEGER DEFAULT 0,
-      created_at    TEXT NOT NULL DEFAULT (datetime('now')),
-      updated_at    TEXT NOT NULL DEFAULT (datetime('now'))
+      sort_order INTEGER DEFAULT 0,
+      active INTEGER DEFAULT 1,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      customization_config TEXT DEFAULT '[]',
+      metaobjects TEXT DEFAULT '{}'
     );
     CREATE TABLE IF NOT EXISTS support_tickets (
       id         INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -143,6 +145,34 @@ function initDb() {
       sort_order  INTEGER DEFAULT 0,
       active      INTEGER DEFAULT 1,
       created_at  TEXT NOT NULL DEFAULT (datetime('now'))
+    );
+    CREATE TABLE IF NOT EXISTS metrics (
+      id TEXT PRIMARY KEY,
+      name TEXT NOT NULL,
+      key TEXT NOT NULL UNIQUE,
+      var_type TEXT NOT NULL,
+      component TEXT NOT NULL,
+      configuration TEXT DEFAULT '{}',
+      validation TEXT DEFAULT '{}',
+      options TEXT DEFAULT '[]',
+      pricing TEXT DEFAULT '{}',
+      visibility TEXT DEFAULT '{}',
+      display TEXT DEFAULT '{}',
+      active INTEGER DEFAULT 1,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
+    CREATE TABLE IF NOT EXISTS product_metrics (
+      id TEXT PRIMARY KEY,
+      product_id TEXT NOT NULL,
+      metric_id TEXT NOT NULL,
+      position INTEGER DEFAULT 0,
+      enabled INTEGER DEFAULT 1,
+      overrides TEXT DEFAULT '{}',
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
+      FOREIGN KEY (metric_id) REFERENCES metrics(id) ON DELETE CASCADE
     );
     CREATE TABLE IF NOT EXISTS leads (
       id         INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -488,8 +518,110 @@ function parseProduct(p) {
     images:           JSON.parse(p.images            || '[]'),
     tags:             JSON.parse(p.tags              || '[]'),
     relatedProducts:  JSON.parse(p.related_products  || '[]'),
+    customizationConfig: JSON.parse(p.customization_config || '[]'),
+    metaobjects:      JSON.parse(p.metaobjects       || '{}')
   };
 }
+
+/* ══════════════════════════════════════════
+   METRICS API
+══════════════════════════════════════════ */
+app.get('/api/metrics', (req, res) => {
+  const rows = db.prepare('SELECT * FROM metrics ORDER BY created_at DESC').all();
+  res.json(rows.map(m => ({
+    ...m,
+    configuration: JSON.parse(m.configuration || '{}'),
+    validation: JSON.parse(m.validation || '{}'),
+    options: JSON.parse(m.options || '[]'),
+    pricing: JSON.parse(m.pricing || '{}'),
+    visibility: JSON.parse(m.visibility || '{}'),
+    display: JSON.parse(m.display || '{}')
+  })));
+});
+
+app.post('/api/metrics', authMiddleware, adminOnly, (req, res) => {
+  const { name, key, var_type, component, configuration, validation, options, pricing, visibility, display } = req.body;
+  if (!name || !key || !var_type || !component) return res.status(400).json({ error: 'Məcburi sahələr çatışmır.' });
+  
+  const existing = db.prepare('SELECT id FROM metrics WHERE key = ?').get(key);
+  if (existing) return res.status(400).json({ error: 'Bu açara (key) malik metrik artıq mövcuddur.' });
+
+  const id = 'metric-' + Date.now();
+  db.prepare(`INSERT INTO metrics (id, name, key, var_type, component, configuration, validation, options, pricing, visibility, display) VALUES (?,?,?,?,?,?,?,?,?,?,?)`)
+    .run(
+      id, name, key, var_type, component,
+      JSON.stringify(configuration || {}),
+      JSON.stringify(validation || {}),
+      JSON.stringify(options || []),
+      JSON.stringify(pricing || {}),
+      JSON.stringify(visibility || {}),
+      JSON.stringify(display || {})
+    );
+  const m = db.prepare('SELECT * FROM metrics WHERE id=?').get(id);
+  res.status(201).json({ ...m, configuration: JSON.parse(m.configuration||'{}'), validation: JSON.parse(m.validation||'{}'), options: JSON.parse(m.options||'[]'), pricing: JSON.parse(m.pricing||'{}'), visibility: JSON.parse(m.visibility||'{}'), display: JSON.parse(m.display||'{}') });
+});
+
+app.get('/api/metrics/:id', (req, res) => {
+  const m = db.prepare('SELECT * FROM metrics WHERE id=?').get(req.params.id);
+  if (!m) return res.status(404).json({ error: 'Tapılmadı.' });
+  res.json({ ...m, configuration: JSON.parse(m.configuration||'{}'), validation: JSON.parse(m.validation||'{}'), options: JSON.parse(m.options||'[]'), pricing: JSON.parse(m.pricing||'{}'), visibility: JSON.parse(m.visibility||'{}'), display: JSON.parse(m.display||'{}') });
+});
+
+/* ══════════════════════════════════════════
+   PRODUCT METRICS API
+══════════════════════════════════════════ */
+app.get('/api/products/:id/metrics', (req, res) => {
+  const rows = db.prepare(`
+    SELECT pm.*, m.name, m.key, m.var_type, m.component, m.configuration, m.validation, m.options, m.pricing, m.visibility, m.display 
+    FROM product_metrics pm 
+    JOIN metrics m ON pm.metric_id = m.id 
+    WHERE pm.product_id = ? 
+    ORDER BY pm.position ASC
+  `).all(req.params.id);
+  
+  res.json(rows.map(r => ({
+    id: r.id,
+    product_id: r.product_id,
+    metric_id: r.metric_id,
+    position: r.position,
+    enabled: r.enabled,
+    overrides: JSON.parse(r.overrides || '{}'),
+    metric: {
+      id: r.metric_id,
+      name: r.name,
+      key: r.key,
+      var_type: r.var_type,
+      component: r.component,
+      configuration: JSON.parse(r.configuration || '{}'),
+      validation: JSON.parse(r.validation || '{}'),
+      options: JSON.parse(r.options || '[]'),
+      pricing: JSON.parse(r.pricing || '{}'),
+      visibility: JSON.parse(r.visibility || '{}'),
+      display: JSON.parse(r.display || '{}')
+    }
+  })));
+});
+
+app.post('/api/products/:id/metrics', authMiddleware, adminOnly, (req, res) => {
+  const { metric_id, overrides, position } = req.body;
+  const product_id = req.params.id;
+  
+  if (!metric_id) return res.status(400).json({ error: 'Metrik ID tələb olunur.' });
+  
+  const existing = db.prepare('SELECT id FROM product_metrics WHERE product_id = ? AND metric_id = ?').get(product_id, metric_id);
+  if (existing) return res.status(400).json({ error: 'Bu metrik artıq məhsula əlavə edilib.' });
+
+  const id = 'pm-' + Date.now();
+  db.prepare(`INSERT INTO product_metrics (id, product_id, metric_id, overrides, position) VALUES (?,?,?,?,?)`)
+    .run(id, product_id, metric_id, JSON.stringify(overrides || {}), position || 0);
+    
+  res.status(201).json({ success: true, id });
+});
+
+app.delete('/api/products/:id/metrics/:metricId', authMiddleware, adminOnly, (req, res) => {
+  db.prepare('DELETE FROM product_metrics WHERE product_id = ? AND metric_id = ?').run(req.params.id, req.params.metricId);
+  res.json({ success: true });
+});
 
 app.get('/api/products', (req, res) => {
   const rows = db.prepare('SELECT * FROM products ORDER BY sort_order ASC, created_at ASC').all();
@@ -503,25 +635,28 @@ app.get('/api/products/:id', (req, res) => {
 });
 
 app.post('/api/products', authMiddleware, adminOnly, (req, res) => {
-  const { name, category, description, technicalSpecs, images, tags, relatedProducts, sort_order } = req.body;
+  const { name, category, description, technicalSpecs, images, tags, relatedProducts, sort_order, customizationConfig, metaobjects } = req.body;
   if (!name) return res.status(400).json({ error: 'Ad tələb olunur.' });
   const id = 'prod-' + Date.now();
-  db.prepare(`INSERT INTO products (id,name,category,description,technical_specs,images,tags,related_products,sort_order) VALUES (?,?,?,?,?,?,?,?,?)`)
-    .run(id, name, category||'', description||'', JSON.stringify(technicalSpecs||{}), JSON.stringify(images||[]), JSON.stringify(tags||[]), JSON.stringify(relatedProducts||[]), sort_order||0);
+  db.prepare(`INSERT INTO products (id,name,category,description,technical_specs,images,tags,related_products,sort_order,customization_config,metaobjects) VALUES (?,?,?,?,?,?,?,?,?,?,?)`)
+    .run(id, name, category||'', description||'', JSON.stringify(technicalSpecs||{}), JSON.stringify(images||[]), JSON.stringify(tags||[]), JSON.stringify(relatedProducts||[]), sort_order||0, JSON.stringify(customizationConfig||[]), JSON.stringify(metaobjects||{}));
   res.status(201).json(parseProduct(db.prepare('SELECT * FROM products WHERE id=?').get(id)));
 });
 
 app.put('/api/products/:id', authMiddleware, adminOnly, (req, res) => {
-  const { name, category, description, technicalSpecs, images, tags, relatedProducts, sort_order, active } = req.body;
+  const { name, category, description, technicalSpecs, images, tags, relatedProducts, sort_order, active, customizationConfig, metaobjects } = req.body;
   const existing = db.prepare('SELECT * FROM products WHERE id=?').get(req.params.id);
   if (!existing) return res.status(404).json({ error: 'Tapılmadı.' });
-  db.prepare(`UPDATE products SET name=?,category=?,description=?,technical_specs=?,images=?,tags=?,related_products=?,sort_order=?,active=?,updated_at=datetime('now') WHERE id=?`)
+  db.prepare(`UPDATE products SET name=?,category=?,description=?,technical_specs=?,images=?,tags=?,related_products=?,sort_order=?,active=?,customization_config=?,metaobjects=?,updated_at=datetime('now') WHERE id=?`)
     .run(name??existing.name, category??existing.category, description??existing.description,
       JSON.stringify(technicalSpecs??JSON.parse(existing.technical_specs||'{}')),
       JSON.stringify(images??JSON.parse(existing.images||'[]')),
       JSON.stringify(tags??JSON.parse(existing.tags||'[]')),
       JSON.stringify(relatedProducts??JSON.parse(existing.related_products||'[]')),
-      sort_order??existing.sort_order, active??existing.active, req.params.id);
+      sort_order??existing.sort_order, active??existing.active,
+      JSON.stringify(customizationConfig??JSON.parse(existing.customization_config||'[]')),
+      JSON.stringify(metaobjects??JSON.parse(existing.metaobjects||'{}')),
+      req.params.id);
   res.json(parseProduct(db.prepare('SELECT * FROM products WHERE id=?').get(req.params.id)));
 });
 

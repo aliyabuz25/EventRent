@@ -290,10 +290,10 @@ export default function Navbar() {
             role="dialog"
             aria-modal="true"
             aria-label={t(locale, menuLabel)}
-            className="fixed inset-0 z-[200] flex flex-col overflow-y-auto bg-brand-bg px-6 py-8 md:px-10"
+            className="fixed inset-0 z-[200] flex flex-col overflow-y-auto overscroll-none bg-brand-bg px-6 py-8 md:px-10 h-[100dvh]"
           >
             {/* Header */}
-            <div className="mb-12 flex items-center justify-between">
+            <div className="mb-6 flex items-center justify-between">
               <Link
                 to="/"
                 onClick={() => setIsMobileMenuOpen(false)}
@@ -314,7 +314,7 @@ export default function Navbar() {
             </div>
 
             {/* Language Switcher — Full visible in mobile */}
-            <div className="mb-10 flex w-fit items-center gap-1 rounded-full border border-white/[0.07] bg-white/[0.03] p-1">
+            <div className="mb-6 flex w-fit items-center gap-1 rounded-full border border-white/[0.07] bg-white/[0.03] p-1">
               {(['az', 'en', 'ru', 'tr'] as Locale[]).map((lang) => (
                 <button
                   key={`mobile-${lang}`}
@@ -336,28 +336,28 @@ export default function Navbar() {
             </div>
 
             {/* Nav Links */}
-            <div className="flex flex-col gap-1">
+            <div className="flex flex-col gap-0.5 flex-1 min-h-0">
               {visibleNavLinks.map((link, i) => (
                 <motion.div
                   key={link.path}
                   initial={{ opacity: 0, x: 24 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.06, duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                  transition={{ delay: i * 0.04, duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
                 >
                   <Link
                     to={link.path}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="group flex items-center justify-between rounded-2xl px-5 py-5 text-[clamp(2rem,8vw,3.2rem)] font-black uppercase tracking-[-0.03em] text-white transition-colors hover:text-premium-orange focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-premium-orange focus-visible:ring-offset-2 focus-visible:ring-offset-brand-bg"
+                    className="group flex items-center justify-between rounded-xl px-4 py-3 text-[clamp(1.5rem,5vw,2.5rem)] font-black uppercase tracking-[-0.03em] text-white transition-colors hover:text-premium-orange focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-premium-orange focus-visible:ring-offset-2 focus-visible:ring-offset-brand-bg"
                   >
                     {t(locale, link.name)}
-                    <ArrowRight className="h-7 w-7 -translate-x-4 text-premium-orange opacity-0 transition-all group-hover:translate-x-0 group-hover:opacity-100" />
+                    <ArrowRight className="h-6 w-6 -translate-x-4 text-premium-orange opacity-0 transition-all group-hover:translate-x-0 group-hover:opacity-100" />
                   </Link>
                 </motion.div>
               ))}
             </div>
 
             {/* Footer */}
-            <div className="mt-auto space-y-4 border-t border-white/[0.06] pt-10">
+            <div className="mt-auto space-y-2 border-t border-white/[0.06] pt-6 flex-shrink-0">
               <p className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-600">{t(locale, inquiriesLabel)}</p>
               <p className="text-xl font-bold uppercase tracking-tight text-white">{content.home.finalCta.email}</p>
               <p className="text-xl font-bold uppercase tracking-tight text-white">{content.home.finalCta.phone}</p>

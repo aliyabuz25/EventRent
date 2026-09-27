@@ -1,6 +1,6 @@
 import urllib.request, json, time
 
-BASE = 'https://erent.octotech.az'
+BASE = 'http://localhost:4320'
 TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhZG1pbkBldmVudHJlbnQuYXoiLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3OTA0MTU4OTgsImV4cCI6MTc5MTAyMDY5OH0.3uX4fuZCZgk9_b8DtP3piNZIrtD3BRdQklFVi09_V_M'
 
 def post(path, data, auth=False):
@@ -32,3 +32,6 @@ orders = [
     {'name':'Zehra Sultanova','phone':'0101234512','email':'zehra.s@gmail.com','event_date':'2026-12-05','location':'Baki, Yasamal','note':'Xina gecesi enanevi dekor','items':[{'productId':'dekor-set','quantity':1}],'source':'website'},
     {'name':'Elsen Kerimov','phone':'0501234513','email':'elsen.k@outlook.com','event_date':'2027-02-14','location':'Baki, Nerimanov','note':'Sevgililer gunu romantik dekor','items':[{'productId':'dekor-set','quantity':1}],'source':'website'},
 ]
+
+for order in orders:
+    print(post('/api/orders', order))

@@ -15,6 +15,9 @@ export interface Product {
   images: string[];
   tags: string[];
   relatedProducts: string[];
+  customizationConfig?: any[]; // JSON structure from Product Management System
+  metaobjects?: Record<string, any>; // JSON structure from Product Management System
+  metrics?: any[]; // Array of attached metrics
 }
 
 export type LeadStatus = 'new' | 'contacted' | 'quoted' | 'won' | 'lost';
